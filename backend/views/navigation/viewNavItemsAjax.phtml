@@ -1,0 +1,179 @@
+<div class="row">
+    <div class="col-md-12">
+        <?php echo $this->tag->linkTo(array('#', '<i class="fa fa-plus fa-lg"></i>', "class" => "addNavItemModal btn btn-info pull-right","data-toggle"=>"modal", "data-target"=>"#addNavItemModal","data-href"=>$this->url->get('backend/navigation/addNavItem/'.$language->id.'/'. $website->id))); ?>
+    </div>
+
+    <hr>
+    <br>
+
+</div>
+<?php
+if (isset($navItems)) {
+    ?>
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Navigation Preview</h3>
+                </div>
+                <div class="panel-body">
+                    <nav class="navbar navbar-default">
+                        <div class="container-fluid">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                        data-target="#preview-navbar-collapse" aria-expanded="false">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                                <a class="navbar-brand" href="#"></a>
+                            </div>
+
+                            <div class="collapse navbar-collapse" id="preview-navbar-collapse">
+                                <ul class="nav navbar-nav">
+                                    <?php
+                                    foreach ($navItems as $item) {
+                                        echo "<li>" . $this->tag->linkTo(array('backend/page/view/en/' . $item->page_id, $item->navigation_name,)) . "</li>";
+                                    }
+                                    ?>
+                                </ul>
+                            </div><!-- /.navbar-collapse -->
+                        </div><!-- /.container-fluid -->
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class='table table-hover table-bordered'>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Desc</th>
+                    <th>Page</th>
+                    <th>Order</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tbody id="navItems">
+                <?php
+                foreach ($navItems as $item) {
+                    echo "<tr id='" . $item->id . "'>";
+                    echo "<td>" . $item->navigation_name . "</td>";
+                    echo "<td>" . $item->navigation_desc . "</td>";
+                    echo "<td>" . $item->getPage()->title . "</td>";
+                    echo "<td>" . $item->navigation_item_order . "</td>";
+                    echo "<td>";
+                    echo '<div class="btn-group" role="group" aria-label="...">';
+                    echo $this->tag->linkTo(array('#', '<i class="fa fa-wrench fa-lg"></i>', "class" => "editNavItemModal btn btn-warning","data-toggle"=>"modal", "data-target"=>"#editNavItemModal","data-href"=>$this->url->get('/backend/navigation/editNavItem/'. $item->id)));
+                    echo "</div>";
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <div id="editNavItemModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button title="<?php echo $this->translator->_('cms.v3.admin.modal.closebtn'); ?>" type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit menu item</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe src="" style="zoom:0.60" width="100%" height="500" frameborder="0"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        <i class="fa fa-times-circle fa-lg"></i> Close
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $( ".editNavItemModal" ).on( "click", function() {
+            var frameSrc = $(this).data("href");
+            $('#editNavItemModal iframe').attr("src",frameSrc);
+
+        });
+        $('#editNavItemModal').on('hidden.bs.modal', function (e) {
+            getNavItems();
+        });
+
+
+        $('#navItems').sortable({
+            update: function (event, ui) {
+                var nav_item_array = [];
+                $('#navItems').find('tr').each(function () {
+                    nav_item_array.push($(this).attr("id"));
+                });
+
+                $.ajax({
+                    url: "<?=$this->config->general->baseUri?>backend/navigation/orderNavItemsAjax/",
+                    method: "POST",
+                    data: {
+                        items: nav_item_array
+                    },
+                    success: function (data) {
+                        getNavItems();
+                    }
+                });
+            }
+        });
+
+
+    </script>
+    <?php
+} else {
+    ?>
+    <div class="alert alert-warning" role="alert">
+        <strong>There are currently no nav items for this language</strong>
+    </div>
+    <?php
+}
+?>
+
+<div id="addNavItemModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button title="<?php echo $this->translator->_('cms.v3.admin.modal.closebtn'); ?>" type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add new menu item</h4>
+            </div>
+            <div class="modal-body">
+                <iframe src="" style="zoom:0.60" width="100%" height="500"    frameborder="0"></iframe>                                                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <i class="fa fa-times-circle fa-lg"></i> Close
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    $( ".addNavItemModal" ).on( "click", function() {
+        var frameSrc = $(this).data("href");
+        $('#addNavItemModal iframe').attr("src",frameSrc);
+
+    });
+    $('#addNavItemModal').on('hidden.bs.modal', function (e) {
+        getNavItems();
+    });
+</script>

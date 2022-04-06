@@ -1,0 +1,33 @@
+<div class="container">
+    <?= $this->getContent();?>
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post">
+                <div class="form-group">
+                    <label for="navItemName">Name</label>
+                    <input type="text" class="form-control" name="navItemName" id="navItemName" value="<?= $navItem->navigation_name; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="navItemDescription">Description</label>
+                    <input type="text" class="form-control" name="navItemDescription" id="navItemDescription"  value="<?= $navItem->navigation_desc;?>">
+                </div>
+                <div class="form-group">
+                    <label for="navItemPages">Page</label>
+                    <select name="navItemPages" id="navItemPages" class="form-control">
+                        <?php
+                        foreach ($pages as $page) {
+                            if($page->id == $navItem->page_id){
+                                echo "<option value='" . $page->id . "' selected='selected'>" . $page->title . "</option>";
+                            }else{
+                                echo "<option value='" . $page->id . "'>" . $page->title . "</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+                 <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+
+</div>

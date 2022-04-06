@@ -1,0 +1,246 @@
+<section class="widgetDataTable">
+    <div id="responcemessageerror" align="center" style="display: none; margin-top:10px;"><?php echo isset($errorMessage)? $errorMessage :"" ?></div>
+    <?php if(!isset($errorMessage)){ ?>
+        <table id="chapterListTable" class="table table-hover listtables" width="100%">
+                <tbody>
+
+                <?php
+				$jsonData = $jsonResponse -> aaData;
+                foreach ($jsonData as $value) {
+                    ?>
+                    <tr>
+                        <td><?php echo !empty($value[0]) ? $value[0] : '' ?></td>
+                        <td><?php echo !empty($value[1]) ? $value[1] : '' ?></td>
+                        <td><?php echo !empty($value[2]) ? $value[2] : '' ?></td>
+                        <td><?php echo !empty($value[3]) ? $value[3] : '' ?></td>
+                        <td><?php echo !empty($value[4]) ? $value[4] : '' ?></td>
+                        <td><?php echo !empty($value[5]) ? $value[5] : '' ?></td>
+						<td><?php echo !empty($value[6]) ? $value[6] : '' ?></td>
+                    </tr> <?php
+                } ?>
+                </tbody>
+            </table>
+    <?php } ?>
+
+    <script type="text/javascript">
+        var oTable;
+        var oDefault;
+        var oSettings;
+        var clearHeaders;
+        var storedGroups;
+        var storedGroupString1;
+        var storedGroupString2;
+        var iColspan;
+        $(function () {
+
+            $.fn.dataTableExt.oSort["string-asc"] = function (x, y) {
+                return x.toString().localeCompare(y.toString());
+            };
+
+            $.fn.dataTableExt.oSort["string-desc"] = function (x, y) {
+                return y.toString().localeCompare(x.toString());
+            };
+
+            $.fn.dataTableExt.oSort["time-sort-asc"] = function (x, y) {
+                var d1 = new Date();
+                var time = x.match(/(\d+)(?::(\d\d))?\s*(p?)/i);
+                var time1 = x.match(/(\d+)(?::(\d\d))?\s*(a?)/i);
+                d1.setHours(parseInt(time[1]) + ((time[1] != "12") ? (time[3] ? 12 : 0) : (time[3] ? 0 : time1[3] ? -12 : 0) ));
+                d1.setMinutes(parseInt(time[2]) || 0);
+
+                var d2 = new Date();
+                time = y.match(/(\d+)(?::(\d\d))?\s*(p?)/i);
+                time1 = y.match(/(\d+)(?::(\d\d))?\s*(a?)/i);
+                d2.setHours(parseInt(time[1]) + ((time[1] != "12") ? (time[3] ? 12 : 0) : (time[3] ? 0 : time1[3] ? -12 : 0) ));
+                d2.setMinutes(parseInt(time[2]) || 0);
+
+                x = d1.getTime();
+                y = d2.getTime();
+
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            };
+
+            $.fn.dataTableExt.oSort["time-sort-desc"] = function (x, y) {
+                var d1 = new Date();
+                var time = x.match(/(\d+)(?::(\d\d))?\s*(p?)/i);
+                var time1 = x.match(/(\d+)(?::(\d\d))?\s*(a?)/i);
+                d1.setHours(parseInt(time[1]) + ((time[1] != "12") ? (time[3] ? 12 : 0) : (time[3] ? 0 : time1[3] ? -12 : 0) ));
+                d1.setMinutes(parseInt(time[2]) || 0);
+
+                var d2 = new Date();
+                time = y.match(/(\d+)(?::(\d\d))?\s*(p?)/i);
+                time1 = y.match(/(\d+)(?::(\d\d))?\s*(a?)/i);
+                d2.setHours(parseInt(time[1]) + ((time[1] != "12") ? (time[3] ? 12 : 0) : (time[3] ? 0 : time1[3] ? -12 : 0) ));
+                d2.setMinutes(parseInt(time[2]) || 0);
+
+                x = d1.getTime();
+                y = d2.getTime();
+
+                return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+            };
+
+            storedGroups = [];
+            storedGroupString1 = [];
+            storedGroupString2 = [];
+
+            var storedHeaderIndex = 0;
+            var nOrigTrs = $(".listtables tbody tr");
+            for (var i = 0; i < nOrigTrs.length; i++) {
+                if ($("td:eq(2)", nOrigTrs[i]).html() == "false") {
+                    storedGroups[storedHeaderIndex] = i;
+                    storedGroupString1[storedHeaderIndex] = $("td:eq(0)", nOrigTrs[i]).html();
+                    storedGroupString2[storedHeaderIndex] = $("td:eq(1)", nOrigTrs[i]).html();
+                    nOrigTrs[i].parentNode.removeChild(nOrigTrs[i]);
+                    storedHeaderIndex++;
+                }
+            }
+
+            oDefault = {
+                "bProcessing": true,
+                "responsive": true,
+                "bServerSide": false,
+                "bLengthChange": false,
+                "iDisplayLength": 50,
+                "bSort": true,
+                "bInfo": true,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "aaSortingFixed": [[0, 'asc']],
+                "aaSorting": [],
+
+                "columnDefs": [
+                    {responsivePriority: 2, targets: 0}
+                ],
+
+                "fnDrawCallback": function (oSettings) {
+                    if (oSettings.aiDisplay.length == 0) {
+                        $('.dataTables_empty').text(storedGroupString2[0]);
+                        var nTrs = $('.dataTables_empty').parent();
+                        var nGroup = document.createElement('tr');
+                        var nCell = document.createElement('td');
+                        iColspan = 6;
+                        nCell.colSpan = iColspan;
+                        nCell.className = "group groupexact";
+                        nCell.innerHTML = storedGroupString1[0];
+                        nGroup.appendChild(nCell);
+                        nTrs[0].parentNode.insertBefore(nGroup, nTrs[0]);
+                        return;
+                    }
+
+                    var nTrs = $('.listtables tbody tr');
+
+                    var nextHeaderIndex = 0;
+                    var startLength = nTrs.length - 1;
+
+                    var iColspan = nTrs[0].getElementsByTagName('td').length;
+                    var sLastGroup = "";
+
+                    for (var i = 0; i < nTrs.length; i++) {
+                        var iDisplayIndex = oSettings._iDisplayStart + i;
+
+                        if (nextHeaderIndex < storedGroups.length && (iDisplayIndex == storedGroups[nextHeaderIndex] || (i == startLength && storedGroups[nextHeaderIndex] > i))) {
+                            var nGroup = document.createElement("tr");
+                            var nCell = document.createElement("td");
+                            iColspan = 6;
+                            nCell.colSpan = iColspan;
+                            nCell.className = "group";
+                            nCell.innerHTML = storedGroupString1[nextHeaderIndex];
+                            nGroup.appendChild(nCell);
+                            if (i == startLength) {
+                                nTrs[i].parentNode.insertBefore(nGroup, nTrs[i].nextSibling);
+                            } else {
+                                nTrs[i].parentNode.insertBefore(nGroup, nTrs[i]);
+                            }
+
+                            var nfGroup = document.createElement("tr");
+                            var nfCell = document.createElement("td");
+                            nfCell.colSpan = iColspan;
+                            nfCell.className = "notfound";
+                            nfCell.innerHTML = storedGroupString2[nextHeaderIndex];
+                            nfGroup.appendChild(nfCell);
+                            if (i == startLength) {
+                                nTrs[i].parentNode.insertBefore(nfGroup, nTrs[i].nextSibling.nextSibling);
+                            } else {
+                                nTrs[i].parentNode.insertBefore(nfGroup, nTrs[i]);
+                            }
+                            nextHeaderIndex++;
+                        }
+
+                        var sGroup = oSettings.aoData[oSettings.aiDisplay[iDisplayIndex]]._aData[0];
+                        if (sGroup != sLastGroup) {
+                            var nGroup = document.createElement('tr');
+                            var nCell = document.createElement('td');
+                            nCell.colSpan = iColspan;
+                            nCell.className = "group";
+                            nCell.innerHTML = sGroup;
+                            nGroup.appendChild(nCell);
+                            nTrs[i].parentNode.insertBefore(nGroup, nTrs[i]);
+                            sLastGroup = sGroup;
+                        }
+                    }
+                    $(".listtables td.group:eq(0)").addClass("groupexact");
+                }
+            };
+
+            oSettings = $.extend(true, {}, oDefault);
+
+            oSettings.oLanguage = {
+                sLengthMenu: "<?php echo  $this->translator->_('datatablesparameters.sLengthMenu')?>",
+                sSearch: "<i class='fa fa-filter' data-toggle='tooltip' title='<?php echo $this->translator->_('cms.v3.admin.editpage.search')?>' aria-hidden='true'></i>",
+                sZeroRecords: "<?=$mappedWidgetSettings->getValueByName("Zero Records")?>",
+                sEmptyTable: "<?=$mappedWidgetSettings->getValueByName("Zero Records")?>",
+                sInfo: "<?=$mappedWidgetSettings->getValueByName("Showing")?> _START_ <?=$mappedWidgetSettings->getValueByName("to")?> _END_ <?=$mappedWidgetSettings->getValueByName("of")?> _TOTAL_ <?=$mappedWidgetSettings->getValueByName("entries")?>",
+                sInfoEmpty: "<?=$mappedWidgetSettings->getValueByName("Showing")?> 0 <?=$mappedWidgetSettings->getValueByName("to")?> 0 <?=$mappedWidgetSettings->getValueByName("of")?> 0 <?=$mappedWidgetSettings->getValueByName("entries")?>",
+                sInfoFiltered: "",
+                oPaginate: {
+                    sFirst: "<i class='fa fa-step-backward' aria-hidden='true'></i>",
+                    sPrevious: "<i class='fa fa-chevron-left' aria-hidden='true'></i>",
+                    sNext: "<i class='fa fa-chevron-right' aria-hidden='true'></i>",
+                    sLast: "<i class='fa fa-step-forward' aria-hidden='true'></i>"
+                }
+            };
+
+            oSettings.aoColumns = [
+                {bVisible: false, sType: "string"},
+                {sWidth: "30%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Chapter - Region")?>"},
+                {sWidth: "17%", sTitle: "<?=$mappedWidgetSettings->getValueByName("City")?>"},
+                {sWidth: "17%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Area")?>"},
+                {sWidth: "17%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Meeting Day")?>"},
+                {sWidth: "17%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Meeting Time")?>", sType: "time-sort"},
+				{sWidth: "17%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Meeting Type")?>"},
+            ];
+
+            oTable = $('.listtables').dataTable(oSettings);
+            $("#chapterListTable").show();
+		
+		$(".group").each(function(){
+			var meet_group=$(this).find('span').html();
+			<?php
+				$chapterMeetingType='';
+				parse_str($_REQUEST['parameters'],$params);
+				if(isset($params['chapterMeetingType'])){
+					$chapterMeetingType=$params['chapterMeetingType'];
+				}
+			?>
+			var chapterMeetingType='<?php echo $chapterMeetingType;?>';
+			if((chapterMeetingType!="")&&(meet_group.indexOf(chapterMeetingType)!=-1)){
+				var meet_translate=$(this).parent('tr').next().find('td:nth-child(6)').text();
+				if(meet_translate!=""){					
+					var grouptxt=meet_group.replace(chapterMeetingType,meet_translate);	
+					$(this).find('span').html(grouptxt);
+				}
+			}
+			
+		});	
+
+		
+        });
+
+        $("#responcemessageerror").hide();
+        <?php if (isset($errorMessage)){ ?>
+        $("#responcemessageerror").show();
+        <?php } ?>
+    </script>
+
+</section>
+

@@ -1,0 +1,85 @@
+svg{
+	&.icon-redarrow{
+		.cls-1, .cls-2 {
+		    fill: none;
+		    stroke: $bniRed;
+		    stroke-linecap: round;
+		    stroke-width: 4px;
+	  	}
+	  	.cls-1 {
+	    	stroke-linejoin: round;
+	  	}
+	}
+	&.icon-whitearrow{
+		.cls-1, .cls-2 {
+		    fill: none;
+		    stroke: $white;
+		    stroke-linecap: round;
+		    stroke-width: 4px;
+	  	}
+	  	.cls-1 {
+	    	stroke-linejoin: round;
+	  	}
+	}
+	&.searchRed{
+		.a{
+			fill:#c8102e;
+			fill-rule:evenodd;
+		}
+	}
+	&.icon-complete{
+		.cls-1 {
+	        fill: #fff;
+	    }
+
+	    .cls-2 {
+	        fill: #c8102e;
+	    }
+	}
+	&.icon-email{
+		.cls-1, .cls-4 {
+	        fill: #c8102e;
+	    }
+
+	    .cls-1 {
+	        stroke: #707070;
+	    }
+
+	    .cls-2 {
+	        fill: #fff;
+	    }
+
+	    .cls-3 {
+	        clip-path: url(#clip-path);
+	    }
+	}
+	&.icon-swoosh{
+		.st0{
+			fill:#828282;
+		}
+	}
+	&.icon-close{
+		.cls-1 {
+        	fill: none;
+        	stroke: #fff;
+        	stroke-width: 2px;
+      	}
+	}
+	&.icon-search{
+		.cls-1, .cls-4 {
+        	fill: #c8102e;
+      	}
+
+      	.cls-1 {
+        	stroke: #707070;
+      	}
+
+      	.cls-2 {
+        	fill: #fff;
+      	}
+
+      	.cls-3 {
+        	clip-path: url(#clip-path);
+      	}
+	}
+}

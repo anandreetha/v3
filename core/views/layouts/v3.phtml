@@ -1,0 +1,16 @@
+<?php $this->partial('partials/v3/header/header'); ?>
+
+<?php
+//Use the page template if requested
+if(isset($pageTemplate) && !empty($pageTemplate)){
+    $this->partial(
+        'partials/v3/page/template/'.$pageTemplate,
+        array("pageWidgets"=>$pageWidgets)
+    );
+}else {
+    //Default
+    $this->partial('partials/v3/page/default-content');
+    $this->partial('partials/v3/footer/footer');
+}
+?>
+

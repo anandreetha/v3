@@ -1,0 +1,290 @@
+<form action="/bnicms/v3/backend/websetting/edit/<?php echo $website->id ?>" method="post" id="websettingsForm" class="form">
+    <div class="box box-default no-border">
+        <div class="box-body">
+
+            <div class="row">
+
+                <?php
+                if (count($website->WebsiteSettings) > 0) {
+
+                    $results = array();
+
+                    foreach ($fixedSettings as $fixedSetting) {
+                        $results[] = $fixedSetting;
+                    }
+
+                    foreach ($websiteSettings as $websiteSetting) {
+                        $results[] = $websiteSetting;
+                    }
+					
+                    $websiteSettingsChunks = array_chunk($results, round(count($results) / 2));
+
+                    foreach ($websiteSettingsChunks as $arrayOfWebsiteSettings) {
+                        echo '  <div class="col-md-6">';
+                        foreach ($arrayOfWebsiteSettings as $Websetting) {
+                            echo '<div class="form-group">';
+
+                            switch ($Websetting->setting->name) {
+
+                                case 'text_input':
+                                    echo '<label for="', $Websetting->id, '">', $this->translator->_($Websetting->setting->translate_token), "</label>";
+                                    echo '<input type="text" name="', $Websetting->id, '" value="', $Websetting->value, '" class="form-control" id="', $Websetting->id, '" placeholder="', $this->translator->_($Websetting->setting->translate_token), '">';
+                                    break;
+
+                                case 'select_input':
+                                    ?>
+                                    <label for="<?= $Websetting->id ?>"><?= $this->translator->_($Websetting->setting->translate_token) ?></label>
+                                    <select name="<?= $Websetting->id ?>[]" id="<?= $Websetting->id ?>" class="form-control" <?php if ($Websetting->setting->multiple) { ?> multiple="multiple" <?php } ?>>
+                                        <?php foreach ($Websetting->setting->selectable_values as $value) { ?>
+                                            <option value='<?= $value->value ?>'<?= $value->selected ?' selected ' : ''?>><?= $value->display ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <?php
+                                    break;
+
+                                case 'Google Map API Key':
+                                   if($website->type_id <>"3") {
+                                       echo '<label for="GoogleMapAPIKey">', $this->translator->_($Websetting->setting->translate_token), "</label>";
+                                       echo '<input type="text" name="settingValue/', $Websetting->id, '" value="', $Websetting->value, '" class="form-control" id="GoogleMapAPIKey" placeholder="', $this->translator->_($Websetting->setting->translate_token), '">';
+                                   }
+                                   break;
+
+                                case 'Location/Area':
+                                case 'Executive Director':
+                                case 'Contact Telephone':
+                                case 'Contact Email':
+                                    echo '<label for="', $Websetting->id, '">', $this->translator->_($Websetting->setting->translate_token), "</label>";
+                                    echo '<input type="text" name="', $Websetting->id, '" value="', $Websetting->value, '" class="form-control" id="', $Websetting->id, '" placeholder="', $this->translator->_($Websetting->setting->translate_token), '">';
+                                    break;
+
+
+                                case 'sitemap.xml':
+                                    echo '<label>', $this->translator->_($Websetting->setting->translate_token), "</label>";
+                                    echo '<textarea class="form-control" rows="6" name="settingValue/', $Websetting->id, '" placeholder="', $this->translator->_($Websetting->setting->translate_token), '">', html_entity_decode($Websetting->value, ENT_QUOTES | ENT_XML1, 'UTF-8'), '</textarea>';
+                                    break;
+
+                                case 'html_snippets':
+                                    if($website->getTypeId() != 3){
+                                        echo '<label>', $this->translator->_($Websetting->setting->translate_token), "</label>";
+                                        echo '<textarea class="form-control" rows="6" name="settingValue/', $Websetting->id, '" placeholder="', $this->translator->_($Websetting->setting->translate_token), '">', html_entity_decode($Websetting->value, ENT_QUOTES | ENT_XML1, 'UTF-8'), '</textarea>';
+                                    }
+                                    break;
+
+                                case 'Social Media Javascript Snippets':
+                                    if($website->getTypeId() != 3) {
+                                        echo '<label>', $this->translator->_($Websetting->setting->translate_token), "</label>";
+                                        echo '<textarea class="form-control" rows="6" name="settingValue/', $Websetting->id, '" placeholder="', $this->translator->_($Websetting->setting->translate_token), '">', $this->renderService->convertHexToAscii($Websetting->value), '</textarea>';
+                                    }
+                                    break;
+
+
+                                case 'Google Analytics Code':
+                                    echo '<label>', $this->translator->_($Websetting->setting->translate_token), "</label>";
+                                    echo '<textarea class="form-control" rows="6" name="settingValue/', $Websetting->id, '" placeholder="', $this->translator->_($Websetting->setting->translate_token), '">', $this->renderService->convertHexToAscii($Websetting->value), '</textarea>';
+                                    break;
+								
+								case 'Cookiebot Group ID':
+									$status_disable='';
+									if($website->getTypeId()== 3): $status_disable='disabled'; endif;
+                                    echo '<label>', $this->translator->_($Websetting->setting->translate_token), "</label>";
+                                     echo '<input type="text" name="settingValue/', $Websetting->id, '" value="', $Websetting->value, '" class="form-control" id="CookiebotGroupID" placeholder="', $this->translator->_($Websetting->setting->translate_token), '" '.$status_disable.'>';
+                                    break;		
+									
+								case 'Allow web visitors to email members':
+									$email_on='';$email_off=''; $translate_token_mailtxt=''; $status_disable='';
+									if($website->getTypeId() == 1):
+										$translate_token_mailtxt=$this->translator->_($Websetting->setting->translate_token);
+									elseif($website->getTypeId() == 2):
+										$translate_token_mailtxt=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailfromregion');
+									else:	
+										$translate_token_mailtxt=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailfromchapter');
+									endif;	
+									$email_member='<table class="table "><tbody><tr>';
+                                    $email_member.='<td><label>'.$translate_token_mailtxt. "</label>";
+                                    $website_value=$this->renderService->convertHexToAscii($Websetting->value);
+									if($website_value=="on"): $email_on='active'; endif;
+									if($website_value=="off"): $email_off='active'; endif;
+									if($website->getTypeId()== 3): $status_disable='disabled'; endif;
+									$emailon=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailon');
+									$emailoff=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailoff');
+									
+									$email_member.='<div class="btn-group" style="vertical-align:top; margin-left: 40px;margin-right: 40px;">
+									<button type="button" id="webvistors_email_on" class="webvistorsemail display-select-btn btn btn-default '.$email_on.'" '.$status_disable.'>'.$emailon.'</button><button type="button" id="webvistors_email_off" class="webvistorsemail display-select-btn btn btn-default '.$email_off.'" '.$status_disable.'>'.$emailoff.'</button></div></td></tr></tbody></table><input type="hidden" id="allow_emailto_members" name="settingValue/'.$Websetting->id.'" value="'.$website_value.'">';
+									break;	
+								
+								case 'Allow Online Applications via Website':
+									$app_on='';$app_off=''; $translate_token_apptxt=''; $status_disable='';
+									if($website->getTypeId() == 1):
+										$translate_token_apptxt=$this->translator->_($Websetting->setting->translate_token);
+									elseif($website->getTypeId() == 2):
+										$translate_token_apptxt=$this->translator->_('cms.v3.admin.settings.allowonlineapplicationsfromregion');
+									else:	
+										$translate_token_apptxt=$this->translator->_('cms.v3.admin.settings.allowonlineapplicationsfromchapter');
+									endif;	
+									$app_member='<table class="table "><tbody><tr>';
+                                    $app_member.='<td><label>'.$translate_token_apptxt. "</label>";
+                                    $website_value=$this->renderService->convertHexToAscii($Websetting->value);
+									if($website_value=="on"): $app_on='active'; endif;
+									if($website_value=="off"): $app_off='active'; endif;
+									if($website->getTypeId()== 3): $status_disable='disabled'; endif;
+									$appon=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailon');
+									$appoff=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailoff');
+									
+									$app_member.='<div class="btn-group" style="vertical-align:top; margin-left: 40px;margin-right: 40px;">
+									<button type="button" id="allowonline_app_on" class="allowonlineapp display-select-btn btn btn-default '.$app_on.'" '.$status_disable.'>'.$appon.'</button><button type="button" id="allowonline_app_off" class="allowonlineapp display-select-btn btn btn-default '.$app_off.'" '.$status_disable.'>'.$appoff.'</button></div></td></tr></tbody></table><input type="hidden" id="allow_appto_online" name="settingValue/'.$Websetting->id.'" value="'.$website_value.'">';
+									break;	
+								
+								case 'Control Chapter Leadership Section':
+									$app_on='';$app_off=''; $translate_token_apptxt=''; $status_disable='';
+									if($website->getTypeId() == 1):
+										$translate_token_apptxt=$this->translator->_($Websetting->setting->translate_token);	
+									elseif($website->getTypeId() == 2):
+										$translate_token_apptxt=$this->translator->_('cms.v3.admin.settings.controlchapterleadershipsectionregion');
+									else:
+										$translate_token_apptxt=$this->translator->_('cms.v3.admin.settings.controlchapterleadershipsectionchapter');
+									endif;	
+									
+									$app_member.='<table class="table "><tbody><tr>';
+                                    $app_member.='<td><label>'.$translate_token_apptxt. "</label>";
+                                    $website_value=$this->renderService->convertHexToAscii($Websetting->value);
+									if($website_value=="on"): $app_on='active'; endif;
+									if($website_value=="off"): $app_off='active'; endif;
+									if($website->getTypeId()== 3): $status_disable='disabled'; endif;
+									$appon=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailon');
+									$appoff=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailoff');
+									
+									$app_member.='<div class="btn-group" style="vertical-align:top; margin-left: 40px;margin-right: 40px;">
+									<button type="button" id="chapter_leadership_on" class="chapter_leadership display-select-btn btn btn-default '.$app_on.'" '.$status_disable.'>'.$appon.'</button><button type="button" id="chapter_leadership_off" class="chapter_leadership display-select-btn btn btn-default '.$app_off.'" '.$status_disable.'>'.$appoff.'</button></div></td></tr></tbody></table><input type="hidden" id="chapter_leadership_section" name="settingValue/'.$Websetting->id.'" value="'.$website_value.'">';
+									break;	
+								
+								case 'Control Member List':
+									$app_on='';$app_off=''; $translate_token_apptxt=''; $status_disable='';
+									if($website->getTypeId() == 1):
+										$translate_token_apptxt=$this->translator->_($Websetting->setting->translate_token);	
+									elseif($website->getTypeId() == 2):
+										$translate_token_apptxt=$this->translator->_('cms.v3.admin.settings.controlmemberlistregion');
+									else:
+										$translate_token_apptxt=$this->translator->_('cms.v3.admin.settings.controlmemberlistchapter');
+									endif;	
+									
+									$app_member.='<table class="table "><tbody><tr>';
+                                    $app_member.='<td><label>'.$translate_token_apptxt. "</label>";
+                                    $website_value=$this->renderService->convertHexToAscii($Websetting->value);
+									if($website_value=="on"): $app_on='active'; endif;
+									if($website_value=="off"): $app_off='active'; endif;
+									if($website->getTypeId()== 3): $status_disable='disabled'; endif;
+									$appon=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailon');
+									$appoff=$this->translator->_('cms.v3.admin.settings.allowwebvistorstoemailoff');
+									
+									$app_member.='<div class="btn-group" style="vertical-align:top; margin-left: 40px;margin-right: 40px;">
+									<button type="button" id="controlmemberlist_on" class="controlmemberlist display-select-btn btn btn-default '.$app_on.'" '.$status_disable.'>'.$appon.'</button><button type="button" id="controlmemberlist_off" class="controlmemberlist display-select-btn btn btn-default '.$app_off.'" '.$status_disable.'>'.$appoff.'</button></div></td></tr></tbody></table><input type="hidden" id="controlmemberlist" name="settingValue/'.$Websetting->id.'" value="'.$website_value.'">';
+									break;		
+
+                                default:
+                                    echo '<label>',$this->translator->_($Websetting->setting->translate_token), "</label>";
+                                    echo '<textarea class="form-control" rows="6" name="settingValue/', $Websetting->id, '" value="', $Websetting->value, '" placeholder="', $this->translator->_($Websetting->setting->translate_token), '">', $Websetting->value, '</textarea>';
+                                    break;
+
+                            }
+                            echo '</div>';
+                            if($website->getTypeId() == 3 && $Websetting->setting->name == "chapter_foldername_overide") {
+                                echo '<p id="delayMessage">'.$this->translator->_('cms.v3.admin.settings.chapterpublishdelaymessage').'</p>';
+                            }
+                        }
+                        echo '</div>';
+                    }
+					echo '<div class="col-md-12"><div class="form-group">'.$email_member.'</div></div>';
+					echo '<div class="col-md-12"><div class="form-group">'.$app_member.'</div></div>';
+                }
+                ?>
+
+            </div>
+            <div class="box-footer">
+                <button type="submit" class="btn btn-default <?php echo $buttonPullDirection; ?>"><?= $this->translator->_('cms.v3.admin.settings.savebtn'); ?></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    $('#fixedSettingSelectCountries').unbind('change');
+    $('#fixedSettingSelectCountries').bind('change', function() {
+
+        $("#fixedSettingSelectNewsCountries").empty();
+        $("option:selected", this).each(function(i, opt){
+            if($(this).val() != 1){
+                $("#fixedSettingSelectNewsCountries").append('<option selected value="'+$(this).val()+'">'+$(this).text()+'</option>');
+            }
+        });
+    });
+
+    $('#fixedSettingSelectRegions').unbind('change');
+    $('#fixedSettingSelectRegions').bind('change', function() {
+
+        $("#fixedSettingSelectNewsRegions").empty();
+        $("option:selected", this).each(function(i, opt){
+            if($(this).val() != 1){
+                $("#fixedSettingSelectNewsRegions").append('<option selected value="'+$(this).val()+'">'+$(this).text()+'</option>');
+            }
+        });
+    });
+	
+	$('#webvistors_email_on').bind('click', function() {
+		$('.webvistorsemail').removeClass('active');
+		$(this).addClass('active');
+		$('#allow_emailto_members').val('on');
+	});
+	$('#webvistors_email_off').bind('click', function() { 
+		$('.webvistorsemail').removeClass('active');
+		$(this).addClass('active');
+		$('#allow_emailto_members').val('off');
+	});
+	
+	$('#allowonline_app_on').bind('click', function() {
+		$('.allowonlineapp').removeClass('active');
+		$(this).addClass('active');
+		$('#allow_appto_online').val('on');
+	});
+	$('#allowonline_app_off').bind('click', function() { 
+		$('.allowonlineapp').removeClass('active');
+		$(this).addClass('active');
+		$('#allow_appto_online').val('off');
+	});	
+	$('#chapter_leadership_on').bind('click', function() {
+		$('.chapter_leadership').removeClass('active');
+		$(this).addClass('active');
+		$('#chapter_leadership_section').val('on');
+	});
+	$('#chapter_leadership_off').bind('click', function() { 
+		$('.chapter_leadership').removeClass('active');
+		$(this).addClass('active');
+		$('#chapter_leadership_section').val('off');
+	});
+	$('#controlmemberlist_on').bind('click', function() {
+		$('.controlmemberlist').removeClass('active');
+		$(this).addClass('active');
+		$('#controlmemberlist').val('on');
+	});
+	$('#controlmemberlist_off').bind('click', function() { 
+		$('.controlmemberlist').removeClass('active');
+		$(this).addClass('active');
+		$('#controlmemberlist').val('off');
+	});	
+	
+    jQuery.validator.addMethod("customemail",
+        function(value, element) {
+            return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
+        }
+    );
+
+
+    <?php
+    $params = $this->dispatcher->getParams();
+    if(isset($submitSuccessfully) and $submitSuccessfully==true) { ?>
+        setTimeout(function () {
+            window.location.href = '/bnicms/v3/backend/website/view/<?=$params[0]?>';
+        }, 2000);
+
+    <?php  }?>
+</script>

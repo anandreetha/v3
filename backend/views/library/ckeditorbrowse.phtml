@@ -1,0 +1,163 @@
+<?php
+if((count($images) > 0)||(count($documents) > 0)) {
+    ?>
+    <section class="content-header">
+        <h1>
+            <?php echo $this->translator->_('cms.v3.admin.editpage.imageLibrary'); ?>
+            <small><?php echo $this->translator->_('cms.v3.admin.editpage.selectanimage'); ?></small>
+        </h1>
+    </section>
+    <div class="box box-file-manager">
+        <div class="box-body">
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-2 col-md-2">
+                    <div class="list-group">
+                        <a id="images" class="list-group-item active" href="#"><i class="fa fa-folder-o fa-fw"
+                                                                                  aria-hidden="true"></i>&nbsp;<?php echo $this->translator->_('cms.v3.admin.editpage.images'); ?>
+                        </a>
+                        <a id="documents" class="list-group-item" href="#"><i class="fa fa-folder-o fa-fw"
+                                                                              aria-hidden="true"></i> <?php echo $this->translator->_('cms.v3.admin.editpage.documents'); ?>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-10 col-md-10 right-column">
+
+                    <div class="files" id="holder">
+                        <form method="post">
+                            <div class="images">
+                                <?php
+                                foreach ($images as $image) {
+
+                                    if (property_exists($image, 'type') && $image->type === "common") {
+                                        ?>
+                                        <a class="thumb">
+                                            <img src="<?= $this->url->get("public/img/common-library/" . $image->filename); ?>"
+                                                 class="img-thumb" width="304" height="236"
+                                                 data-imgp="<?= $this->url->get("public/img/common-library/" . $image->filename); ?>">
+
+
+                                            <span class="filename">
+                                                <?= $image->filename; ?>
+                                                <br>
+                                                <?= $this->translationUtils->formatDate($image->uploadDate->toDateTime()->format('Y-m-d H:i:s'), $userTimezone) ?>
+                                                <br>
+                                                <?= $image->size; ?>
+                                                <br>
+                                            </span>
+                                        </a>
+
+                                        <?php
+                                    } else {
+
+                                        ?>
+                                        <a class="thumb">
+
+                                            <img src="<?= $this->url->get('backend/render/renderImage/' . $image->thumbnail_id) ?>"
+                                                 class="img-thumb" width="304" height="236"
+                                                 data-imgp="<?= $this->url->get('backend/render/renderImage/' . $image->_id) ?>">
+
+                                            <span class="filename">
+                                        <?= $image->filename; ?>
+                                                <br>
+                                                <?= $this->translationUtils->formatDate($image->uploadDate->toDateTime()->format('Y-m-d H:i:s'), $userTimezone) ?>
+                                                <br>
+                                                <?= $this->viewHelper->formatBytes((double)$image->length); ?>
+                                                <br>
+                                    </span>
+                                        </a>
+                                        <?php
+                                    }
+                                } ?>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="files" id="documentHolder" style="display:none;">
+                        <form method="post">
+                            <div class="documents">
+                                <?php
+                                foreach ($documents as $document) {
+                                    ?>
+                                        <a class="thumb">
+
+                                            <i class="fa fa-file-pdf-o img-thumb" aria-hidden="true" style="font-size: 5em"  data-imgp="<?= $this->url->get('backend/render/renderDocument/' . $document->_id) ?>"></i>
+
+                                            <span class="filename">
+                                        <?= $document->filename; ?>
+                                                <br>
+                                                <?= $this->translationUtils->formatDate($document->uploadDate->toDateTime()->format('Y-m-d H:i:s'), $userTimezone) ?>
+                                                <br>
+                                                <?= $this->viewHelper->formatBytes((double)$document->length); ?>
+                                                <br>
+                                    </span>
+                                        </a>
+                                        <?php
+
+                                } ?>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer"></div>
+    </div>
+    <?php
+} else {
+    ?>
+
+    <section class="content">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= $this->translator->_('cms.v3.admin.editpage.imageLibrary'); ?>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="col-md-12">
+                    <p><?= $this->translator->_('cms.v3.admin.library.nofiles'); ?></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<?php } ?>
+<script>
+    $(".img-thumb").click(function () {
+        /**
+         * If window.opener.CKEDITOR is set, we're coming through the WYSIWYG editor as per BNIDEV-4294 and SVN committ 17231.
+         * Else we're coming through the slider view, and the JS in /pagecontentwidget/edit.phtml will handle this click instead.
+         */
+        if (window.opener && window.opener.CKEDITOR) {
+            var funcNum = getParameterByName('CKEditorFuncNum');
+            var fileUrl = $(this).data('imgp');
+            window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+            window.close();
+        }
+    });
+
+
+    $("#images").click(function () {
+        if ($("#documents").hasClass("active")) {
+            $("#documents").removeClass("active");
+        }
+        $("#images").addClass("active");
+
+        $("#documentHolder").hide();
+        $("#holder").show();
+
+    });
+
+    $("#documents").click(function () {
+        if ($("#images").hasClass("active")) {
+            $("#images").removeClass("active");
+        }
+        $("#documents").addClass("active");
+        $("#holder").hide();
+        $("#documentHolder").show();
+
+    });
+
+
+</script>

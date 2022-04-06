@@ -1,0 +1,190 @@
+<section class="widgetForm">
+    <div class="holder">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab"
+                                  href="#search-simple-tab"><?= $mappedWidgetSettings->getValueByName("Simple Search") ?></a>
+            </li>
+            <li><a data-toggle="tab"
+                   href="#search-advanced-tab"><?= $mappedWidgetSettings->getValueByName("Advanced Search") ?></a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div id="search-simple-tab" class="tab-pane fade in active">
+                <form id="search-simple" name="search-simple" class="form" method="post" action="memberlist"
+                      novalidate="novalidate">
+                    <input type="hidden" name="countryIds" id="countryIds2"
+                           value="<?php echo implode(",", $orgIds); ?>">
+
+                    <div class="col-xs-12 col-sm-6 col-md-8">
+                        <div class="formRow">
+                            <input type="text" class="textField" name="keywords" id="keywords"
+                                   placeholder="<?= $mappedWidgetSettings->getValueByName("Please enter a keyword") ?>">
+                            <div class="error"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="formButtonsRow">
+                            <button type="submit" name="submit" class="button"
+                                    id="simpleSubmit"><?= $mappedWidgetSettings->getValueByName("Search") ?></button>
+                            <span id="simpleFormAjaxLoader" style="display:none;"><i
+                                        class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="search-advanced-tab" class="tab-pane fade">
+                <form id="search-advanced" name="search-advanced" class="form" method="post" action="memberlist">
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="formRow">
+                            <label for="chapterName"><?= $mappedWidgetSettings->getValueByName("Chapter") ?></label>
+                            <select name="chapterName" id="chapterName" class="selectField">
+                                <option value=""></option>
+                            </select>
+                            <div class="error"></div>
+                        </div>
+                        <div class="formRow">
+                            <label for="chapterCity"><?= $mappedWidgetSettings->getValueByName("City") ?></label>
+                            <select name="chapterCity" id="chapterCity" class="selectField">
+                                <option></option>
+                            </select>
+                        </div>
+
+                        <div class="formRow">
+                            <label for="chapterArea"><?= $mappedWidgetSettings->getValueByName("Area") ?></label>
+                            <select name="chapterArea" id="chapterArea" class="selectField">
+                                <option value=""></option>
+                            </select>
+                            <div class="error"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="formRow">
+                            <label for="memberFirstName"><?= $mappedWidgetSettings->getValueByName("First Name") ?></label>
+                            <input type="text" name="memberFirstName" id="memberFirstName" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+
+                        <div class="formRow">
+                            <label for="memberKeywords"><?= $mappedWidgetSettings->getValueByName("Keywords") ?></label>
+                            <input type="text" name="memberKeywords" id="memberKeywords" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="formRow">
+                            <label for="memberLastName"><?= $mappedWidgetSettings->getValueByName("Last Name") ?></label>
+                            <input type="text" name="memberLastName" id="memberLastName" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+
+                        <div class="formRow">
+                            <label for="formCompany"><?= $mappedWidgetSettings->getValueByName("Company") ?></label>
+                            <input type="text" name="memberCompany" id="memberCompany" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="formButtonsRow">
+                            <button type="submit" name="submit" class="button"
+                                    id="advancedSubmit"><?= $mappedWidgetSettings->getValueByName("Search") ?></button>
+                            <span id="advancedFormAjaxLoader" style="display:none;"><i
+                                        class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var jsonUrl;
+        $(function () {
+            regionIds = '<?php echo implode(",", $orgIds); ?>';
+
+            jsonUrl = "/web/open/appsCmsMemberFilterJson?<?php echo $languages ?>&regionIds=" + regionIds;
+
+            $.getJSON(jsonUrl, function (data) {
+
+                $("#chapterName").empty().append("<option></option>");
+                $.each($(data.chapter), function (i, item) {
+                    $("<option/>", {value: item.id}).text(item.name).appendTo("#chapterName");
+                });
+
+                $("#chapterCity").empty().append("<option></option>");
+                $.each($(data.city), function (i, item) {
+                    $("<option/>", {value: item.name}).text(item.name).appendTo("#chapterCity");
+                });
+
+                $("#chapterArea").empty().append("<option></option>");
+                $.each($(data.area), function (i, item) {
+                    $("<option/>", {value: item.id}).text(item.name).appendTo("#chapterArea");
+                });
+
+                $("#basicfindamember").hide();
+                $("#findamember").show();
+
+            });
+
+            $("#search-simple").validate({
+                rules: {
+                    keywords: {
+                        required: true,
+                        minlength: 2
+                    }
+                },
+                messages: {
+                    keywords: {
+                        required: "<?=$mappedWidgetSettings->getValueByName("Please enter a keyword")?>",
+                        minlength: "<?=$mappedWidgetSettings->getValueByName("Please enter at least 2 characters")?>"
+                    }
+                },
+                errorClass: "error",
+                errorElement: "div",
+                submitHandler: function (form) {
+                    $("#simpleSubmit").attr("disabled", true);
+                    $("#simpleFormAjaxLoader").show();
+                    window.location.assign($(form).attr("action") + "?" + $(form).serialize());
+                }
+            });
+
+
+            $("#advancedSubmit").bind("click", function () {
+                $(this).attr("disabled", true);
+                $("#advancedFormAjaxLoader").show();
+                window.location.assign($("#search-advanced").attr("action") + "?" + $("#search-advanced").serialize() + "&regionIds=" + regionIds);
+                return false;
+            });
+            $("#advancedSubmit, #simpleSubmit").removeAttr("disabled");
+
+
+            //Json Sort Function
+            $.fn.sort = function () {
+                return this.pushStack([].sort.apply(this, arguments), []);
+            }
+
+            function sortByName(a, b) {
+                if (a.name == b.name) {
+                    return 0;
+                }
+                return a.name > b.name ? 1 : -1;
+            }
+
+            function sortById(a, b) {
+                if (a.id == b.id) {
+                    return 0;
+                }
+                return a.id > b.id ? 1 : -1;
+            }
+        });
+    </script>
+</section>

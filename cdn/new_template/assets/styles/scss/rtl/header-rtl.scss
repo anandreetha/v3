@@ -1,0 +1,472 @@
+/* Header Start */
+header {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    background-color: $white;
+    
+    .holder {
+        overflow: visible !important;
+    }
+    
+    .topRow {
+        display: block;
+        clear: both;
+        margin: 0px;
+        padding: 0px;
+        background-color: $bniRed;
+        
+        .holder {
+            .menuDropdown {
+                display: inline-block;
+                margin: 0px;
+                padding: 0px;
+                list-style: none;
+                
+                li {
+                    display: block;
+                    margin: 0px;
+                    padding: 0px;
+                    background-color: $bniRed;
+                    
+                    a {
+                        display: block;
+                        font-size: 16px;
+                        line-height: 40px;
+                        font-weight: 500;
+                        color: $white;
+                        margin: 0px;
+                        padding: 0px 15px 0px 60px;
+                        text-decoration: none;
+                        text-align: right;
+
+                        .fa {
+                            position: absolute;
+                            top: 0px;
+                            left: 15px;
+                            font-size: 12px;
+                            line-height: 40px;
+                            color: $white;
+                            padding-right: 30px;
+                        }
+
+                        &:hover {
+                            color: $grey;
+                            background-color: $bniRed;
+                            .fa {
+                                color: $grey;
+                            }
+                        }
+                    }
+
+                    ul {
+                        padding: 0px;
+                        margin: 0px;
+                        border-color: $bniRed;
+                        -webkit-border-radius: 0px;
+                        -moz-border-radius: 0px;
+                        border-radius: 0px;
+                        -webkit-box-shadow: none;
+                        width: 100%;
+                        background-color: $bniRed;
+                        
+                        -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.5);
+                        -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.5);
+                        box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.5);
+                        
+                        &:hover {
+                            border-color: $bniRed;
+                        }
+
+                    }
+                }
+            }
+            
+            .lCol {
+                .menuDropdown {
+                    margin-right: -15px;
+                }
+            }
+            
+            .rCol {
+                text-align: left;
+                .menuDropdown {
+                    li {
+                        a {
+                            background-color: $bniRed;
+
+                        }
+                    }
+                }
+
+                a {
+                    display: inline-block;
+                    font-size: 16px;
+                    line-height: 40px;
+                    font-weight: 500;
+                    color: $white;
+                    margin: 0px;
+                    padding: 0px 15px;
+                    text-decoration: none;
+
+                    &:hover {
+                        color: $grey;
+                    }
+                }
+            }
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .topRow {
+            .holder {
+                padding: 0px !important;
+                
+                .lCol {
+                    padding: 0px;
+                    .menuDropdown {
+                        margin-right: 0px;
+                        display: block;
+                        li {
+                            a {
+                                text-align: right;
+                                padding: 0px 30px 0px 30px;
+                                .fa {
+                                    padding-right: 15px;
+                                    left: 30px;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                .rCol {
+                    padding: 0px;
+                    .menuDropdown {
+                        display: block;
+                        li {
+                            a {
+                                text-align: right;
+                                padding: 0px 30px 0px 30px;
+                                .fa {
+                                    padding-right: 15px;
+                                    left: 30px;
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    .bottomRow {
+        display: block;
+        clear: both;
+        margin: 0px;
+        padding: 0px;
+        border-bottom: 1px solid $greyLight;
+        
+        .holder {
+
+            .colLogo {
+                padding-left: 0px;
+                .bniLogo {
+                    display: table;
+                    margin: 0px;
+                    padding: 30px 0px 30px 0px;
+                    text-decoration: none;
+                    .ico-069 {
+                        display: table-cell;
+                        color: $bniRed;
+                        font-size: 65px;
+                        line-height: 65px;
+                    }
+
+                    .texts {
+                        display: table-cell;
+                        vertical-align: middle;
+                        padding-right: 10px;
+
+                        .name {
+                            display: block;
+                            margin: 0px;
+                            padding: 0px;
+                            font-size: 38px;
+                            line-height: 46px;
+                            font-weight: 600;
+                            color: $bniBlack;
+                            text-decoration: none;
+                            white-space: nowrap;
+                            
+                                max-width: 400px;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                        }
+                        .tagline {
+                            display: block;
+                            margin: 0px;
+                            padding: 6px 2px 0px 0px;
+                            font-size: 14px;
+                            line-height: 14px;
+                            font-weight: 400;
+                            font-style: italic;
+                            color: $greyDark;
+                            text-decoration: none;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+            
+            .colNav {
+                padding: 0px;
+                text-align: left;
+                
+                ul {
+                    display: inline-block;
+                    margin: 0px;
+                    padding: 0px;
+                    list-style: none;
+                    text-align: left;
+                    white-space: nowrap;
+                    
+                    li {
+                        position: relative;
+                        display: inline-block;
+                        float: right;
+                        margin: 0px;
+                        padding: 0px 10px;
+                        a {
+                            position: relative;
+                            display: block;
+                            font-size: 22px;
+                            line-height: 26px;
+                            font-weight: 600;
+                            padding: 74px 0px 0px 0px;
+                            color: $bniBlack;
+                            text-decoration: none;
+                            text-transform: uppercase;
+                            &:hover {
+                                color: $bniRed;
+                            }
+                        }
+                    }
+                    li:after {
+                        position: absolute;
+                        content: "|";
+                        top: 0px;
+                        left: -1px;
+                        padding-top: 74px;
+                        color: $greyDark;
+                    }
+                    
+                    li:last-child:after {
+                        display: none;
+                        content: none;
+                    }
+                    li:nth-last-child(2):after {
+                        display: none;
+                        content: none;
+                    }
+                    
+                    li.active {
+                        a {
+                            background-color: $white;
+                            color: $bniRed;
+                        }
+                    }
+
+                }
+
+            }
+        }
+    }
+    
+    @media (max-width: 1439px) {
+        .bottomRow {
+            .holder {
+                
+                .colLogo {
+                    .bniLogo {
+                        padding: 25px 0px 25px 0px;
+                        .ico-069 {
+                            font-size: 60px;
+                            line-height: 60px;
+                        }
+
+                        .texts {
+
+                            .name {
+                                font-size: 36px;
+                                line-height: 40px;
+                            }
+
+                        }
+                    }
+                }
+                
+                .colNav {
+                    padding-left: 10px;
+                    ul {
+                        li {
+                            padding: 0px 8px;
+                            a {
+                                font-size: 18px;
+                                padding: 64px 0px 0px 0px;
+                            }
+                        }
+                        li:after {
+                            padding-top: 66px;
+                            font-size: 14px;
+                            margin-right: 6px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    @media (max-width: 1199px) {
+        .bottomRow {
+            .holder {
+                .colLogo {
+                    .bniLogo {
+                        margin: 0px auto;
+                    }
+                }
+                .colNav {
+                    clear: both;
+                    display: block;
+                    float: none;
+                    width: auto;
+                    border-top: 1px solid $greyLight;
+                    padding: 0px 35px;
+                    margin: 0px auto;
+                    margin-left: -35px;
+                    margin-right: -35px;
+                    text-align: center;
+                    
+                    ul {
+                        li {
+                            padding: 0px 15px;
+                            a {
+                                font-size: 18px;
+                                line-height: 22px;
+                                padding: 20px 0px 16px 0px;
+                            }
+                        }
+                        li:after {
+                            padding-top: 19px;
+                            font-size: 14px;
+                            line-height: 22px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    @media (max-width: 991px) {
+        .bottomRow {
+            .holder {
+                .colLogo {
+                    .bniLogo {
+                        padding: 15px 0px 15px 0px;
+                        margin: 0px;
+                        .ico-069 {
+                            font-size: 50px;
+                            line-height: 50px;
+                        }
+
+                        .texts {
+
+                            .name {
+                                font-size: 28px;
+                                line-height: 32px;
+                            }
+                            .tagline {
+
+                                padding: 4px 2px 0px 0px;
+                            }
+                        }
+                    }
+                }
+                .colNav {
+                    clear: none;
+                    display: block;
+                    float: right;
+                    width: 25%;
+                    border-top: 0px solid $greyLight;
+                    padding: 0px 15px 0px 0px;
+                    margin: 0px;
+                    text-align: left;
+                    
+                    ul {
+                        li {
+                            padding: 0px 15px;
+                            a {
+                                font-size: 28px;
+                                line-height: 50px;
+                                padding: 15px 0px 5px 0px;
+                                color: $bniRed;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .bottomRow {
+            .holder {
+                
+                .colLogo {
+                    .bniLogo {
+                        padding: 15px 0px 15px 0px;
+                        .ico-069 {
+                            font-size: 40px;
+                            line-height: 40px;
+                        }
+
+                        .texts {
+                            padding-right: 8px;
+
+                            .name {
+                                font-size: 22px;
+                                line-height: 26px;
+                            }
+                            .tagline {
+                                padding-top: 0px;
+                                font-size: 12px;
+                                line-height: 14px;
+                                padding: 0px;
+                            }
+                        }
+
+                    }
+                }
+                
+                .colNav {
+                    width: 16.66666667%;
+                    padding-right: 0px;
+                    ul {
+                        li {
+                            a {
+                                font-size: 30px;
+                                line-height: 40px;
+                                padding: 15px 0px 5px 0px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+
+
+}
+/* Header End */

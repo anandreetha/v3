@@ -1,0 +1,38 @@
+<style>
+    .wysiwyg img {
+        vertical-align: unset;
+    }
+</style>
+<section class="widgetTextColumns">
+
+    <div class="holder">
+        <div class="wysiwyg col-xs-12 col-sm-12 col-md-12">
+            <?php
+			$doc = new DOMDocument();
+			//$doc->loadHTML($htmlContent, LIBXML_HTML_NODEFDTD);
+			$doc->loadHTML(mb_convert_encoding($htmlContent, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NODEFDTD);
+			$xpath = new DOMXPath($doc);
+			foreach ($xpath->query("//iframe[contains(@src, 'youtube')]") as $youtube) {
+				// create a new node
+				$node = $doc->createElement('div');
+				// set attributes
+				$node->setAttribute('data-embed', basename(parse_url($youtube->getAttribute('src'), PHP_URL_PATH)));
+				$node->setAttribute('class', 'youtube-iframe');
+				$node->setAttribute('data-width', $youtube->getAttribute('width'));
+				$node->setAttribute('data-height', $youtube->getAttribute('height'));
+				// and now replace the old node
+				$youtube->parentNode->replaceChild($node, $youtube);
+			}
+			echo $doc->saveHTML();
+			
+            // Main content from controller will be displayed here
+            //echo $htmlContent;
+			/*$newsletterstring=strtolower($htmlContent);
+			$wordtxt = "newsletter";
+			if(strpos($newsletterstring, $wordtxt) !== false):
+				echo '<p class="required"> Denotes required field.</p>';
+			endif;*/
+            ?>
+        </div>
+    </div>
+</section>

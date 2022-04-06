@@ -1,0 +1,95 @@
+/* Mobile Menu Start */
+.mm-menu {
+    background: $white;
+    .mm-panel {
+        padding: 0px;
+
+        .mm-navbar {
+            border-bottom: 0px;
+            background-color: $white;
+            line-height: 40px;
+            height: auto;
+            border-bottom: 1px solid $grey;
+            
+            .mm-title {
+                padding-top: 20px;
+                color: $bniRed;
+                text-transform: uppercase;
+                .ico-069 {
+                    font-size: 38px;
+                    line-height: 38px;
+                }
+            }
+        }
+
+        .mm-listview {
+            margin: 22px 0px !important;
+            
+            li {
+                display: block;
+                border-bottom: 1px solid $grey;
+                border-top: 0px solid $grey;
+                a {
+                    display: block;
+                    font-size: 14px;
+                    line-height: 14px;
+                    font-weight: 500;
+                    color: $bniRed;
+                    background-color: $greyLight;
+                    border-left: 0px solid $grey;
+                    border-bottom: 0px solid $grey;
+                    border-top: 0px solid $grey;
+                    padding: 14px 10px 14px 25px;
+                    
+                    .ico-048 {
+                        float: right;
+                        font-size: 10px;
+                        line-height: 10px;
+                        color: $bniRed;
+                        padding-right: 10px;
+                        padding-top: 3px;
+                    }
+                }
+                
+                .label {
+                    font-size: 12px;
+                    line-height: 12px;
+                    font-weight: 300;
+                    text-transform: uppercase;
+                    color: $white;
+                    text-align: left;
+                    padding-top: 25px;
+                }
+            }
+            
+            li.active {
+                a {
+                    background-color: $greyDark;
+                }
+            }
+        
+            li:not(.mm-divider):after {
+              left: 0px;
+            }
+            
+            li:not(.mm-divider):after {
+                border-bottom-width: 0px;
+            }
+        }
+    }
+    
+    .mm-navbar .mm-btn:before, .mm-menu .mm-navbar .mm-btn:after {
+        border-color: rgba(255, 255, 255, 0.3);
+        
+    }
+
+}
+
+.mm-opened {
+    .mm-page.mm-slideout {
+        -webkit-box-shadow: 1px 0px 25px 0px rgba(0,0,0,0.5);
+        -moz-box-shadow: 1px 0px 25px 0px rgba(0,0,0,0.5);
+        box-shadow: 1px 0px 25px 0px rgba(0,0,0,0.5);
+    }
+}
+/* Mobile Menu End */

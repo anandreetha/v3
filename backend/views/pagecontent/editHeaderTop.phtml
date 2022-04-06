@@ -1,0 +1,53 @@
+<script src="/bnicms/v3/js/modalClose/closeModal.js"></script>
+<?= $this->getContent(); ?>
+<div class="row modal-row">
+    <div class="col-xs-12 col-sm-6">
+        <form method="post">
+            <div class="form-group">
+                <label for="accountLoginInput"><?= $this->translator->_('cms.v3.admin.editpage.accountlogintxt'); ?></label>
+                <input type="text" class="form-control" name="accountLoginInput" id="accountLoginInput"
+                       placeholder="Account Login"
+                       value="<?php echo isset($accountLoginText) ? $accountLoginText : '' ?>">
+            </div>
+
+            <div class="form-group">
+                <label for="bniInternationalInput"><?= $this->translator->_('cms.v3.admin.editheadertopwidget.bniinternationaltext'); ?></label>
+                <input type="text" class="form-control" name="bniInternationalInput" id="bniInternationalInput"
+                       placeholder="BNI International"
+                       value="<?php echo isset($bniInternationalText) ? $bniInternationalText : '' ?>">
+            </div>
+
+            <div class="form-group">
+                <label for="bniConnectInput"><?= $this->translator->_('cms.v3.admin.editheadertopwidget.bniconnecttext'); ?></label>
+                <input type="text" class="form-control" name="bniConnectInput" id="bniConnectInput"
+                       placeholder="BNI Connect" value="<?php echo isset($bniConnectText) ? $bniConnectText : '' ?>">
+            </div>
+			
+            <?php if( isset($regionWebsiteText) ){?>
+            <div class="form-group">
+                <label for="regionWebsiteInput"><?= $this->translator->_('cms.v3.admin.editpage.regionalwebsitelinktxt'); ?></label>
+                <input type="text" class="form-control" name="regionWebsiteInput" id="regionWebsiteInput" placeholder="<?= $this->translator->_('cms.v3.admin.editpage.regionalwebsitelinktxt'); ?>"
+                       value="<?php echo isset($regionWebsiteText) ? $regionWebsiteText : '' ?>">
+            </div>
+            <?php } ?>
+			
+			<div class="form-group">
+                <label for="bniBusinessbuilderInput"><?= $this->translator->_('cms.v3.admin.editheadertopwidget.bnibusinessbuildertext'); ?></label>
+                <input type="text" class="form-control" name="bniBusinessbuilderInput" id="bniBusinessbuilderInput"
+                       placeholder="BNI Business Builder"
+                       value="<?php echo isset($bniBusinessbuilderText) ? $bniBusinessbuilderText : '' ?>">
+            </div>	
+			
+        </form>
+    </div>
+</div>
+
+
+<script>
+    // When the document is ready, check on intervals if the success alert is on display.
+    // If the success alert is on display then this means we've successfully completed our action and we can close the form
+    // Close modal function is highly specific to the bootstrap modal and expects some sort of successful alert in this file to process
+    $(document).ready(function () {
+        closeModal('#editPageHeaderSettingsModal');
+    });
+</script>

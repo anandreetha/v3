@@ -1,0 +1,58 @@
+<div id="memberDetail">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script type="text/javascript" data-cookieconsent="ignore">
+    $(document).ready(function(){
+		var basepath=document.location.href;
+		$('link[rel="canonical"]').attr('href', basepath);
+		$('meta[property="og:url"]').attr('content', basepath);
+		$('meta[name="twitter:url"]').attr('content', basepath);
+
+        //This will make a ajax post request to the member detail controller which return html and we render that in ajax response.
+        var languages = <?php echo json_encode($languages) ?>;
+        var parameters = window.location.href.slice(window.location.href.indexOf('?') + 1);
+        var mappedWidgetSettings = '<?php echo json_encode($mappedWidgetSettingsObj) ?>';
+        var pageMode = <?php echo json_encode($pageMode) ?>;
+        var websitetype="<?php echo $this->session->get('websitetype') ?>";
+		var website_type = $('#website_type').val();
+		var website_id = $('#website_id').val();
+		
+		$.urlParam = function(name){
+			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+			if(results==null) return;
+			return results[1] || 0;			
+		}
+        
+		if($.urlParam('encryptedUserId')){
+			var memberId=$.urlParam('encryptedUserId');
+		}else {
+            var memberId = $.urlParam('encryptedMemberId')
+        }
+		memberId=decodeURIComponent(memberId);
+		
+		$.ajax({
+			type: "POST",
+			url: "<?php echo $ajaxUrl; ?>",
+			data:{
+            parameters: parameters,
+            languages:languages,
+            pageMode:pageMode,
+            mappedWidgetSettings:mappedWidgetSettings,
+			websitetype:websitetype,
+			website_type:website_type,
+			website_id:website_id,
+            memberId:memberId},
+			success: function(data) {
+				$("#rssLoaderAjax").hide();
+				$("#memberDetail").html(data);
+				adjustIframes();
+				<?php if($websiteTypeId == 3){ ?>
+				$('#memberDetail').find("div.photoCol").find("a").removeAttr("href");
+				<?php } ?>
+			}
+		});
+
+    });
+
+</script>

@@ -1,0 +1,63 @@
+<?php
+if (count($images) > 0) {
+    ?>
+    <div class="box box-file-manager">
+        <div class="box-body">
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-2 col-md-2">
+                    <div class="list-group">
+                        <a id="images" class="list-group-item active" href="#"><i class="fa fa-folder-o fa-fw"
+                                                                                  aria-hidden="true"></i>&nbsp;<?php echo $this->translator->_('cms.v3.admin.editpage.images'); ?></a>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-10 col-md-10 right-column">
+
+                    <div class="files" id="holder">
+                        <form method="post">
+                            <div class="images">
+                                    <?php
+                                    foreach ($images as $image) { ?>
+                                        <a class="thumb">
+                                        <img src="<?= $this->url->get("/public/img/common-library/".basename($image["image"]) );  ?>"
+                                             class="img-thumb" width="304" height="236"
+                                             data-imgp="<?= $this->url->get("/public/img/common-library/".basename($image["image"]) );  ?>">
+
+                                    <span class="filename">
+                                        <?= basename($image["image"]); ?>
+                                         <br>
+                                        <?= $image["modifiedDate"]?>
+                                        <br>
+                                        <?= $this->viewHelper->formatBytes((double)$image["size"]); ?>
+                                        <br>
+                                    </span>
+                                </a>
+                                <?php
+                                } ?>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">  </div>
+    </div>
+    <?php
+}
+?>
+
+<script>
+    $(".img-thumb").click(function () {
+        /**
+         * If window.opener.CKEDITOR is set, we're coming through the WYSIWYG editor as per BNIDEV-4294 and SVN committ 17231.
+         * Else we're coming through the slider view, and the JS in /pagecontentwidget/edit.phtml will handle this click instead.
+         */
+        if (window.opener && window.opener.CKEDITOR) {
+            var funcNum = getParameterByName('CKEditorFuncNum');
+            var fileUrl = $(this).data('imgp');
+            window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+            window.close();
+        }
+    });
+</script>

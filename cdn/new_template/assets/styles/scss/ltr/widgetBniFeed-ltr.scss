@@ -1,0 +1,352 @@
+/* BNI Feed Start */
+.widgetBniFeed {
+    display: block;
+    margin: 0px;
+    padding: 60px 0px;
+    overflow: hidden;
+    background-color: $white;
+    .holder {
+        h2{
+            color: $bniBlack;
+            font-weight: 700;
+            position: relative;
+            padding: 0 0 10px 0;
+            margin: 0 0px 30px 0px;
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 80px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }  
+        .topRow {
+            display: block;
+            margin: 0px;
+            padding: 0px;
+            overflow: hidden;
+            .viewOuter{
+                text-align: right;
+                a{
+                    display: inline-block;
+                    color: $bniRed;
+                    font-size: 34px;
+                    line-height: 39px;
+                    font-weight: 700;
+                    text-decoration: none;
+                    svg{
+                        width: 22px;
+                        height: 22px;
+                        .cls-1, .cls-2 {
+                            stroke: $bniRed;
+                        }
+                    }
+                    &:hover{
+                        color: $bniBlack;
+                        svg{
+                            width: 22px;
+                            .cls-1, .cls-2 {
+                                stroke: $bniBlack;
+                            }
+                        }
+                    }
+                }
+            }
+            .bniOuter{
+                margin: 0 0 20px 0;
+                img{
+                    margin: 0 0 25px 0;
+                    max-width: 100%;
+                }
+                h5{
+                    margin: 0 0 8px 0;
+                    color: $bniRed;
+                    font-weight: 700;
+                    a{
+                        display: inline-block;
+                        text-decoration: none;
+                        color: $bniRed;
+                        &:hover{
+                            color: $bniBlack;
+                        }
+                    }
+                }
+                p{
+                    color: $greyDark;
+                    margin: 0 0 15px 0;
+                    span{
+                        display: block;
+                        font-size: 14px;
+                        line-height: 20px;
+                    }
+                }
+            }
+        }
+        
+        .rss-box {
+            display: block;
+            margin: 0px -15px;
+            padding: 0px;
+            overflow: hidden;
+            
+            p.rss-item {
+                display: none;
+            }
+            
+            ul {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+                margin: 0px 0px;
+                padding: 0px 0px;
+                list-style: none;
+                border-collapse: separate;
+                border-spacing: 30px 0px;
+                
+                li {
+                    display: table-cell;
+                    padding: 0px 0px;
+                    border-top: 5px solid $greyLight;
+                    vertical-align: top;
+                    font-size: 17px;
+                    line-height: 22px;
+                    font-weight: 400;
+                    color: $greyDark;
+                        
+                        
+                    a {
+                        position: relative;
+                        display: block;
+                        font-size: 22px;
+                        line-height: 26px;
+                        font-weight: 700;
+                        color: $bniRed;
+                        text-decoration: none;
+                        padding-top: 20px;
+                        
+                        img {
+                            display: block;
+                            margin-bottom: 15px;
+                            max-width: 100%;
+                        }
+                        
+                        &:hover {
+                            color: $bniBlack;
+                            text-decoration: none;
+                        }
+                    }
+                    a:before {
+                      content: '';
+                      position: absolute;
+                      top: -4px;
+                      left: 0;
+                      width: 0%;
+                      border-top: 5px solid $bniRed;
+                      transition: 0.2s;
+                    }
+                    a:hover:before {
+                      width: 100%;
+                    }
+                    
+                    br {
+                        display: none;
+                    }
+
+                    .rss-date {
+                        position: relative;
+                        display: block;
+                        margin: 0px;
+                        padding: 2px 0px 15px 0px;
+                        font-size: 14px;
+                        line-height: 16px;
+                        font-weight: 400;
+                        color: $greyDark;
+                        white-space: nowrap;
+                    }
+
+                    .rss-item-auth {
+                        position: relative;
+                        display: block;
+                        margin: 0px;
+                        padding: 4px 0px 4px 0px;
+                        font-size: 17px;
+                        line-height: 22px;
+                        font-weight: 400;
+                        color: $greyDark;
+                        overflow: hidden;
+                    }
+
+
+                }
+
+            }
+        }
+    }
+}
+
+@media (max-width: 1439px) {
+    .widgetBniFeed {
+        padding: 50px 0;
+        .holder {
+            h2{
+                font-size: 28px;
+                line-height: 32px;
+            }
+            .topRow {
+                .viewOuter {
+                    a{
+                        font-size: 25px;
+                        line-height: 30px;
+                        &:after{
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetBniFeed {
+
+        .holder {
+            .topRow {
+                .bniOuter {
+                    img{
+                        margin: 0 0 15px 0;
+                    }
+                    h5{
+                        font-size: 20px;
+                    }
+                }
+            }
+            .rss-box {
+                ul {
+                    margin: 0px 0px;
+                    border-spacing: 30px 0px;
+                    
+                    li {
+                        a {
+                            font-size: 20px;
+                            line-height: 24px;
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetBniFeed {
+        padding: 50px 0px 20px 0;
+
+        .holder {
+            .topRow {
+                .bniOuter {
+                    margin: 0 0 30px 0;
+                    p{
+                        margin: 0 0 10px 0;
+                    }
+                }
+            }
+
+            .rss-box {
+                ul {
+                    display: block;
+                    width: auto;
+                    table-layout: fixed;
+                    margin: 0px 30px;
+
+                    li {
+                        display: block;
+                        padding-bottom: 30px;
+
+                        a {
+                            font-size: 20px;
+                            line-height: 24px;
+                            
+                            img {
+                                max-width: 300px;
+                            }
+                        }
+
+                    }
+                    
+                    li:last-child {
+                        padding-bottom: 5px;
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetBniFeed {
+        padding: 30px 0 10px 0;
+        .holder {
+            h2{
+                font-size: 25px;
+                line-height: 32px;
+                margin: 0 0 20px 0;
+                &:after{
+                    width: 50px;
+                }
+            }
+            .topRow{
+                .viewOuter{
+                    margin: 0 0 20px 0;
+                    a{
+                        font-size: 19px;
+                        line-height: 26px;
+                        svg{
+                            width: 15px;
+                            height: 15px;
+                        }
+                    }
+                }
+                .bniOuter {
+                    margin: 0 0 20px 0;
+                    h5{
+                        font-size: 18px;
+                        line-height: 24px;
+                    }
+                    p{
+                        font-size: 16px;
+                        line-height: 22px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 413px) {
+    .widgetBniFeed {
+        .holder {
+            .rss-box {
+                ul {
+                    li {
+                        font-size: 16px;
+                        .rss-item-auth{
+                            font-size: 16px;
+                        }
+                        a {
+                            font-size: 18px;
+                            line-height: 22px;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}
+/* BNI Feed Start */

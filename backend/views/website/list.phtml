@@ -1,0 +1,311 @@
+<div class="box">
+
+    <div class="box-header">
+        <p>
+            <br/><br/>
+            <?= $this->flashSession->output(); ?>
+            <?= $this->getContent(); ?>
+        </p>
+        <?php if ($websiteType == 'regions' || $websiteType == 'chapters' || $websiteType == 'countrylevel') { ?>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="countriesAvailable"><?= $this->translator->_('cms.v3.admin.websitelist.regioncountriesheading') ?></label>
+                        <?php 
+						if(($websiteType == 'countrylevel')&&(count($orgCountries)>1)):
+							echo Phalcon\Tag::select(
+								[
+									"countriesAvailable",
+									$orgCountries,
+									"class" => "form-control",
+									"value" => $preSelectedCountryId,
+									"data-toggle" => "tooltip",
+									"title" => $this->translator->_('cms.v3.admin.websitelist.regioncountrydropdowndefault'),
+									"useEmpty"=>true, 
+									"emptyText"=>$this->translator->_("cms.v3.admin.websitelist.pleaseselect"),
+									"emptyValue"=>""
+								]
+							);
+						else:
+							echo Phalcon\Tag::select(
+								[
+									"countriesAvailable",
+									$orgCountries,
+									"class" => "form-control",
+									"value" => $preSelectedCountryId,
+									"data-toggle" => "tooltip",
+									"title" => $this->translator->_('cms.v3.admin.websitelist.regioncountrydropdowndefault')
+								]
+							);
+						endif;
+                        ?>
+
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+
+        <?php
+        if ($websiteType == 'chapters') { ?>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="regionsAvailable"><?= $this->translator->_('cms.v3.admin.websitelist.regiondropdownheading') ?></label>
+
+                        <?php echo Phalcon\Tag::select(
+                            [
+                                "regionsAvailable",
+                                $orgRegions,
+                                "class" => "form-control",
+                                "value" => $preSelectedRegionId,
+                                "data-toggle" => "tooltip",
+                                "title" => $this->translator->_('cms.v3.admin.websitelist.selectregion')
+                            ]
+                        );
+                        ?>
+
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="box-tools">
+            <?php
+            // Show add buttons only for country websites but (currently disable for region websites- will be reinstated after first release to UAT)  list
+            if (isset($typeId) && ($typeId == 1 || $typeId == 2) ){
+                echo $this->tag->linkTo(array('#', '<i class="fa fa-plus fa-lg"></i>', "data-toggle" => "tooltip", "title" => $this->translator->_('cms.v3.admin.websitelist.createwebsite'), "class" => "newWebsiteModal btn btn-block btn-default", "data-toggle" => "modal", "data-target" => "#newWebsiteModal", "id" => "", "data-href" => $this->url->get('backend/website/add/' . $typeId), "data-backdrop" => "static", "data-keyboard" => "false", "data-backdrop" => "static", "data-keyboard" => "false"));
+            }
+			if(($websiteType == 'countrylevel')&&(count($websites)==0)&&($preSelectedCountryId!="")){
+				echo $this->tag->linkTo(array('#', '<i class="fa fa-plus fa-lg"></i>', "data-toggle" => "tooltip", "title" => $this->translator->_('cms.v3.admin.websitelist.createwebsite'), "class" => "newWebsiteModal btn btn-block btn-default", "data-toggle" => "modal", "data-target" => "#newWebsiteModal", "id" => "", "data-href" => $this->url->get('backend/website/countrylevel/' . $preSelectedCountryId), "data-backdrop" => "static", "data-keyboard" => "false", "data-backdrop" => "static", "data-keyboard" => "false"));
+				?>
+				<style type="text/css">	
+				.modal-footer{display:none;}
+				.modal-body{height:auto !important;}
+				</style>
+				
+				<?php
+			}
+            ?>
+        </div>
+
+    </div>
+
+    <?php
+    if (count($websites)) {
+        ?>
+
+        <div class="box-body">
+
+            <table id="websiteListDatatable" class="table table-bordered table-striped dataTable dt-responsive">
+                <thead>
+                <tr>
+                    <th><?= $this->translator->_('cms.v3.admin.websitelist.name'); ?></th>
+                    <?php
+                    // If $typeId is set, we're viewing one of the real 'website list' nav items (country website list, chapter website list, etc) - where the 'type' column is redundant
+                    if (!is_int($typeId)) { ?>
+                        <th><?= $this->translator->_('cms.v3.admin.websitelist.type'); ?></th>
+                    <?php } ?>
+                    <th><?= $this->translator->_('cms.v3.admin.websitelist.domain'); ?></th>
+                    <th><?= !is_int($typeId) ? $this->translator->_('cms.v3.admin.websitelist.organization') : ($typeId == 1 ? $this->translator->_('cms.v3.admin.websitelist.country') : ($typeId == 2 ? $this->translator->_('cms.v3.admin.websitelist.region') : $this->translator->_('cms.v3.admin.websitelist.chapter'))); ?></th>
+                    <th><?= $this->translator->_('cms.v3.admin.websitelist.lastmodified'); ?></th>
+                    <th><?= $this->translator->_('cms.v3.admin.websitelist.lastpublished'); ?></th>
+                    <th><?= $this->translator->_('cms.v3.admin.websitelist.creator'); ?></th>
+                    <th><?= $this->translator->_('cms.v3.admin.websitelist.options'); ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+				$countrylevelarr=array(); $cnt=0; $oldcountrylevel=array();$countryids=array();
+                foreach ($websites as $website) {
+					if($websiteType == 'countrylevel'):
+						$countrylevelarr[]=$website->id;
+					endif;
+                    $orgNames = '';
+					
+					$last_modified=strtotime($website->last_modified);
+					$last_published=strtotime($website->last_published);
+
+                    $lastKey = count($website->getWebsiteOrg());
+                    foreach ($website->getWebsiteOrg() as $key => $org) {
+                        if (array_key_exists($org->orgId, $orgNameMap)) {
+                            $orgNames .= $orgNameMap[$org->orgId] . ', ';
+
+                            if ($key == $lastKey - 1) {
+                                $orgNames = rtrim($orgNames, ", ");
+                            }
+                        }
+                    }
+
+                    echo "<tr>";
+                    echo "<td class='cellWrap'><a href='http://" .$this->websiteHelper->strip_accents($website->clean_domain) . "' target='_blank'>" . $website->name . "</a></td>";
+
+                    if (!is_int($typeId)) {
+                        echo "<td>" . $website->WebsiteType->name . "</td>";
+                    }
+                    echo "<td class='cellWrap'>".$this->websiteHelper->strip_accents($website->clean_domain)."</td>";
+
+                    echo "<td class='currentorgname'>$orgNames</td>";
+                    echo "<td data-order='".$last_modified."'>".$this->translationUtils->formatDate($website->last_modified, $userTimezone)."</td>";
+                    echo "<td data-order='".$last_published."'>".$this->translationUtils->formatDate($website->last_published, $userTimezone)."</td>";
+                    echo "<td>$website->creator</td>";
+                    echo "<td>";
+                    echo '<div class="btn-group" role="group" aria-label="...">';
+                    echo $this->tag->linkTo(array('backend/website/view/' . $website->id, '<i class="fa fa-wrench fa-lg"></i>', "data-toggle" => "tooltip", "title" => $this->translator->_('cms.v3.admin.websitelist.settings'), "class" => "btn btn-default"));
+
+                    // We only want to define the return path for country, region or chapter lists
+                    $returnPath = '';
+                    if ($websiteType ==='regions' || $websiteType === 'chapters' || $websiteType === 'countries') {
+                        $returnPath = $websiteType;
+                    }
+
+                    if ($website->is_default == 0 && $website->type_id<>3) {
+                        echo $this->tag->linkTo(array("backend/website/delete/{$website->id}/{$returnPath}", '<i class="fa fa-trash-o fa-lg"></i>', "data-toggle" => "tooltip", "title" => $this->translator->_('cms.v3.admin.websitelist.trash'), "class" => "btn btn-default", 'onClick' => 'return confirm("' . $this->translator->_('cms.v3.admin.websitelist.deletewebsiteconfirmmsg') . '");'));
+                    }
+
+                    echo "</div>";
+                    echo "</td>";
+                    echo "</tr>";
+					$cnt++;
+                }
+				if($websiteType == 'countrylevel'):
+					$this->session->set('countrylevel','y');
+					if($this->session->get('countrylevel_website')!=""):
+						$oldcountrylevel=$this->session->get('countrylevel_website');
+						$countrylevelarr=array_merge($countrylevelarr,$oldcountrylevel);
+						$countrylevelarr=array_unique($countrylevelarr);
+					endif;
+					
+					$this->session->set('countrylevel_website',$countrylevelarr);
+					/*$countryids=$this->session->get('id_country');
+					$countryids[]=$preSelectedCountryId;
+					$countryids=array_unique($countryids);*/
+					
+					
+					//$this->session->set('id_country',$countryids);
+				endif;
+                ?>
+                </tbody>
+            </table>
+
+        </div>
+
+
+    <?php } else { ?>
+        <div class="box-body">
+            <div class="alert alert-warning" role="alert">
+                <strong><?= $this->translator->_('cms.v3.admin.websitelist.nositesmessage'); ?></strong>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php $this->partial('partials/admin/modal', [
+        'title' => $this->translator->_('cms.v3.admin.websitecreation.newwebsitemodalheading'),
+        'iframeId' => 'newWebsiteIframe',
+        'wrapperId' => 'newWebsiteModal',
+        'successButtonId' => 'newWebsiteSubmit',
+        'modalBodyHeight' => '400px',
+    ]); ?>
+
+</div>
+
+
+<script>
+    var typeId = '<?php echo $typeId; ?>';
+	var websiteType = '<?php echo $websiteType; ?>';
+
+	if(websiteType=="countrylevel"){
+		$("#countriesAvailable").change(loadCountryLevelList);
+		$('.currentorgname').html($('#countriesAvailable option:selected').text());
+	}else{
+		if (typeId == 2) {
+			$("#countriesAvailable").change(loadRegionList);
+
+		} else {
+			// To get all chapters within the country if country alone is chosen
+			$("#countriesAvailable").change(loadChapterListForCountry);
+			$("#regionsAvailable").change(loadChapterList);
+		}
+	}
+
+	function loadCountryLevelList() {
+        var countryIdSelected = $(this).find("option:selected").val();
+        window.location.replace("<?=$this->config->general->baseUri?>backend/website/list/countrylevel/" + countryIdSelected);
+    }
+    //The function filters the region websites based on the country chosen
+    function loadRegionList() {
+        var countryIdSelected = $(this).find("option:selected").val();
+        window.location.replace("<?=$this->config->general->baseUri?>backend/website/list/regions/" + countryIdSelected);
+    }
+
+    //The function filters the chapter websites based on the region chosen
+    function loadChapterList() {
+
+        var countryIdSelected = $("#countriesAvailable").find("option:selected").val();
+        var regionIdSelected = $("#regionsAvailable").find("option:selected").val();
+        window.location.replace("<?=$this->config->general->baseUri?>backend/website/list/chapters/" + countryIdSelected + '/' + regionIdSelected);
+    }
+
+    //The function filters the chapter websites based on the country chosen
+    function loadChapterListForCountry() {
+        var countryIdSelected = $("#countriesAvailable").find("option:selected").val();
+        window.location.replace("<?=$this->config->general->baseUri?>backend/website/list/chapters/" + countryIdSelected);
+    }
+
+    $(".newWebsiteModal").on("click", function () {
+        var frameSrc = $(this).data("href");
+        $('#newWebsiteModal iframe').attr("src", frameSrc);
+    });
+
+    $('#newWebsiteSubmit').on('click', function (e) {
+        e.preventDefault();
+        $('#newWebsiteSubmit').attr("disabled", true);
+        submitModal('newWebsiteIframe');
+    });
+
+    $('.cms-save-btn').click(function () {
+        alert('save button click');
+    });
+
+    $(function () {
+
+        $('#websiteListDatatable').DataTable({
+            'paging': true,
+            'responsive': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false,
+            "columnDefs": [
+                <?php if (!is_int($typeId)) { ?>
+                  {aTargets: [7], bSortable: false},
+                // After hiding all other columns, hide the 'name' column next (since it has highest priority to hide), then hide 'domain' then hide 'options'
+                { responsivePriority: 3, targets: 0 },
+                { responsivePriority: 2, targets: 2 },
+                { responsivePriority: 1, targets: -1 }
+                  <?php } else { ?>
+                {aTargets: [6], bSortable: false},
+                // After hiding all other columns, hide the 'name' column next (since it has highest priority to hide), then hide 'domain' then hide 'options'
+                { responsivePriority: 3, targets: 0 },
+                { responsivePriority: 2, targets: 1 },
+                { responsivePriority: 1, targets: -1 }
+                <?php } ?>
+            ],
+            'language'    :{
+                "lengthMenu": "<?php echo  $this->translator->_('datatablesparameters.sLengthMenu')?>",
+                "zeroRecords": "<?php echo  $this->translator->_('datatablesparameters.sZeroRecords')?>",
+                "info": "<?php echo  $this->translator->_('datatablesparameters.sInfo')?>",
+                "search":" <?php echo  $this->translator->_('datatablesparameters.sSearch')?>",
+                "paginate": {
+                    "first":     "<?php echo  $this->translator->_('datatablesparameters.sFirst')?>",
+                    "last":       "<?php echo  $this->translator->_('datatablesparameters.sLast')?>",
+                    "next":      "<?php echo  $this->translator->_('datatablesparameters.sNext')?>",
+                    "previous":   "<?php echo  $this->translator->_('datatablesparameters.sPrevious')?>"
+                },
+            }
+        })
+    });
+
+    // Remove the 'selected language' drop down value (used in the back button logic, as per admin.phtml)
+    window.localStorage.removeItem("selectedLanguageId");
+    window.localStorage.removeItem("activeTab");
+</script>

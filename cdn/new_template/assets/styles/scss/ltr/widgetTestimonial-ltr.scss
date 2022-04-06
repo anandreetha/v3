@@ -1,0 +1,350 @@
+/* Testimonial Start */
+.widgetTestimonial {
+    display: block;
+    margin: 0px;
+    padding: 0px 0px 50px 0px;
+    overflow: hidden;
+    
+    .holder {
+        .textmonialInner{
+            box-shadow: 0px 1px 6px #00000029;
+            margin: 10px 0 20px 0;
+            clear: both;
+            display: block;
+            overflow: hidden;
+        }
+        .imageBox {
+            float: left;
+            width: 50%;
+            height: 550px;
+            overflow: hidden;
+            z-index: 10;            
+            background-size: cover;
+            img{
+                max-width: 100%;
+                width: 100%;
+                height: 550px;
+                object-fit: cover;
+            }
+        }
+        
+        .textBox {
+            position: relative;
+            float: right;
+            width: 50%;
+            min-height: 550px;
+            background-color: $white;
+            overflow: hidden;
+            padding: 60px 60px;
+            .textboxInner{
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 100%;
+                padding: 60px;
+                transform: translate(0, -50%);
+                -webkit-transform: translate(0, -50%);
+                -moz-transform: translate(0, -50%);
+                -ms-transform: translate(0, -50%);
+                -o-transform: translate(0, -50%);
+            }
+            
+            h3 {
+                display: block;
+                margin: 0px;
+                padding: 0px 0px 0px 0px;
+                font-size: 28px;
+                line-height: 42px;
+                font-weight: 700;
+                color: $greyDark;
+            }
+            
+            p {
+                display: block;
+                margin: 0px;
+                padding: 30px 0px 0px 0px;
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: 400;
+                color: $greyDark;
+                span{
+                    color: $bniRed;
+                    display: block;
+                }
+                a{
+                    &.story{
+                        background: $bniRed;;
+                        color: $white;
+                        padding: 12px 30px;
+                        border-radius: 25px;
+                        display: inline-block;
+                        text-decoration: none;
+                        border: 1px solid $bniRed;
+                        &:hover{
+                            background: $white;
+                            color: $bniRed;
+                        }
+                    }
+                }
+                
+                a.name {
+                    position: relative;
+                    display: inline-block;
+                    padding: 10px 15px 10px 15px;
+                    background-color: $first;
+                    color: $white;
+                    text-decoration: none;
+                    font-weight: 500;
+                    font-size: 18px;
+                    line-height: 22px;
+                    .ico-048 {
+                        float: right;
+                        font-size: 10px;
+                        line-height: 22px;
+                        padding-left: 40px;
+                    }
+                    &:hover {
+                        background-color: $third;
+                    }
+                }
+                
+                span.name {
+                    padding: 10px 0px 10px 0px;
+                    color: $greyDarker;
+                    text-decoration: none;
+                    font-weight: 500;
+                    font-size: 18px;
+                    line-height: 22px;
+                }
+                
+                span.designation {
+                    display: block;
+                    padding: 10px 0px 2px 0px;
+                    font-size: 16px;
+                    line-height: 20px;
+                }
+                
+                a.company {
+                    display: inline-block;
+                    padding: 0px;
+                    color: $first;
+                    text-decoration: none;
+                    font-size: 16px;
+                    line-height: 20px;
+                    &:hover {
+                        color: $third;
+                    }
+                }
+                
+                span.company {
+                    font-size: 16px;
+                    line-height: 20px;
+                    color: $grey;
+                }
+                
+                
+            }
+        }
+        /*.textBox:after {
+            position: absolute;
+            top: 60px;
+            right: 50px;
+            content: "\f10e";
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: 32px;
+            color: $first;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }*/
+    }
+}
+
+.widgetTestimonial:nth-child(odd) {
+    background-color: $white;
+    
+    .holder {
+        .imageBox {
+            float: right;
+        }
+        
+        .textBox {
+            float: left;           
+            
+        }
+    }
+}
+
+.widgetTestimonial:nth-child(3n) {
+
+    .holder {
+        .imageBox {
+            
+        }
+
+    }
+}
+
+@media (max-width: 1439px) {
+    .widgetTestimonial {
+        padding: 0px 0px 40px 0px;
+        .holder {
+            .imageBox {
+               
+            }
+            .textBox {
+                h3{
+                    font-size: 22px;
+                    line-height: 32px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetTestimonial {
+        padding: 0px 0px 40px 0px;
+        .holder {
+            .imageBox {
+                height: 460px;
+                img{
+                    height: 460px;
+                }
+            }
+            
+            .textBox {
+                min-height: 460px;
+                padding: 40px 40px;
+                .textboxInner{
+                    padding: 40px 40px;
+                }
+                h3 {
+                    font-size: 22px;
+                    line-height: 32px;
+                }
+
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetTestimonial {
+        padding: 0px 0px 30px 0px;
+        .holder {
+            .imageBox {
+                height: 400px;
+                img{
+                    height: 400px;
+                }
+            }
+            
+            .textBox {
+                padding: 30px 30px;
+                min-height: 400px;
+                .textboxInner{
+                    padding: 30px 30px;
+                }
+                h3 {
+                    font-size: 18px;
+                    line-height: 24px;
+                }
+                
+                p {
+                    padding: 20px 0px 0px 0px;
+                    a{
+                        &.story{
+                            padding: 12px 20px;
+                        }
+                    }
+
+                    a.name {
+                        padding: 10px 15px 10px 15px;
+                        font-size: 16px;
+                        line-height: 20px;
+                        .ico-048 {
+                            font-size: 10px;
+                            line-height: 20px;
+                            padding-left: 30px;
+                        }
+                    }
+
+                    span.name {
+                        font-size: 14px;
+                        line-height: 18px;
+                    }
+
+                    span.designation {
+                        font-size: 14px;
+                        line-height: 18px;
+                    }
+
+                    a.company {
+                        font-size: 14px;
+                        line-height: 18px;
+                    }
+
+                    span.company {
+                        font-size: 14px;
+                        line-height: 18px;
+                    }
+
+                }
+
+            }
+        }
+    }
+    
+    
+}
+
+@media (max-width: 767px) {
+    .widgetTestimonial {
+        padding: 0px 0px 20px 0px;
+        .holder {
+            .imageBox {
+                float: none;
+                width: 100%;
+                height: 300px;
+                img{
+                    height: 300px;
+                }
+            }
+            
+            .textBox {
+                float: none;
+                display: block;
+                width: 100%;
+                padding: 15px 15px;
+                margin: 0px 0px 0px 0px;
+                min-height: inherit;
+                .textboxInner{
+                    padding: 0;
+                    position: relative;
+                    top: auto;
+                    left: auto;
+                    transform: translate(0, 0);
+                    -webkit-transform: translate(0, 0);
+                    -moz-transform: translate(0, 0);
+                    -ms-transform: translate(0, 0);
+                    -o-transform: translate(0, 0);
+                }
+                h3 {
+                    
+                }
+
+
+            }
+        }
+    }
+    
+    .widgetTestimonial:nth-child(odd) {
+        .holder {
+            .textBox {
+                
+            }
+        }
+    }
+}
+/* Testimonial Start */

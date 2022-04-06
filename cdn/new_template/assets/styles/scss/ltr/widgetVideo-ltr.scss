@@ -1,0 +1,51 @@
+/* Video Start */
+.widgetVideo {
+    display: block;
+    margin: 0px;
+    padding: 80px 0px;
+    overflow: hidden;
+    
+    .video-container {
+        margin: 0px auto;
+        position: relative;
+        padding-bottom: 52.5%;
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden;
+        
+        iframe, object, embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+    }
+    
+    .oneVideo {
+        display: block;
+        margin: 0px auto;
+        max-width: 800px;
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetVideo {
+        padding: 60px 0px;
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetVideo {
+        padding: 30px 15px;
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetVideo {
+        padding: 20px 15px;
+    }
+}
+/* Video End */

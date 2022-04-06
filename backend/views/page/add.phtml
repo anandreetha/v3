@@ -1,0 +1,34 @@
+<script src="/bnicms/v3/js/modalClose/closeModal.js"></script>
+
+<div class="container">
+    <?= $this->getContent();?>
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post">
+                <div class="form-group">
+                    <label for="pageOrder"><?= $this->translator->_('cms.v3.admin.pages.pageorder'); ?></label>
+                    <input type="text" class="form-control" name="pageOrder" id="pageOrder" placeholder="<?= $this->translator->_('cms.v3.admin.pages.enterpageorder'); ?>" value="<?= $this->request->isPost() ? $this->request->getPost("pageOrder") : ''?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="pageTitle"><?= $this->translator->_('cms.v3.admin.pages.pagetitle'); ?></label>
+                    <input type="text" class="form-control" name="pageTitle" id="pageTitle" placeholder="<?= $this->translator->_('cms.v3.admin.pages.enterpagetitle'); ?>" value="<?= $this->request->isPost() ? $this->request->getPost("pageTitle") : '' ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="navName"><?= $this->translator->_('cms.v3.admin.pages.navname'); ?></label>
+                    <input type="text" class="form-control" name="navName" id="navName" placeholder="<?= $this->translator->_('cms.v3.admin.pages.enterpagenav'); ?>" value="<?= $this->request->isPost() ? $this->request->getPost("navName") : '' ?>">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // When the document is ready, check on intervals if the success alert is on display.
+    // If the success alert is on display then this means we've successfully completed our action and we can close the form
+    // Close modal function is highly specific to the bootstrap modal and expects some sort of successful alert in this file to process
+    $(document).ready(function(){
+        closeModal('#addLanguagesModal');
+    });
+</script>

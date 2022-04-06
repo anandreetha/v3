@@ -1,0 +1,285 @@
+<?php if ($widgetSettings != null) {
+    $size =0;
+    $slidesToDisplayArray = $this->widgetRenderService->findWidgetSettingWithImages($widgetSettings);
+    $size = count($slidesToDisplayArray);
+
+    $interval = 9;
+    if(isset($widgetSettings[15]) && property_exists($widgetSettings[15], 'value')){
+        $interval = (double)$widgetSettings[15]->value > 0 ? (double)$widgetSettings[15]->value * 1000 : $interval * 1000;
+    }
+    ?>
+	<section class="widgetVisitChapterOverlay" style="display: none;">
+            <div class="contentBox">
+                <div class="contentBoxInner">
+                    <a href="#" class="modal-close close_chapter">
+                        <svg  class="icon-close" xmlns="http://www.w3.org/2000/svg" width="26.498" height="26.498" viewBox="0 0 26.498 26.498">
+                          <g transform="translate(2067.346 3389.678)">
+                            <path data-name="Path 45" class="cls-1" d="M-2066.639-3388.971l25.084,25.084"/>
+                            <path data-name="Path 46" class="cls-1" d="M-2041.554-3388.971l-25.084,25.084"/>
+                          </g>
+                        </svg>
+                    </a>
+                    <div class="chapterLeft">
+                        <img loading="lazy" src="<?php echo $this->config->general->cdn; ?>/new_template/assets/images/gettingstarted-image.png" alt="gettingstarted-image">
+                    </div>
+                    <div class="chapterRight">
+                        <div class="chapterRightInner">
+                            <h2><?php echo isset($contentSettings["pagecontent_find_a_chapter_getinvited_heading_text"]) ? $contentSettings["pagecontent_find_a_chapter_getinvited_heading_text"] : "Getting Started Easy" ?></h2>
+                            <ul>
+                                <li>
+                                    <span>
+                                        <svg class="icon-search" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="81" height="81" viewBox="0 0 81 81">
+                                          <defs>
+                                            <clipPath>
+                                              <rect data-name="Rectangle 9" class="cls-1" width="32.478" height="32" transform="translate(173 529)"/>
+                                            </clipPath>
+                                          </defs>
+                                          <g transform="translate(-1030 -1398)">
+                                            <rect data-name="Rectangle 19" class="cls-2" width="81" height="81" rx="10" transform="translate(1030 1398)"/>
+                                            <g data-name="Mask Group 3" class="cls-3" transform="translate(881 894)">
+                                              <g transform="translate(173.216 529)">
+                                                <path data-name="Path 26" class="cls-4" d="M14.988.244a12.542,12.542,0,0,1,7.027,20.52l9.764,9.742a.869.869,0,0,1-1.226,1.232l-9.767-9.745A12.54,12.54,0,1,1,14.988.244ZM4.124,10a9.378,9.378,0,0,1,6.25-6.065L10.866,5.6a7.621,7.621,0,0,0-5.087,4.942Zm10.53-8.046a10.8,10.8,0,1,0,8.481,12.7A10.795,10.795,0,0,0,14.654,1.952Z" transform="translate(0 0)"/>
+                                              </g>
+                                            </g>
+                                          </g>
+                                        </svg>
+                                    </span>
+                                    <p><?php 
+										$step1=isset($contentSettings["pagecontent_find_a_chapter_getinvited_step1_text"]) ? $contentSettings["pagecontent_find_a_chapter_getinvited_step1_text"] : "Find a <span>Chapter</span>"; 
+										echo wordwrap($step1,10,"<span/>");
+									?></p>
+                                </li>
+                                <li>
+                                    <span>
+                                        <svg class="icon-email" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="81" height="81" viewBox="0 0 81 81">
+                                          <defs>
+                                            <clipPath>
+                                              <rect data-name="Rectangle 10" class="cls-1" width="31.522" height="32" transform="translate(253 529)"/>
+                                            </clipPath>
+                                          </defs>
+                                          <g transform="translate(-1295 -1398)">
+                                            <rect data-name="Rectangle 21" class="cls-2" width="81" height="81" rx="10" transform="translate(1295 1398)"/>
+                                            <g data-name="Mask Group 4" class="cls-3" transform="translate(1067 894)">
+                                              <g transform="translate(253.143 529)">
+                                                <path data-name="Path 27" class="cls-4" d="M5.7,14.862V9.691L2.419,12.237ZM20.734,6.683a.915.915,0,0,1,0,1.83H10.5a.915.915,0,0,1,0-1.83Zm0,3.819a.907.907,0,0,1,0,1.814H10.5a.907.907,0,1,1,0-1.814Zm0,3.851a.915.915,0,0,1,0,1.83H10.5a.915.915,0,0,1,0-1.83Zm10.089-2.817a.888.888,0,0,1,.414.748v17.6A2.122,2.122,0,0,1,29.136,32h-27a2.092,2.092,0,0,1-1.512-.621A2.057,2.057,0,0,1,0,29.915V12.284a.912.912,0,0,1,.4-.748l5.3-4.09V4.153A1.637,1.637,0,0,1,7.336,2.514h4.742L15.085.191a.885.885,0,0,1,1.1,0l2.992,2.323H23.9A1.637,1.637,0,0,1,25.54,4.153V7.447ZM29.454,29.884v-15.9L18.809,22.309a5.634,5.634,0,0,1-6.7-.032L1.782,14.019V29.884a.34.34,0,0,0,.35.334H29.1A.34.34,0,0,0,29.454,29.884Zm-.636-17.647L25.54,9.691V14.8ZM23.741,16.2V4.3H7.479v12l5.744,4.583a3.846,3.846,0,0,0,4.5.032ZM14.974,2.514h1.289l-.637-.493Z" transform="translate(0)"/>
+                                              </g>
+                                            </g>
+                                          </g>
+                                        </svg>
+                                    </span>
+                                    <p><?php
+										$step2= isset($contentSettings["pagecontent_find_a_chapter_getinvited_step2_text"]) ? $contentSettings["pagecontent_find_a_chapter_getinvited_step2_text"] : "Submit a <span>Request</span>";
+										echo wordwrap($step2,10,"<span/>");
+									?></p>
+                                </li>
+                                <li>
+                                    <span>
+                                        <svg class="icon-complete" xmlns="http://www.w3.org/2000/svg" width="81" height="81" viewBox="0 0 81 81">
+                                          <g transform="translate(-1559 -1398)">
+                                            <rect data-name="Rectangle 20" class="cls-1" width="81" height="81" rx="10" transform="translate(1559 1398)"/>
+                                            <path data-name="Path 39" class="cls-2" d="M12.717,23.208A4.208,4.208,0,0,0,15.5,25.957a2.108,2.108,0,0,1,1.49,2.053,4.221,4.221,0,0,0,1.225,3.039A4.315,4.315,0,0,0,22.6,32.094a2.155,2.155,0,0,1,2.433.777,4.208,4.208,0,0,0,3.474,1.8,4.268,4.268,0,0,0,3.474-1.8,2.155,2.155,0,0,1,2.412-.785,4.311,4.311,0,0,0,4.392-1.046A4.221,4.221,0,0,0,40.012,28a2.108,2.108,0,0,1,1.49-2.053,4.208,4.208,0,0,0,2.8-2.74,4.268,4.268,0,0,0-.632-3.841,2.108,2.108,0,0,1,0-2.535A4.268,4.268,0,0,0,44.3,12.99a4.208,4.208,0,0,0-2.779-2.749,2.108,2.108,0,0,1-1.49-2.053,4.221,4.221,0,0,0-1.246-3.06,4.315,4.315,0,0,0-4.4-1.05,2.16,2.16,0,0,1-2.407-.785A4.268,4.268,0,0,0,28.509,1.5a4.208,4.208,0,0,0-3.474,1.793,2.16,2.16,0,0,1-2.412.785,4.268,4.268,0,0,0-1.37-.23h0a4.268,4.268,0,0,0-3.026,1.28A4.221,4.221,0,0,0,17,8.167a2.109,2.109,0,0,1-1.49,2.053,4.208,4.208,0,0,0-2.8,2.74,4.268,4.268,0,0,0,.632,3.841,2.134,2.134,0,0,1,0,2.535A4.268,4.268,0,0,0,12.717,23.208Zm2.348-7.683a2.134,2.134,0,0,1,1.071-3.3,4.23,4.23,0,0,0,2.988-4.11,2.1,2.1,0,0,1,.61-1.515,2.134,2.134,0,0,1,1.519-.623h0a2.134,2.134,0,0,1,.683.115,4.268,4.268,0,0,0,4.84-1.566,2.134,2.134,0,0,1,3.466,0A4.269,4.269,0,0,0,35.078,6.1a2.134,2.134,0,0,1,2.194.525,2.1,2.1,0,0,1,.606,1.49,4.23,4.23,0,0,0,2.988,4.11,2.134,2.134,0,0,1,1.071,3.3,4.23,4.23,0,0,0,0,5.083,2.134,2.134,0,0,1-1.071,3.3,4.23,4.23,0,0,0-2.988,4.11,2.1,2.1,0,0,1-.61,1.511,2.134,2.134,0,0,1-2.194.525,4.268,4.268,0,0,0-4.836,1.571,2.134,2.134,0,0,1-3.466,0,4.268,4.268,0,0,0-4.836-1.571,2.134,2.134,0,0,1-2.194-.525,2.1,2.1,0,0,1-.61-1.511,4.23,4.23,0,0,0-2.988-4.11,2.134,2.134,0,0,1-1.071-3.3,4.234,4.234,0,0,0,.009-5.071ZM24.318,17.6a1.067,1.067,0,0,1,1.455-.393,6.88,6.88,0,0,1,1.6,1.28,18.58,18.58,0,0,1,3.786-3.5,1.067,1.067,0,1,1,1.216,1.754,16.458,16.458,0,0,0-4.132,4.132,1.067,1.067,0,0,1-.875.474h-.047a1.067,1.067,0,0,1-.879-.534,4.751,4.751,0,0,0-1.741-1.741,1.067,1.067,0,0,1-.388-1.455Z" transform="translate(1571.494 1420.5)"/>
+                                          </g>
+                                        </svg>
+                                    </span>
+                                    <p><?php 
+										$step3= isset($contentSettings["pagecontent_find_a_chapter_getinvited_step3_text"]) ? $contentSettings["pagecontent_find_a_chapter_getinvited_step3_text"] : "Complete the <span>Registration";
+										echo wordwrap($step3,12,"<span/>");
+									?></span></p>
+                                </li>
+                            </ul>
+                            <h3><?php echo isset($contentSettings["pagecontent_find_a_chapter_heading"]) ? $contentSettings["pagecontent_find_a_chapter_heading"] : "Find A Chapter" ?></h3>
+                            <form class="input-group" name="find_chapterBox" id="find_chapterBox" method="get" action="findachapter">
+                                <div class="inputOuter">
+                                    <input type="text" class="form-control" name="search" placeholder="<?php echo isset($contentSettings["pagecontent_find_a_chapter_input_text"]) ? $contentSettings["pagecontent_find_a_chapter_input_text"] : "Search for chapter" ?>" value="">
+                                    <div class="btnOuter">
+                                        <button class="btn btn-default btn_find_chapter" type="submit">
+                                            <span>
+                                                <svg class="icon-redarrow" xmlns="http://www.w3.org/2000/svg" width="25.967" height="26.7" viewBox="0 0 25.967 26.7">
+                                                  <g data-name="Group 261" transform="translate(-1732.5 -1677.672)">
+                                                    <path data-name="Path 40" class="cls-1" d="M1757.443,1680.379l10.521,10.521-10.521,10.521" transform="translate(-11.498 0.121)"/>
+                                                    <line data-name="Line 19" class="cls-2" x1="21.857" transform="translate(1734.5 1690.87)"/>
+                                                  </g>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(function() {
+    
+                    $(".invitedLink").click(function (event) {
+                        $(".widgetVisitChapterOverlay").show();
+                        return false;
+                    });
+                    
+					$(".close_chapter").click(function (event) {
+                        $(".widgetVisitChapterOverlay").trigger('click');
+                    });
+					
+					$(".btn_find_chapter").click(function (event) { 
+						$('#find_chapterBox').submit();
+                    });
+					
+					
+					
+					
+                    $(".widgetVisitChapterOverlay .contentBox").click(function (event) {
+                        return false;
+                    });
+                    
+                    $(".widgetVisitChapterOverlay").click(function (event) {
+                        $(".widgetVisitChapterOverlay").hide();
+                        return false;
+                    });
+
+                });
+            </script>
+        </section>
+	<?php //echo 'anand'.$find_chapter_active?>
+    <section class="widgetSlider">
+
+        <div id="carousel-slider" class="carousel slide" data-ride="carousel"
+             data-interval="<?= $interval; ?>">
+
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <?php
+                /**
+                 * The size of the calculated array is used to create the list items. If the widget setting has x number of images with value it wil create x number of items
+                 */
+                if ($size > 0) {
+                    for ($x = 0; $x < $size; $x++) {
+                        if ($x == 0) {
+                            echo '<li data-target="#carousel-slider" data-slide-to="' . $x . ' " class="active"></li>';
+                        } else {
+                            echo '<li data-target="#carousel-slider" data-slide-to="' . $x . ' " class=""></li> ';
+                        }
+                    }
+                } else {
+                    echo '<li data-target="#carousel-slider" data-slide-to="0" class="active"></li>';
+                }
+                ?>
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+
+
+                <?php
+                /**
+                 * it iterate throw the array of image setting which has value, for everyone of them it find the setting in the widget setting list and then
+                 * it use the key of then setting to generate the slide html value.
+                 */
+                $count=0;
+                foreach($slidesToDisplayArray as $slide){
+                    foreach($widgetSettings AS $key=>$object){
+                        if($object->id == $slide->id){
+                            if($count==0){  ?>
+                                <div class="item active" tabindex="<?php echo $count?>">
+                                    <div class="slide"
+                                         style="background: url('<?= property_exists($widgetSettings[$key+2], 'value') ? $widgetSettings[$key+2]->value : $widgetSettings[$key+2]->default_value; ?><?= '?' . time()?>') no-repeat center center; background-size: cover;">
+                                        <div class="opacityDiv">
+											<div class="holder">
+												<div class="sliderTxtContent">
+													<?php
+														$slider_link=property_exists($widgetSettings[$key+1], 'value') ? $widgetSettings[$key+1]->value : $widgetSettings[$key+1]->default_value;
+														if(parse_url($slider_link, PHP_URL_SCHEME)==''):
+															$slider_link='http://'.$slider_link;
+														endif;
+													?>
+													<h4><a href="<?php echo $slider_link;?>" target="_blank"><?= property_exists($widgetSettings[$key], 'value') ? $widgetSettings[$key]->value : $widgetSettings[$key]->default_value; ?></a></h4>
+													<a href="#" class="invitedLink"><?php echo isset($contentSettings["pagecontent_find_a_chapter_getinvited_button_text"]) ? $contentSettings["pagecontent_find_a_chapter_getinvited_button_text"] : "Get invited" ?></a>
+												</div>
+											</div>
+										</div>	
+                                    </div>
+                                </div>
+
+                            <?php  } else { ?>
+                                <div class="item" tabindex="<?php echo $count?>">
+                                    <div class="slide"
+                                         style="background: url('<?= property_exists($widgetSettings[$key+2], 'value') ? $widgetSettings[$key+2]->value : $widgetSettings[$key+2]->default_value; ?><?= '?' . time()?>') no-repeat center center; background-size: cover;">
+                                        <div class="opacityDiv">
+											<div class="holder">
+												<div class="sliderTxtContent">
+													<?php
+														$slider_link=property_exists($widgetSettings[$key+1], 'value') ? $widgetSettings[$key+1]->value : $widgetSettings[$key+1]->default_value;
+														if(parse_url($slider_link, PHP_URL_SCHEME)==''):
+															$slider_link='http://'.$slider_link;
+														endif;
+													?>
+													<h4><a href="<?php echo $slider_link;?>" target="_blank"><?= property_exists($widgetSettings[$key], 'value') ? $widgetSettings[$key]->value : $widgetSettings[$key]->default_value; ?></a></h4>
+													<a href="#" class="invitedLink"><?php echo isset($contentSettings["pagecontent_find_a_chapter_getinvited_button_text"]) ? $contentSettings["pagecontent_find_a_chapter_getinvited_button_text"] : "Get invited" ?></a>
+												</div>
+											</div>
+										</div>	
+                                    </div>
+                                </div>
+
+                            <?php      }
+                        }
+                    }
+                    $count++;
+                }
+                if($size == 0 ) { ?>
+
+                <div class="item active" tabindex="0">
+                    <div class="slide"
+                         style="background: url('<?= property_exists($widgetSettings[2], 'value') ? $widgetSettings[2]->value : $widgetSettings[2]->default_value; ?><?= '?' . time()?>') no-repeat center center; background-size: cover;">
+						<div class="opacityDiv">	
+							<div class="holder">
+								<div class="sliderTxtContent">
+									<?php
+										$slider_link=property_exists($widgetSettings[$key+1], 'value') ? $widgetSettings[$key+1]->value : $widgetSettings[$key+1]->default_value; 
+										if(parse_url($slider_link, PHP_URL_SCHEME)==''):
+											$slider_link='http://'.$slider_link;
+										endif;
+									?>
+									<h4><a href="<?php echo $slider_link;?>" target="_blank"><?= property_exists($widgetSettings[0], 'value') ? $widgetSettings[0]->value : $widgetSettings[0]->default_value; ?></a></h4>
+									<a href="#" class="invitedLink"><?php echo isset($contentSettings["pagecontent_find_a_chapter_getinvited_button_text"]) ? $contentSettings["pagecontent_find_a_chapter_getinvited_button_text"] : "Get invited" ?></a>
+								</div>
+							</div>
+						</div>	
+                    </div>
+
+
+               <?php }
+
+                ?>
+            </div>
+
+            <a href="#carousel-slider" role="button" data-slide="prev" class="sliderLeft"><i
+                        class="fa fa-chevron-left"></i></a>
+            <a href="#carousel-slider" role="button" data-slide="next" class="sliderRight"><i
+                        class="fa fa-chevron-right"></i></a>
+
+        </div>
+
+        <script type="text/javascript">
+            $(function() {
+                $('#carousel-slider').carousel();
+            });
+
+
+            $(function () {
+                $(".carousel-inner").swipe({
+                    swipeLeft: function (event, direction, distance, duration, fingerCount) {
+                        $(this).parent().carousel('next');
+                    },
+                    swipeRight: function () {
+                        $(this).parent().carousel('prev');
+                    },
+                    threshold: 0
+                });
+            });
+        </script>
+
+    </section>
+<?php }
+
+?>

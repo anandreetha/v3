@@ -1,0 +1,137 @@
+<script src="/bnicms/v3/js/modalClose/closeModal.js"></script>
+<div class="container">
+    <?= $this->getContent(); ?>
+    <?php
+    if (count($inputWebsiteCountryList) > 0) {
+        ?>
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post" action = "<?=$this->config->general->baseUri?>backend/website/add/<?=$typeId?>">
+                    <div class="form-group">
+                        <label for="inputWebsiteName"><?= $this->translator->_('cms.v3.admin.websitecreation.newwebsitename') ?> </label>
+                        <input id="inputWebsiteName" name="inputWebsiteName" class="form-control"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.websitecreation.newwebsitenameplaceholdertext') ?> " value="<?= $this->request->getPost("inputWebsiteName"); ?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputWebsiteDomain"><?= $this->translator->_('cms.v3.admin.websitecreation.newwebsitedomain') ?></label>
+                        <input id="inputWebsiteDomain" name="inputWebsiteDomain" class="form-control"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.websitecreation.newwebsitedomainplaceholdertext') ?>"
+                               value="<?= $this->request->getPost("inputWebsiteDomain"); ?>">
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="inputWebsiteCountryList"><?= $this->translator->_('cms.v3.admin.websitecreation.newwebsitecountries') ?></label>
+                        <select name="inputWebsiteCountryList[]" id="inputWebsiteCountryList"
+                                class="form-control" <?php if ($typeId == 1) { ?> multiple="multiple" <?php } ?>>
+                            <?php if ($typeId == 2){?>
+                                <option selected="selected" value=''><?= $this->translator->_('cms.v3.admin.websitecreation.newwebsiteselectacountry') ?></option>
+                            <?php }
+                            foreach ($inputWebsiteCountryList as $value) {
+                                if (isset($this->request->getPost("inputWebsiteCountryList")[0]) && $this->request->getPost("inputWebsiteCountryList")[0] == $value->orgId) {
+                                    echo "<option selected=\"selected\" value='" . $value->orgId . "' >" . $value->orgName . "</option>";
+                                }else {
+                                    echo "<option value='" . $value->orgId . "'>" . $value->orgName . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <?php if ($typeId != 1) { ?>
+
+                            <div class="row" id="noRegionsFound" style="display: none">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger" role="alert"><?php echo $this->translator->_('cms.v3.admin.websitecreation.allregionwebsitesadded') ?></div>
+                                </div>
+                            </div>
+
+                            <label for="inputWebsiteRegionList" id="regionsLabel"><?= $this->translator->_('cms.v3.admin.websitecreation.newwebsiteregions') ?></label>
+                            <select name="inputWebsiteRegionList[]" id="inputWebsiteRegionList" class="form-control"
+                                    multiple="multiple">
+                                <option value=''></option>
+                            </select>
+                        <?php }   ?>
+						<input type="hidden" name="countryname" id="countryname">
+						<input type="hidden" name="countryid" id="countryid">
+                    </div>
+                </form>
+            </div>
+        </div>
+    <?php } else { ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger" role="alert"><?php echo $this->translator->_('cms.v3.admin.websitecreation.newwebsiteallwebsitesaddederrmsg') ?></div>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+
+<script>
+
+    // When the document is ready, check on intervals if the success alert is on display.
+    // If the success alert is on display then this means we've successfully completed our action and we can close the form
+    // Close modal function is highly specific to the bootstrap modal and expects some sort of successful alert in this file to process
+    $(document).ready(function () {
+		var countriesAvailable=window.parent.$('#countriesAvailable option:selected');
+		$('#countryname').val(countriesAvailable.text());
+		$('#countryid').val(countriesAvailable.val());
+        // If there are errors shown then enable the save button again
+        if ($(".alert-danger").length > 0) {
+            $(parent.document).find("#newWebsiteSubmit").attr("disabled", false);
+        }
+        if ($(".alert-danger").length > 0 || $(".alert-success").length > 0){
+            $(parent.document).find("#modalLoadingBackground").fadeOut(function () {
+
+                $(parent.document).find('#modalLoadingSpinner').fadeOut();
+                $(parent.document).find('#modal-spinner').fadeOut();
+            });
+        }
+        closeModal('#newWebsiteModal');
+    });
+
+
+    if (<?php echo $typeId; ?> == 2)
+    {
+        $("#inputWebsiteCountryList").change(generateRegionList);
+    }
+
+    function generateRegionList(){
+
+        var countrySelected = document.getElementById("inputWebsiteCountryList");
+        var countryIdSelected = countrySelected.options[countrySelected.selectedIndex].value;
+        $("#inputWebsiteRegionList").empty();
+
+        $.ajax({
+            async: false,
+            url: "<?=$this->config->general->baseUri?>backend/website/getRegions/" + countryIdSelected,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                    var noRegionData = !data || !Object.keys(data).length;
+                    $("#regionsLabel").toggle(!noRegionData);
+                    $("#inputWebsiteRegionList").toggle(!noRegionData);
+                    $("#noRegionsFound").toggle(noRegionData);
+                    var sortdata =  Object.keys(data).sort(function (a, b) {
+                        return data[a]['orgName'].localeCompare(data[b]['orgName']);
+                    });
+                    sortdata.forEach(function (k) {
+                        $("#inputWebsiteRegionList").append("<option value=" + data[k].orgId + ">" + data[k].orgName + "</option>");
+                    });
+            }
+        });
+    }
+    <?php
+    if($this->request->isPost() && $typeId == 2) {?>
+    selectedRegion =   <?php  echo json_encode($this->request->getPost("inputWebsiteRegionList")); ?>;
+    generateRegionList();
+    $("#inputWebsiteRegionList").val(selectedRegion);
+    <?php }?>
+
+
+</script>

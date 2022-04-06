@@ -1,0 +1,28 @@
+<div id="albumlist">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script>
+    //This will make a ajax post request to the member list controller which return html and we render that in ajax response.
+    $(function () {
+        var languages = <?php echo json_encode($languages) ?>;
+        var parameters = window.location.href.slice(window.location.href.indexOf('?') + 1);
+        var widgetSettings = '<?php echo json_encode($widgetSettingObj) ?>';
+        var websiteId = '<?php echo json_encode($websiteId) ?>';
+        var renderStaticContent = '<?php echo json_encode($renderStaticContent) ?>';
+
+        var url = "<?php echo $ajaxUrl; ?>";
+
+        $.post(url, {
+            parameters: parameters,
+            languages: languages,
+            widgetSettings: widgetSettings,
+            websiteId: websiteId,
+            renderStaticContent: renderStaticContent
+        }, function (data) {
+            $("#rssLoaderAjax").hide();
+            $("#albumlist").html(data);
+        });
+    });
+
+</script>

@@ -1,0 +1,260 @@
+<?php
+//$this->flashSession->success('test'); 
+echo $this->flashSession->output(); ?>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs" id="websiteTab">
+        <li class="nav-item">
+            <a href="#page" class="nav-link" data-toggle="tab"><?= $this->translator->_('cms.v3.admin.tabheadings.pages')?></a>
+        </li>
+        <li class="nav-item">
+            <a href="#settings" class="nav-link" data-toggle="tab"><?= $this->translator->_('cms.v3.admin.tabheadings.settings')?></a>
+        </li>
+        <li class="nav-item">
+            <a href="#languages" class="nav-link" data-toggle="tab"><?= $this->translator->_('cms.v3.admin.tabheadings.languages')?></a>
+        </li>
+		<?php if($allow_access=="n"): ?>
+        <li class="nav-item">
+            <a href="#library" class="nav-link" data-toggle="tab"><?= $this->translator->_('cms.v3.admin.tabheadings.library')?></a>
+        </li>
+		<?php endif; ?>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane" id="page">
+            <?php $this->partial('partials/admin/pages'); ?>
+        </div>
+        <div class="tab-pane" id="settings">
+            <?php $this->partial('partials/admin/settings'); ?>
+        </div>
+        <div class="tab-pane" id="languages">
+            <?php $this->partial('partials/admin/languages'); ?>
+        </div>
+		<?php if($allow_access=="n"): ?>
+        <div class="tab-pane" id="library">
+            <?php $this->partial('partials/admin/library'); ?>
+        </div>
+		<?php endif; ?>
+    </div>
+</div>
+
+<div id="box-site-info" class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= $this->translator->_('cms.v3.admin.footer.siteinformation'); ?></h3>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <h4><?= $this->translator->_('cms.v3.admin.footer.liveurl'); ?></h4>
+                <?php
+                if($website->type_id==3) {
+                    ?>
+                    <p><a href="<?php echo "http://" . $this->websiteHelper->strip_accents($website->clean_domain) ?>"
+                          target="_blank"><?php echo "http://" . $this->websiteHelper->strip_accents($website->clean_domain) ?></a></p>
+                    <?php
+                }else{
+                    ?>
+                    <p><a href="<?php echo "http://" . $website->clean_domain ?>"
+                          target="_blank"><?php echo "http://" . $website->clean_domain ?></a></p>
+                <?php
+                }
+					if($website->publish_status=="PUBLISHING"): $publish_display_style='';else:$publish_display_style='display:none;'; endif;					
+                      ?>
+				<h4><?= $this->translator->_('cms.v3.admin.footer.publishedstatus'); ?></h4>
+				<p><span id="last_publish_status"><?php echo $this->translator->_("cms.v3.admin.footer.".$website->publish_status); ?></span>&nbsp;&nbsp;<span id="publish_status_chk" style="<?php echo $publish_display_style;?>"><img src="<?php echo $this->config->general->cdn; ?>/images/published-action-loader.gif" width="20"></span></p>		
+				<input type="hidden" id="publish_status" value="<?php echo $website->publish_status; ?>">
+				
+                <h4><?= $this->translator->_('cms.v3.admin.footer.lastpublished'); ?></h4>
+                <p id="lastPublished"><?php echo $this->translationUtils->formatDate($website->last_published, $userTimezone);?></p>
+            </div>
+            <div class="col-sm-4">
+                <h4><?= $this->translator->_('cms.v3.admin.footer.previewurl'); ?></h4>
+                <p>
+                    <?php
+                    if(!empty($pageArray)){
+
+
+                if($website->type_id==3) {
+                    $previewUrl = 'preview/' . $this->websiteHelper->strip_accents($website->clean_domain) . '/' . $this->translationUtils->normalizeLocaleCode($selectedLanguage->locale_code, false) . '/' . $pageArray[0]->pageContent->nav_name;
+
+                }else {
+                    $previewUrl = 'preview/' . $this->websiteHelper->strip_accents($website->clean_domain) . '/' . $this->translationUtils->normalizeLocaleCode($selectedLanguage->locale_code, false) . '/' . $pageArray[0]->pageContent->nav_name;
+                }
+                        echo $this->tag->linkTo(array($previewUrl, $this->url->get($previewUrl), "target" => "self"));
+                    }else{
+                        echo "N/A";
+                    }
+
+                    ?>
+                </p>
+
+                <h4><?= $this->translator->_('cms.v3.admin.footer.lastmodified'); ?></h4>
+                <p id="lastModified"><?php echo $this->translationUtils->formatDate($website->last_modified, $userTimezone);?></p>
+            </div>
+            <div class="col-sm-4">
+                <div class="btn-group">
+                    <?php
+                    if (($website->type_id != 3) || (isset($chapterRegionPublished) && $chapterRegionPublished)){
+                        $currentLanguage = ($selectedLanguage === false ? '' : $selectedLanguage->getId());
+						
+						echo $this->tag->linkTo(array
+						(
+							 "javascript:;",
+							 $this->translator->_('cms.v3.admin.footer.publish'),
+							"class" => "btn btn-default",
+							"id" => "publish-website",
+							"role" => "button"
+						));
+						
+                    }
+                    ?>
+			    </div>
+				<input type="hidden" id="publish_process_url" value="<?php echo $this->config->general->baseUri .'backend/website/publish/'.$website->id.'/'.$currentLanguage;?>">
+				<input type="hidden" id="publish_status_url" value="<?php echo $this->config->general->baseUri .'backend/website/publishstatus/'.$website->id.'/'.$currentLanguage;?>">
+				
+				<span id="publish_text" style="display:none"><?php echo $this->translator->_("cms.v3.admin.footer.publishprocessrun");?></span>
+				<span id="publishing_text" style="display:none"><?php echo $this->translator->_("cms.v3.admin.footer.publishprocessalreadyrun");?></span>
+				<span id="publishwarn_text" style="display:none"><?php echo $this->translator->_('cms.v3.admin.footer.publishwarning'); ?></span>
+				
+				
+                <h4><?= $this->translator->_('cms.v3.admin.footer.createdon'); ?></h4>
+                <p id="createdOn"><?php echo $this->translationUtils->formatDate($website->created_on, $userTimezone);?></p>
+				
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit page content modal -->
+<?php $this->partial('partials/admin/modal', [
+    'title' => '',
+    'iframeId' => 'publishSettingsIFrame',
+    'wrapperId' => 'publishSettingsModal',
+    'modalBodyHeight' => '265px'
+]); 
+?>
+
+<style type="text/css">
+#publishSettingsModal #modalLoadingSpinner{
+	width:100%;
+	left :0%;
+	text-align :center;
+	position: relative;
+    margin: 10px;
+}
+#publishSettingsModal #modal-spinner{
+	display : inline-block;
+	font-size:15px;
+	font-weight:bold;	
+}
+#publishSettingsModal .modal-body{
+	height:auto !important;
+}
+#publishSettingsModal .modal-dialog{
+	width: 450px;
+}
+</style>
+<script>
+    /**
+     * When the publish button has been clicked.
+     * We want to show a waiting spinner to the user
+     * can see that something is going on in the background
+     */
+	$( document ).ready(function() {		
+		$('#publishSettingsModal .modal-footer').hide();
+		$('#publishSettingsModal #modalLoadingSpinner').show();
+		
+		$('#publishSettingsIFrame').remove();	
+		$('#publish-website').attr('href','javascript:;')
+		
+		setInterval(function(){ 
+			let publish_status=$('#publish_status').val();
+			if(publish_status=="PUBLISHING"){
+				let publish_status_url=$('#publish_status_url').val();		
+				$.ajax({
+					type: "POST",
+					url: publish_status_url,
+					success: function(data) {
+						let obj=$.parseJSON(data);					
+						$('#publish_status').val(obj.publish_status);
+						$('#last_publish_status').html(obj.publish_status_msg);
+						$('#lastPublished').html(obj.last_published);
+						$('#lastModified').html(obj.last_modified);
+						$('#createdOn').html(obj.created_on);
+						if(obj.publish_status=="PUBLISHING"){
+							$('#publish_status_chk').show();
+						}else{
+							$('#publish_status_chk').hide();
+						}
+					}
+				});
+			}
+		}, 5000);
+
+
+	});
+	
+	
+    $('#publish-website').on('click', function(e) { 
+
+        // Get the user choice of if they want to publish.
+        // If the user selects no then we'll
+		var publishwarn_text=$('#publishwarn_text').html();
+        var buttonChoice = confirm(publishwarn_text);
+        if (buttonChoice === false) {
+            e.preventDefault();
+            return buttonChoice; // Return false
+        }else{
+			e.preventDefault();
+			$('#publishSettingsModal').modal();
+			
+			let publish_url=$('#publish_process_url').val();
+			let publish_status_url=$('#publish_status_url').val();
+			
+			$.ajax({
+			  url: publish_status_url,
+			  success: function(data){ //console.log(data);
+				let obj=$.parseJSON(data); 
+				if(obj.publish_status=="PUBLISHING"){
+					$('#publishSettingsModal #modalLoadingSpinner').html('<img id="modal-spinner" src="<?php echo $this->config->general->cdn; ?>/images/ajax-loader.gif"> <span id="publishingtxt"></span>');
+					$('#publishingtxt').html($('#publishing_text').html());
+				}else{
+					$('#publishSettingsModal #modalLoadingSpinner').html('<img id="modal-spinner" src="<?php echo $this->config->general->cdn; ?>/images/ajax-loader.gif"> <span id="publishtxt"></span>');
+					$('#publishtxt').html($('#publish_text').html());
+					$.ajax({
+					  url: publish_url,
+					  success: function(data1){
+						let obj1=$.parseJSON(data1);   
+						$('#publish_status').val(obj1.publish_status);
+						$('#last_publish_status').html(obj1.publish_status_msg);
+						if(obj1.publish_status=="PUBLISHING"){
+							$('#publish_status_chk').show();
+						}else{
+							$('#publish_status_chk').hide();
+						}
+						$("#publishSettingsModal").modal("hide");
+						//let obj=$.parseJSON(data1);
+						//location.reload(true);
+					  }
+					});
+				}
+			  }
+			});
+			
+			
+		}
+
+        // Set the cursor to be the waiting spinner
+        //$('body').css('cursor', 'wait');
+    });
+	
+	
+</script>
+
+<?php  $params = $this->dispatcher->getParams();
+if(count($params)>2 && $params[3] == true) { ?>
+    <script>
+        setTimeout(function () {
+            window.location = '/bnicms/v3/backend/website/view/<?=$params[1]?>';
+        }, 2000);
+    </script>
+<?php  }?>

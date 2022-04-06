@@ -1,0 +1,158 @@
+<?php
+$meetingDetails = $mappedWidgetSettings->getValueByName("Meeting Details");
+$viewMap = $mappedWidgetSettings->getValueByName("View Map");
+$coreGroupText = $mappedWidgetSettings->getValueByName("Additional");
+$visitThisGroup = $mappedWidgetSettings->getValueByName("Visit this group");
+$coreGroupLeadership = $mappedWidgetSettings->getValueByName("Core Group Leadership");
+$directions = $mappedWidgetSettings->getValueByName("Directions");
+$phone = $mappedWidgetSettings->getValueByName("Phone");
+$doesRegionAllowOnlineApplicationsCheck = !isset($jsonForOnlineApplicationsCheck) ? "" : $jsonForOnlineApplicationsCheck->{'cancreate'};
+
+?>
+<section class="widgetChapterDetail">
+    <div class="holder">
+        <p id="responcemessageerror" align="center"
+           style="display: none; margin-top:10px;"><?php echo isset($errorMessage) ? $errorMessage : "" ?></p>
+        <?php if (!isset($errorMessage)){ ?>
+        <div class="rowDetail">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3"><h1 class="ico-068"></h1>
+                <h2><?php echo $jsonResponse->coreGroupName; ?></h2></div>
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3"><h3><?php echo $meetingDetails; ?></h3>
+                <p class="meetingDate"><?php echo $jsonResponse->coreGroupMeetingDay . ' ' . $jsonResponse->coreGroupMeetingTime; ?></p>
+                <?php if(($OrgType != "PLANNED_CHAPTER")&&isset($jsonResponse->coreGroupMeetingTypeText)):?>
+				<p class="meetingType"><?php echo $jsonResponse->coreGroupMeetingTypeText; ?></p>
+				<?php endif;?>
+				
+				<p><strong><?php echo $jsonResponse->coreGroupMeetingLocationName; ?></strong></p>
+                <p class="address"><?php echo $jsonResponse->coreGroupMeetingLocationAddress; ?>
+                    <?php echo isset($jsonResponse->coreGroupMeetingLocationPhone) && !empty($jsonResponse->coreGroupMeetingLocationPhone) ? '<p class="meetingDate">' . "<strong>" . $phone . ": </strong>" . $jsonResponse->coreGroupMeetingLocationPhone . '</p>' : ""; ?>
+                    <?php echo isset($jsonResponse->coreGroupMeetingLocationDirection) && !empty($jsonResponse->coreGroupMeetingLocationDirection) ? '<p class="meetingDate">' . "<strong>" . $directions . ": </strong>" . $jsonResponse->coreGroupMeetingLocationDirection . '</p>' : ""; ?>
+                    <?php if ((!property_exists($jsonResponse, "hideUrls") || $jsonResponse->hideUrls == false) && strlen($jsonResponse->coreGroupMeetingLocationMapUrl) > 0) { ?>
+                <p><a href="<?php echo $jsonResponse->coreGroupMeetingLocationMapUrl ?>"
+                      target="_blank"><?php echo $viewMap; ?></a></p>
+                <?php } ?>
+            </div>
+            <?php if (isset($jsonResponse->coreGroupText) && !empty($jsonResponse->coreGroupText)) { ?>
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3"><h3><?php echo $coreGroupText; ?></h3>
+                    <p class="meetingDate"><?php echo $jsonResponse->coreGroupText ?></p>
+                </div>
+            <?php }
+
+            if (!property_exists($jsonResponse, "hideUrls") || $jsonResponse->hideUrls == false) { ?>
+
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3"></div>
+
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+                    <?php
+                    $visitorRegUrl = ($useLatestCode == true ? "visitorregistration?chapterId=" . $jsonResponse->coreGroupId : "/web/open/visitorRegistration?coreGroupId=" . $jsonResponse->coreGroupId . "&name=" . $jsonResponse->coreGroupName);
+                    $applicantRegUrl = ($useLatestCode == true ? "applicationregistration?chapterId=" . $jsonResponse->coreGroupId : $ChapterDetails['visitChapterUrl']);
+                    ?>
+                    <a
+                            href="<?php echo $visitorRegUrl; ?>"
+                            target="_blank" class="button"><?php echo $visitThisGroup; ?>
+                        <span class="ico-048"></span></a>
+
+                    <?php if (isset($OrgType) && $OrgType != "PLANNED_CHAPTER" && $doesRegionAllowOnlineApplicationsCheck == true) {
+						if($OnlineApplications=="on"):
+						?>
+                    <a
+                            href="<?php echo $applicantRegUrl; ?>"
+                            target="_self"
+                            class="button"><?= $mappedWidgetSettings->getValueByName("Apply Now") ?><span
+                                class="ico-048"></span></a>
+                    <?php 
+						endif;
+					} ?>
+                </div>
+
+            <?php } ?>
+
+		</div>
+
+    </div>
+    <?php } ?>
+</section>
+
+<?php if ((count($jsonResponse->coreGroupLeadershipSub) > 0)&&($ChapterLeadershipVal=="on")) { ?>        
+<section class="widget_chapterdetails_people">
+	<div class="holder">
+		<div class="leadership-taholder">
+			<ul class="nav nav-tabs leadership_tab" id="myTab" role="tablist">
+				<li class="nav-item active">
+					<a class="nav-link active" id="chapter_leaders_tab" data-toggle="tab" href="#Chapter_leaders" role="tab" aria-controls="<?= $mappedWidgetSettings->getValueByName("Chapter Leadership") ?>" aria-selected="true">
+					<? echo $this->translator->_('cms.v3.admin.chapterdetails.chapterleadership'); ?></a>
+					</a>
+				</li>
+				
+			</ul>
+			<div class="tab-content chapter_leaders_tab_content" id="myTabContent">
+				<div class="tab-pane fade active in" id="Chapter_leaders" role="tabpanel" aria-labelledby="chapter_leaders_tab">
+					<div class="chptr_leadr_card_row">
+						<?php
+						$coreGroupLeadershipSub=json_decode(json_encode($jsonResponse->coreGroupLeadershipSub),true);
+						foreach ($coreGroupLeadershipSub as $item) { //print"<pre>";print_r($item);print"</pre>";
+							$name = $item['name'];
+							if($item['companyName']!=""):
+								$companyName=$item['companyName'];
+							else:
+								$companyName=$item['companyWebsitelink'];
+							endif;
+							
+							if($item['profileImageUrl']!=""):
+								$profile_img=$item['profileImageUrl'];
+							else:
+								$profile_img=$this->config->general->cdn.'/new_template/assets/images/default.svg';
+							endif;
+							
+							$website_link='javascript:;';
+							if($item['companyWebsitelink']!=""):
+								$website_link=$item['companyWebsitelink'];
+								$website_link=parse_url($website_link, PHP_URL_SCHEME)==''?'http://'.$website_link:$website_link;
+							endif;
+							
+						?>
+							
+							<div class="leaders_card_holder">
+								<div class="profile_picture">
+									<img src="<?php echo $profile_img;?>" alt="default">
+								</div>
+								<div class="leadership_card_content_holder">
+									<h4 title="<?php echo $name;?>"><?php echo $name; ?></h4>
+									<h5 title="<?php echo $item['role'];?>"><?php echo $item['role']; ?></h5>
+									<p class="company_name"><a <?php if($website_link!="javascript:;"){?> href="<?php echo $website_link; ?>"  target="_blank" <?php }else{echo 'class="leadership_withoutwebsite"';} ?> title="<?php echo $companyName; ?>"><?php if($companyName!=""): echo $companyName; else: echo '&nbsp;'; endif; ?></a></p>
+									<div class="mail_call_profile_viewholder">
+										<div class="leftside">
+											<?php if(!is_null($item['phone'])&&($item['phone']!="")):?>
+											<a href="tel:<?php echo $item['phone']; ?>"><i class="fa fa-phone" aria-hidden="true"></i></a>
+											<?php endif;
+											if(!is_null($item['emailAddress'])&&($item['emailAddress']!="")):
+												if (!property_exists($jsonResponse, "hideUrls") || $jsonResponse->hideUrls == false):
+											?>
+												<a href="<?php echo 'sendmessage?userId=' . $this->securityUtils->encryptUrlEncoded($item['userId']) . '&userName=' . urlencode($name) ?>"
+												   target="_self" class="iconEmail"><i class="fa fa-envelope-o"  data-toggle='tooltip' title='<?php echo $this->translator->_('cms.v3.admin.editpage.sendmessage')?>' aria-hidden="true"></i></a>
+											<?php endif; endif; ?>
+										</div>
+										<?php if(!is_null($item['cmsProfileUrl'])&&($item['cmsProfileUrl']!="N/A")):
+												$cmsProfileUrl=$item['cmsProfileUrl'];
+												if (strpos($cmsProfileUrl, 'memberdetails') !== false):
+													$member_url=explode('memberdetails',$cmsProfileUrl);
+													$cmsProfileUrl='memberdetails'.$member_url[1];
+												endif;
+										?>
+										<div class="right_side">
+											<a href="<?php echo $cmsProfileUrl;?>"><? echo $this->translator->_('cms.v3.admin.chapterdetails.viewprofile'); ?> <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+										</div>
+										<?php endif;?>
+									</div>
+								</div>
+							</div>
+							
+						<?php } ?>
+					</div>					
+				</div>
+
+			</div>
+		</div>
+	</div>
+</section>
+<?php } ?>

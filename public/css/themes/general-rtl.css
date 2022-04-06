@@ -1,0 +1,182 @@
+/*
+    Header rtl bg images
+ */
+html[dir='rtl'] .pc .page .widgetHeader .header {
+    background: #6c0207 url(../images/header-red-pc-rtl.jpg) no-repeat top;
+}
+
+html[dir='rtl'] .tablet .page .widgetHeader .header {
+    background: #6c0207 url(../images/header-red-tablet-rtl.jpg) no-repeat top;
+}
+
+html[dir='rtl'] .mobile .page .widgetHeader .header {
+    width: 100%;
+    background: #6c0207 url(../images/header-red-mobile.rtl.jpg);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+html[dir='rtl'] .pc .page .widgetHeader .header .leftCol h1 {
+    padding-right: 300px;
+    overflow: visible;
+}
+
+html[dir='rtl'] .pc .page .widgetHeader .header .leftCol h2 {
+    padding-right: 300px;
+    overflow: visible;
+}
+
+
+html[dir='rtl'] .tablet .page .widgetHeader .header .leftCol {
+    width: 300px;
+    margin: 0px;
+    padding: 40px 0px 0px 350px;
+    height: 70px;
+}
+
+html[dir='rtl'] .tablet .page .widgetHeader .header .leftCol h1 {
+    padding-right: 310px;
+    overflow: visible;
+}
+
+html[dir='rtl'] .tablet .page .widgetHeader .header .leftCol h2 {
+    padding-right: 310px;
+    overflow: visible;
+}
+
+
+html[dir='rtl'] .mobile .page .widgetHeader .header .leftCol h1 {
+    padding: 28px 92px 0px 0px;
+    overflow: visible;
+}
+
+html[dir='rtl'] .mobile .page .widgetHeader .header .leftCol h2 {
+    padding-right: 92px;
+    overflow: visible;
+}
+
+html[dir='rtl'] .pc .page .widgetHeader .header .leftCol {
+    float: right;
+    width: 300px;
+    margin: 0px;
+    padding: 40px 0px 0px 350px;
+    height: 70px;
+}
+
+
+html[dir='rtl'] .pc .page .widgetHeader .header .rightCol {
+    float: left;
+    margin: 21px 15px 0px 0px;
+    width: 150px;
+}
+
+html[dir='rtl'] .mobile .page .widgetHeader .header .rightCol {
+    display: block;
+    margin: 30px 0px 0px 0px;
+}
+
+/*
+    Header Buttons
+ */
+html[dir='rtl'] .pc .page .widgetHeader .header .rightCol .headerButton {
+    margin: 10px 0px 0px 7px;
+}
+
+html[dir='rtl'] .tablet .page .widgetHeader .header .rightCol .headerButton:first-child {
+    float:right;
+}
+
+html[dir='rtl'] .tablet .page .widgetHeader .header .rightCol .headerButton:last-child {
+    float:left;
+}
+
+html[dir='rtl'] .mobile .page .widgetHeader .header .rightCol .headerButton:first-child {
+    float: right;
+}
+
+html[dir='rtl'] .mobile .page .widgetHeader .header .rightCol .headerButton:last-child {
+    float: left;
+}
+
+
+/*
+    Side nav bar
+    to add further confusion and do not be misled by left column that floats right......
+  */
+html[dir='rtl'] .pc .page .contentArea .leftColumn {
+    float:right;
+    min-height: 100px;
+    width: 200px;
+    padding: 8px 15px 8px 15px;
+    overflow:hidden;
+}
+
+html[dir='rtl'] .tablet .page .contentArea .leftColumn {
+    float: right;
+    min-height: 100px;
+    width: 200px;
+    padding: 8px 15px 8px 15px;
+    overflow: hidden;
+}
+
+
+/*  Footer
+*/
+html[dir='rtl'] .pc .page .socialMediaArea .iconsColumn {
+    float: right;
+    margin: 5px 15px 5px 15px;
+    padding: 0px;
+    height: 24px;
+    overflow: hidden;
+}
+
+html[dir='rtl'] .pc .page .socialMediaArea .addthisColumn {
+    float: left;
+    margin: 7px 15px 5px 15px;
+    padding: 0px;
+    height: 20px;
+    overflow: hidden;
+}
+
+html[dir='rtl'] .tablet .page .socialMediaArea .iconsColumn {
+    float: right;
+    margin: 5px 15px 5px 15px;
+    padding: 0px;
+    height: 24px;
+    overflow: hidden;
+}
+
+html[dir='rtl'] .tablet .page .socialMediaArea .addthisColumn {
+    float: left;
+    margin: 7px 15px 5px 15px;
+    padding: 0px;
+    height: 20px;
+    overflow: hidden;
+}
+
+/* Custom CSS datatables for RTL */
+html[dir='rtl'] table.dataTable thead th div.DataTables_sort_wrapper {
+    float: right;
+}
+
+html[dir='rtl'] .dataTables_filter {
+    float: left;
+    text-align: right;
+}
+
+html[dir='rtl'] .dataTables_info {
+    padding-top: 3px;
+    clear: both;
+    float: right;
+}
+
+html[dir='rtl'] .dataTables_length {
+    float: right;
+}
+
+html[dir='rtl'] .dataTables_paginate {
+    float: left;
+}
+
+html[dir='rtl'] div.dataTables_wrapper {
+    direction: rtl;
+}

@@ -1,0 +1,94 @@
+<?php
+// If we're not a chapter
+if ($website->type_id != 3) {
+
+    foreach ($pageWidgets as $pageWidget) {
+
+        $sliderWidgetType = 'SliderWidget';
+		$find_chapter_active='';
+        if ($pageWidget->widget->class_name == $sliderWidgetType) {
+            $widget = $this->coreWidgetFactory->getCountryPageWidgetWithProperties($sliderWidgetType, $pageWidget);
+            if ($widget != false) {
+                $widget->setRenderStaticContent($renderStaticContent);
+                $widget->setWebsite($website);
+                echo $widget->getContent($contentSettings);
+            }
+
+            $chapterBoxwidget = $this->coreWidgetFactory->getCountryPageWidgetWithProperties("FindAChapterBoxWidget", $pageWidget);
+            if ($chapterBoxwidget != false) {
+                // If it is a chapter site then exclude the "Find a chapter" box
+                if ($this->view->page->getWebsite()->type_id != 3) {
+                    $chapterBoxwidget->setHeadingText(isset($contentSettings["pagecontent_find_a_chapter_heading"]) ? $contentSettings["pagecontent_find_a_chapter_heading"] : "Find a Chapter");
+                    $chapterBoxwidget->setSubheadingText(isset($contentSettings["pagecontent_find_a_chapter_sub_heading"]) ? $contentSettings["pagecontent_find_a_chapter_sub_heading"] : "With BNI, your network is one of your greatest assets.");
+                    $chapterBoxwidget->setContentText(isset($contentSettings["pagecontent_find_a_chapter_text_content"]) ? $contentSettings["pagecontent_find_a_chapter_text_content"] : "The worlds greatest business referral organization is just a few clicks away.");
+                    $chapterBoxwidget->setSearchText(isset($contentSettings["pagecontent_find_a_chapter_input_text"]) ? $contentSettings["pagecontent_find_a_chapter_input_text"] : "Search for chapter");
+
+                    $findAChapterLink = "findachapter";
+                    $chapterBoxwidget->setLink($findAChapterLink);
+					$find_chapter_active='y';
+                    //echo $chapterBoxwidget->getContent();
+                }
+            }
+
+        }
+    }
+    ?>
+    <section class="widgetPageHeader">
+        <div class="holder">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <h1><?php echo isset($contentSettings["pagecontent_lead_heading"]) ? $contentSettings["pagecontent_lead_heading"] : "pagecontent_lead_heading" ?></h1>
+            </div>
+        </div>
+    </section>
+    <?php
+} else {
+// We're a chapter
+?>
+    <section class="widgetImageHeading"
+             style="background: #666666 url('<?php echo $this->config->general->cdn; ?>/images/widgetImageHeading.jpg') no-repeat center center; background-size: cover;">
+        <div class="holder">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <h1><?php echo isset($contentSettings["pagecontent_lead_heading"]) ? $contentSettings["pagecontent_lead_heading"] : "pagecontent_lead_heading" ?></h1>
+            </div>
+        </div>
+    </section>
+<?php
+}
+
+$widgetProperties = array();
+$widgetProperties["languages"] = $languages;
+$widgetProperties["orgIds"] = $orgIds;
+$widgetProperties["domainName"] = $domainName;
+$widgetProperties["websiteId"] = $website->getId();
+
+if(isset($renderStaticContent)){
+    $widgetProperties['renderStaticContent'] = $renderStaticContent;
+}
+
+if (isset($regionId)) {
+    $widgetProperties["regionId"] = $regionId;
+}
+
+$this->widgetRenderService->renderWidgets($pageWidgets, $widgetProperties);
+
+    if ($website->type_id==3){ ?>
+        <script type="application/javascript">
+            $.ajax({
+                url: "<?php echo $this->config->general->baseUri . "frontend/consume/getTYFCBValue?encodedChapterId=".$this->securityUtils->encryptUrlEncoded($orgIds[0]); ?>",
+                type: 'GET',
+                success: function (data) {
+                    $( ".widgetTextColumns .holder .wysiwyg" ).each(function() {
+                        var str =  $(this).html();
+                        if(str.indexOf("##tyfcb##") !== -1){
+
+                            str= str.replace("##tyfcb##" ,data.tyfcbval+' '+data.currencycode);
+                            $(this).html(str);
+                        }
+                    });
+                }
+            });
+        </script>
+
+    <?php }
+$this->partial('partials/v3/footer/footer'); ?>
+

@@ -1,0 +1,810 @@
+.widgetProfile {
+    display: block;
+    margin: 0px;
+    padding: 100px 0px;
+    overflow: hidden;
+    
+    .rowProfileDetail {
+        display: block;
+        margin: 0px;
+        padding: 0px 0px 30px 0px;
+        overflow: hidden;
+        
+        .photoCol {
+            .profilephoto {
+                display: inline-block;
+                max-height: 196px;
+                margin: 0px;
+                padding: 0px;
+                overflow: hidden;
+                border-bottom: 6px solid $greyDarker;
+                img {
+                    max-width: 156px;
+                }
+            }
+            
+            h2 {
+                display: block;
+                font-size: 24px;
+                line-height: 28px;
+                font-weight: 500;
+                color: $bniBlack;
+                margin: 0px;
+                padding: 15px 0px 0px;
+            }
+            
+            p {
+                display: block;
+                font-size: 17px;
+                line-height: 22px;
+                font-weight: 400;
+                color: $greyDark;
+                margin: 0px;
+                padding: 1px 0px;
+                
+                a {
+                    display: block;
+                    font-size: 18px;
+                    line-height: 22px;
+                    font-weight: 500;
+                    color: $bniRed;
+                    padding: 15px 0px;
+                    margin: 0px;
+                    text-decoration: none;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+        
+        .contactCol {
+            p {
+                display: block;
+                font-size: 14px;
+                line-height: 18px;
+                font-weight: 400;
+                color: $greyDark;
+                text-transform: uppercase;
+                margin: 0px;
+                padding: 8px 0px;
+                
+                strong {
+                    display: block;
+                    text-transform: none;
+                    font-size: 17px;
+                    line-height: 22px;
+                    font-weight: 400;
+                    color: $bniBlack;
+                    padding-bottom: 15px;
+                }
+                
+                a {
+                    display: block;
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 500;
+                    color: $bniRed;
+                    text-transform: none;
+                    width: 100%;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    padding: 0px;
+                    margin: 0px;
+                    text-decoration: none;
+                    overflow: hidden;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+        
+        .companyCol {
+            p {
+                display: block;
+                font-size: 14px;
+                line-height: 18px;
+                font-weight: 400;
+                color: $greyDark;
+                text-transform: uppercase;
+                margin: 0px;
+                padding: 8px 0px;
+                strong {
+                    display: block;
+                    text-transform: none;
+                    font-size: 17px;
+                    line-height: 22px;
+                    font-weight: 400;
+                    color: $bniBlack;
+                }
+            }
+        }
+    }
+    
+    .rowMsgSml {
+        display: block;
+        margin: 0px;
+        padding: 25px 0px 80px 0px;
+        overflow: hidden;
+        
+        
+        .col-xs-12.col-sm-8.col-md-8.col-lg-9 {
+            padding-right: 1px;
+            .smUrls {
+                display: block;
+                margin: 0px;
+                padding: 10px 15px;
+                background-color: $greyDarker;
+                a {
+                    display: inline-block;
+                    margin: 6px;
+                    padding: 0px 8px;
+                    border: 2px solid $greyDarker;
+                    font-size: 18px;
+                    line-height: 34px;
+                    background-color: $white;
+                    -webkit-border-radius: 7px;
+                    -moz-border-radius: 7px;
+                    border-radius: 7px;
+                    transition: all 0s ease;
+                    -webkit-transition:  all 0s ease;
+
+                    &:hover {
+                        border: 2px solid $white;
+                        -webkit-border-radius: 0px;
+                        -moz-border-radius: 0px;
+                        border-radius: 0px;
+                        transition: all 0s ease;
+                        -webkit-transition:  all 0s ease;
+                    }
+                }
+            }
+        }
+        
+        .col-xs-12.col-sm-4.col-md-4.col-lg-3 {
+            padding-left: 0px;
+            .button {
+                display: block;
+                margin: 0px 0px 0px 0px;
+                padding: 0px 30px 0px 30px;
+                font-size: 18px;
+                line-height: 70px;
+                font-weight: 500;
+                background-color: $bniRed;
+                border: 1px solid $bniRed;
+                color: $white;
+                text-decoration: none;
+                span {
+                    float: left;
+                    font-size: 12px;
+                    line-height: 70px;
+                    transform: rotate(180deg);
+                    -webkit-transform: rotate(180deg);
+                    -moz-transform: rotate(180deg);
+                    -ms-transform: rotate(180deg);
+                }
+                &:hover {
+                    background-color: $white;
+                    color: $bniRed;
+                }
+            }
+        }
+
+    }
+    
+    .rowBusiness {
+        display: block;
+        margin: 0px;
+        padding: 50px 0px;
+        overflow: hidden;
+        background-color: $greyLight;
+        h2 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 20px 0px 10px 0px;
+            font-weight: 700;
+            color: $bniBlack;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+        h3 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 20px 0px 10px 0px;
+            font-weight: 700;
+            color: $bniBlack;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            position: relative;
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+
+        h4 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 20px 0px 10px 0px;
+            font-weight: 700;
+            color: $bniBlack;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            position: relative;
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+
+        p {
+            display: block;
+            margin: 0px;
+            padding: 8px 0px 8px 0px;
+            font-size: 17px;
+            line-height: 22px;
+            font-weight: 400;
+            color: $bniBlack;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+
+            strong, b {
+                font-size: 17px;
+                font-weight: 700;
+                margin: 0 0 10px 0;
+                display: inline-block;
+            }
+
+            a {
+                display: inline-block;
+                font-size: 17px;
+                font-weight: 500;
+                color: $bniRed;
+                text-decoration: underline;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+    
+    .rowTwoCol {
+        display: block;
+        margin: 0px;
+        padding: 50px 0px 0px 0px;
+        overflow: hidden;
+        h2 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 20px 0px 10px 0px;
+            font-weight: 700;
+            color: $bniBlack;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+        h3 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 20px 0px 10px 0px;
+            font-weight: 700;
+            color: $bniBlack;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            position: relative;
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+
+        h4 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 20px 0px 10px 0px;
+            font-weight: 700;
+            color: $bniBlack;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            position: relative;
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+
+        p {
+            display: block;
+            margin: 0px;
+            padding: 8px 0px 8px 0px;
+            font-size: 17px;
+            line-height: 22px;
+            font-weight: 400;
+            color: $bniBlack;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+
+            strong, b {
+                font-size: 17px;
+                font-weight: 700;
+                margin: 0 0 10px 0;
+                display: inline-block;
+            }
+
+            a {
+                display: inline-block;
+                font-size: 17px;
+                font-weight: 500;
+                color: $bniRed;
+                text-decoration: underline;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+    
+}
+
+@media (max-width: 1439px) {
+    .widgetProfile {
+        .rowBusiness { 
+            h1{
+                font-size: 50px;
+                line-height: 56px;
+            }
+            h2{
+                font-size: 30px;
+                line-height: 36px;
+            }
+            h3{
+                font-size: 26px;
+                line-height: 32px;
+            }
+            h4{
+                font-size: 20px;
+                line-height: 26px;
+            }
+        }
+        .rowTwoCol {
+            h1{
+                font-size: 50px;
+                line-height: 56px;
+            }
+            h2{
+                font-size: 30px;
+                line-height: 36px;
+            }
+            h3{
+                font-size: 26px;
+                line-height: 32px;
+            }
+            h4{
+                font-size: 20px;
+                line-height: 26px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetProfile {
+        padding: 50px 0px;
+
+        .rowProfileDetail {
+            padding: 0px 0px 20px 0px;
+
+            .photoCol {
+
+                h2 {
+                    font-size: 22px;
+                    line-height: 26px;
+                    padding: 15px 0px 0px;
+                }
+
+                p {
+                    font-size: 14px;
+                    line-height: 18px;
+
+                    a {
+                        font-size: 16px;
+                        line-height: 20px;
+                        padding: 12px 0px;
+                    }
+                }
+            }
+
+            .contactCol {
+                p {
+                    font-size: 10px;
+                    strong {
+                        font-size: 14px;
+                        line-height: 18px;
+                        padding-bottom: 10px;
+                    }
+
+                    a {
+                        font-size: 14px;
+                        line-height: 18px;
+                    }
+                }
+            }
+
+            .companyCol {
+                p {
+                    font-size: 10px;
+                    strong {
+                        font-size: 14px;
+                        line-height: 22px;
+                    }
+                }
+            }
+        }
+
+        .rowMsgSml {
+            padding: 20px 0px 60px 0px;
+
+            .col-xs-12.col-sm-8.col-md-8.col-lg-9 {
+                .smUrls {
+                    white-space: nowrap;
+                    overflow-x: auto;
+                    a {
+                        margin: 3px;
+                        padding: 0px 8px;
+                        border: 2px solid $greyDarker;
+                        font-size: 16px;
+                        line-height: 30px;
+                    }
+                }
+            }
+
+            .col-xs-12.col-sm-4.col-md-4.col-lg-3 {
+                .button {
+                    font-size: 16px;
+                    line-height: 60px;
+                    span {
+                        font-size: 10px;
+                        line-height: 60px;
+                    }
+                }
+            }
+
+        }
+
+        .rowBusiness {
+            h1{
+                font-size: 40px;
+                line-height: 46px;
+            }
+            h2{
+                font-size: 25px;
+                line-height: 34px;
+            }
+            h3{
+                font-size: 22px;
+                line-height: 26px;
+            }
+            h4{
+                font-size: 18px;
+                line-height: 24px;
+            }
+
+            p {
+                font-size: 16px;
+                line-height: 22px;
+                strong, b {
+                    font-size: 16px;
+                }
+
+                a {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .rowTwoCol {
+            padding: 30px 0px 0px 0px;
+            h1{
+                font-size: 40px;
+                line-height: 46px;
+            }
+            h2{
+                font-size: 25px;
+                line-height: 34px;
+            }
+            h3{
+                font-size: 22px;
+                line-height: 26px;
+            }
+            h4{
+                font-size: 18px;
+                line-height: 24px;
+            }
+
+            p {
+                font-size: 16px;
+                line-height: 22px;
+                strong, b {
+                    font-size: 16px;
+                }
+
+                a {
+                    font-size: 16px;
+                }
+            }
+        }
+
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetProfile {
+        .rowBusiness {
+            h1{
+                font-size: 30px;
+                line-height: 36px;
+                padding: 20px 0 10px 0;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+            h2{
+                font-size: 22px;
+                line-height: 26px;
+                padding: 20px 0 10px 0;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+            h3{
+                font-size: 20px;
+                line-height: 24px;
+                padding: 20px 0 10px 0;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+            h4{
+                font-size: 18px;
+                line-height: 24px;
+                padding: 20px 0 10px 0;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+
+            p {
+                padding: 0px 0px 10px 0px;
+                font-size: 16px;
+                line-height: 22px;
+                color: $bniBlack;
+
+                strong, b {
+                    font-size: 16px;
+                }
+
+                a {
+                    font-size: 16px;
+                }
+            }
+        }
+        .rowTwoCol{
+            h1{
+                font-size: 30px;
+                line-height: 36px;
+                padding: 20px 0 10px 0;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+            h2{
+                font-size: 22px;
+                line-height: 26px;
+                padding: 20px 0 10px 0;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+            h3{
+                font-size: 20px;
+                line-height: 24px;
+                padding: 20px 0 10px 0;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+            h4{
+                font-size: 18px;
+                line-height: 24px;
+                padding: 20px 0 10px 0;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+
+            p {
+                padding: 0px 0px 10px 0px;
+                font-size: 16px;
+                line-height: 22px;
+                color: $bniBlack;
+
+                strong, b {
+                    font-size: 16px;
+                }
+
+                a {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetProfile {
+        padding: 40px 0px;
+
+        .rowProfileDetail {
+            padding: 0px 0px 20px 0px;
+
+            .photoCol {
+                border-bottom: 1px solid $greyLight;
+                padding-bottom: 15px;
+            }
+
+            .contactCol {
+                border-bottom: 1px solid $greyLight;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+
+            .companyCol {
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+        }
+
+        .rowMsgSml {
+            padding: 20px 0px 40px 0px;
+
+            .col-xs-12.col-sm-8.col-md-8.col-lg-9 {
+                padding-right: 15px;
+                .smUrls {
+                    white-space: normal;
+                    overflow-x: hidden;
+                }
+            }
+
+            .col-xs-12.col-sm-4.col-md-4.col-lg-3 {
+                padding-left: 15px;
+                .button {
+                    padding-right: 15px;
+                    padding-left: 15px;
+                }
+            }
+
+        }
+        .rowBusiness{
+            h1{
+                font-size: 26px;
+                line-height: 34px;
+            }
+            h2{
+                font-size: 22px;
+                line-height: 26px;
+            }
+            h3{
+                font-size: 20px;
+                line-height: 24px;
+            }
+            h4{
+                font-size: 18px;
+                line-height: 24px;
+                padding: 20px 0 10px 0;
+            }
+
+            p {
+                padding: 0px 0px 10px 0px;
+                font-size: 14px;
+                line-height: 20px;
+                color: $bniBlack;
+
+                strong, b {
+                    font-size: 14px;
+                }
+
+                a {
+                    font-size: 14px;
+                }
+            }
+        }
+        .rowTwoCol{
+            h1{
+                font-size: 26px;
+                line-height: 34px;
+            }
+            h2{
+                font-size: 22px;
+                line-height: 26px;
+            }
+            h3{
+                font-size: 20px;
+                line-height: 24px;
+            }
+            h4{
+                font-size: 18px;
+                line-height: 24px;
+                padding: 20px 0 10px 0;
+            }
+
+            p {
+                padding: 0px 0px 10px 0px;
+                font-size: 14px;
+                line-height: 20px;
+                color: $bniBlack;
+
+                strong, b {
+                    font-size: 14px;
+                }
+
+                a {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,92 @@
+<section class="widgetDataTable">
+    <div id="responcemessageerror" align="center" style="display: none; margin-top:10px;"><?php echo isset($errorMessage)? $errorMessage :"" ?></div>
+    <?php if(!isset($errorMessage)){ ?>
+        <table id="chapterFormingTable" class="table table-hover listtables" width="100%">
+        <tbody>
+
+        <?php
+        $jsonData = $response -> aaData;
+            foreach ($jsonData as $value) {
+                ?>
+                <tr>
+                    <td><?php echo !empty($value[0]) ? $value[0] : '' ?></td>
+                    <td><?php echo !empty($value[1]) ? $value[1] : '' ?></td>
+                    <td><?php echo !empty($value[2]) ? $value[2] : '' ?></td>
+                    <td><?php echo !empty($value[3]) && !empty($value[4]) ? $value[3]. ', '. $value[4] : '' ?></td>
+                </tr>
+            <?php
+              }
+            ?>
+        </tbody>
+    </table>
+    <?php } ?>
+    <script type="text/javascript">
+        var oDefault;
+        var oSettings;
+
+        $(function() {
+
+            $.fn.dataTableExt.oSort["string-asc"]  = function(x,y) {
+                return x.toString().localeCompare(y.toString());
+            };
+
+            $.fn.dataTableExt.oSort["string-desc"]  = function(x,y) {
+                return y.toString().localeCompare(x.toString());
+            };
+
+            oDefault = {
+                "bProcessing": true,
+                "responsive": true,
+                "bServerSide": false,
+                "bLengthChange": false,
+                "iDisplayLength": 25,
+                "bSort": true,
+                "bInfo": true,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "aaSorting": [],
+				"order": [[0, 'asc']],
+                "fnDrawCallback": function ( oSettings ) {
+                    if ( oSettings.aiDisplay.length == 0 ) {
+
+                    }
+
+                }
+            };
+
+            oSettings = $.extend( true, {}, oDefault );
+
+            oSettings.oLanguage = {
+                sLengthMenu: "Show _MENU_ entries",
+                sSearch: "<i class='fa fa-filter'  data-toggle='tooltip' title='<?php echo $this->translator->_('cms.v3.admin.editpage.search')?>' aria-hidden='true'></i>",
+                sZeroRecords: "<?=$mappedWidgetSettings->getValueByName("Zero Records")?>",
+                sEmptyTable: "<?=$mappedWidgetSettings->getValueByName("Zero Records")?>",
+                sInfo: "<?=$mappedWidgetSettings->getValueByName("Showing")?> _START_ <?=$mappedWidgetSettings->getValueByName("to")?> _END_ <?=$mappedWidgetSettings->getValueByName("of")?> _TOTAL_ <?=$mappedWidgetSettings->getValueByName("entries")?>",
+                sInfoEmpty: "<?=$mappedWidgetSettings->getValueByName("Showing")?> 0 <?=$mappedWidgetSettings->getValueByName("to")?> 0 <?=$mappedWidgetSettings->getValueByName("of")?> 0 <?=$mappedWidgetSettings->getValueByName("entries")?>",
+                sInfoFiltered: "",
+                oPaginate: {
+                    sFirst:    "<i class='fa fa-step-backward' aria-hidden='true'></i>",
+                    sPrevious: "<i class='fa fa-chevron-left' aria-hidden='true'></i>",
+                    sNext:     "<i class='fa fa-chevron-right' aria-hidden='true'></i>",
+                    sLast:     "<i class='fa fa-step-forward' aria-hidden='true'></i>"
+                }
+            };
+
+            oSettings.aoColumns = [
+                { sWidth: "30%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Name")?>" },
+                { sWidth: "20%", sTitle: "<?=$mappedWidgetSettings->getValueByName("City")?>" },
+                { sWidth: "20%", sTitle:"<?=$mappedWidgetSettings->getValueByName("Location/Area")?>"  },
+                { sWidth: "20%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Meeting Day & Time")?>"  },
+            ];
+
+            $('.listtables').DataTable(oSettings);
+            $("#chapterFormingTable").show();
+			
+        });
+
+        $("#responcemessageerror").hide();
+        <?php if (isset($errorMessage)){ ?>
+        $("#responcemessageerror").show();
+        <?php } ?>
+    </script>
+</section>

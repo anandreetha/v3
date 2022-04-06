@@ -1,0 +1,177 @@
+<section class="widgetForm">
+    <br>
+    <div class="holder">
+        <form name="formApplicationRegistration" action="chapterlist" method="post" class="form" id="formApplicationRegistration">
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="formRow">
+                    <label for="emailAddress"><?= $mappedWidgetSettings->getValueByName("Application reg email text") ?></label>
+                    <input type="text" name="emailAddress" id="emailAddress" value="" class="textField required limitedFieldWidth" autofocus>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="formRow">
+                    <label for="captcha"><?= $mappedWidgetSettings->getValueByName("Application reg captcha text") ?></label>
+                    <div class="g-recaptcha" data-sitekey="6LfvSREUAAAAAOxTPtj79Hj7sECtQthOpb7NQ2gb" data-callback="correctCaptcha"></div>
+                    <input type="hidden" id="captcha" name="captcha"  class="required" value="" title="Please enter captcha">
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="formRow">
+                    <p>
+                        <label for="agreeCheckbox" id="formIAgree" class="agree">
+                            <input id="agreeCheckbox" type="checkbox" name="agreeCheckbox" value="accept"
+                                   title="I agree"><i class="fa fa-check-square-o" aria-hidden="true"></i>
+                            <i class="fa fa-square-o" aria-hidden="true"></i>
+                            <?php
+                            echo $mappedWidgetSettings->getValueByName("Application reg agree text");
+
+                            $regLinkTxt = $mappedWidgetSettings->getValueByName("Application reg link text");
+                            $regLinkUrl = $mappedWidgetSettings->getValueByName("Application reg url value");
+
+                            if (!empty($regLinkUrl)) {
+                                echo ' <a href="' . $regLinkUrl . '" target="_blank">' . $regLinkTxt . '</a>';
+                            }
+                            ?>
+                        </label>
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="formButtonsRow">
+                    <input type="hidden" id="chapterId" name="chapterId"
+                           value="<?php echo !empty($this->request->get("chapterId")) ? $this->request->get("chapterId") : 0 ?>">
+                    <button type="submit" id="submit" name="submit"
+                            class="button"><?= $mappedWidgetSettings->getValueByName("Application reg submit text") ?></button>
+                    <span id="formAjaxLoader" style="display:none;"><i
+                                class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                </div>
+            </div>
+            <p id="responcemessagesuccess" align="center"
+               style="margin-top: 15px; display: none;"><?= $mappedWidgetSettings->getValueByName("Application reg thank you message text") ?></p>
+            <p id="responcemessageerror" align="center"
+               style="margin-top: 15px; display: none;"><?= $mappedWidgetSettings->getValueByName("There was an error while processing your request") ?></p>
+        </form>
+    </div>
+</section>
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<!--[if gte IE 11]> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/url-search-params/1.1.0/url-search-params.js"></script>
+<!-- <![endif]-->
+<script type="text/javascript">
+
+    window.onload = function () {
+        if (document.getElementById("emailAddress").value === '') {
+            setTimeout(function () {
+                document.getElementById("emailAddress").focus();
+            })
+        }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const chapterIdParam = urlParams.get('chapterId');
+
+    if (typeof chapterIdParam !== "undefined") {
+        $("#chapterId").val(chapterIdParam);
+    }
+
+    if ($("#agreeCheckbox").is(":checked")) {
+        $("#submit").attr("disabled", false);
+    } else {
+        $("#submit").attr("disabled", true);
+    }
+
+    $(function () {
+
+        //custom validation rule
+        $.validator.addMethod("customemail",
+            function (value, element) {
+                return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
+            }
+        );
+
+        if ($("#agreeCheckbox").change(function () {
+            if ($("#agreeCheckbox").is(":checked")) {
+                $("#submit").attr("disabled", false);
+            } else {
+                $("#submit").attr("disabled", true);
+            }
+        })) ;
+
+        var url = '<?php echo $this->url->get("backend/captcha/handleApplicationRegistrationRecaptcha")?>';
+
+        $("#formApplicationRegistration").validate({
+            ignore: ".ignore",
+            rules: {
+                emailAddress: {
+                    required: true,
+                    customemail: true
+                },
+                captcha: {
+                    required: function () {
+                        return !grecaptcha.getResponse();
+                    }
+                }
+            },
+            messages: {
+                emailAddress: {
+                    required: "<?=$mappedWidgetSettings->getValueByName("Enter a correct email validation message")?>",
+                    customemail: "<?=$mappedWidgetSettings->getValueByName("Enter a correct email validation message")?>"
+                },
+                captcha: {
+                    required: "<?=$mappedWidgetSettings->getValueByName("Please enter captcha")?>"
+                }
+            },
+            errorClass: "error",
+            errorElement: "div",
+            submitHandler: function (form) {
+                if (!grecaptcha.getResponse()) {
+                    grecaptcha.reset();
+                } else {
+                    $("#submit").attr("disabled", true);
+
+                    $("#formAjaxLoader").show();
+                    $(form).ajaxSubmit({
+                        dataType: "json",
+                        url: url,
+                        success: function (data) {
+                            if (data.reCaptchaFailed) {
+                                grecaptcha.reset();
+                                $("#submit").attr("disabled", false);
+                                $("#formAjaxLoader").hide();
+                                $(".error", $("#captcha").parent()).remove();
+                                $("#captcha").parent().append('<div class="error" style="display: block; max-width: 300px;">' + $("#captcha").attr("title") + '</div>');
+                            }
+                            else if (data.chapterRegStatus == "true" || data.chapterRegStatus == true) {
+                                $("#submit").hide();
+                                $("#formAjaxLoader").hide();
+                                $("#responcemessageerror").hide();
+                                if (data.hasOwnProperty('redirectURL')) {
+                                    window.location.href = data.redirectURL;
+                                }else{
+                                    $("#responcemessagesuccess").show();
+                                }
+                            } else if (data.chapterRegStatus == "false" || data.chapterRegStatus == false) {
+                                grecaptcha.reset();
+                                $("#submit").attr("disabled", false);
+                                $("#formAjaxLoader").hide();
+                                $("#responcemessagesuccess").hide();
+                                $("#responcemessageerror").show();
+                            }
+                        },
+                        failure: function (data) {
+                            grecaptcha.reset();
+                            $("#submit").attr("disabled", false);
+                            $("#formAjaxLoader").hide();
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>
+

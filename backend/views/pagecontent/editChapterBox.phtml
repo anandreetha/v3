@@ -1,0 +1,74 @@
+<script src="/bnicms/v3/js/modalClose/closeModal.js"></script>
+<?= $this->getContent();?>
+    <div class="row modal-row">
+        <div class="col-md-12">
+            <form method="post">
+			
+				<div class="form-group">
+                    <label for="chapterHeadingText"><?php echo $this->translator->_('cms.v3.admin.editpage.fagetinvitedbuttontext'); ?></label>
+                    <input type="text" class="form-control" name="chapterButtonText" id="chapterButtonText" value="<?php if(isset($chapterButtonText)):echo $chapterButtonText;else: echo 'Get Invited';endif;?>">
+                </div>
+				
+				<div class="form-group">
+                    <label for="chapterHeadingText"><?php echo $this->translator->_('cms.v3.admin.editpage.fagetinvitedheadingtext'); ?></label>
+                    <input type="text" class="form-control" name="chapterHeadText" id="chapterHeadText" value="<?php if(isset($chapterHeadText)):echo $chapterHeadText;else: echo 'Getting Started Easy';endif;?>">
+                </div>
+				
+				<div class="form-group">
+                    <label for="chapterHeadingText"><?php echo $this->translator->_('cms.v3.admin.editpage.fagetinvitedstep1text'); ?></label>
+                    <input type="text" class="form-control" name="chapterStep1Text" id="chapterStep1Text" value="<?php if(isset($chapterStep1Text)):echo $chapterStep1Text;else: echo 'Find a Chapter';endif;?>">
+                </div>
+				
+				<div class="form-group">
+                    <label for="chapterHeadingText"><?php echo $this->translator->_('cms.v3.admin.editpage.fagetinvitedstep2text'); ?></label>
+                    <input type="text" class="form-control" name="chapterStep2Text" id="chapterStep2Text" value="<?php if(isset($chapterStep2Text)):echo $chapterStep2Text;else: echo 'Submit a Request';endif;?>">
+                </div>
+				
+				<div class="form-group">
+                    <label for="chapterHeadingText"><?php echo $this->translator->_('cms.v3.admin.editpage.fagetinvitedstep3text'); ?></label>
+                    <input type="text" class="form-control" name="chapterStep3Text" id="chapterStep3Text" value="<?php if(isset($chapterStep3Text)):echo $chapterStep3Text;else: echo 'Complete the Registration';endif;?>">
+                </div>
+				
+				<div class="form-group">
+                    <label for="chapterHeadingText"><?= $this->translator->_('cms.v3.admin.editpage.headingtext'); ?></label>
+                    <input type="text" class="form-control" name="chapterHeadingText" id="chapterHeadingText" value="<?php if(isset($chapterHeadingText)){ echo $chapterHeadingText;}?>">
+                </div>
+				
+				<div class="form-group">
+                    <label for="chapterInputText"><?= $this->translator->_('cms.v3.admin.editpage.facinputtextheadingtext'); ?></label>
+                    <input type="text" class="form-control" name="chapterInputText" id="chapterInputText" value="<?php if(isset($chapterInputText)){ echo $chapterInputText;}?>">
+                </div>
+			
+				<?php /*?>
+                <div class="form-group">
+                    <label for="chapterHeadingText"><?= $this->translator->_('cms.v3.admin.editpage.headingtext'); ?></label>
+                    <input type="text" class="form-control" name="chapterHeadingText" id="chapterHeadingText" value="<?php if(isset($chapterHeadingText)){ echo $chapterHeadingText;}?>">
+                </div>
+                <div class="form-group">
+                    <label for="chapterSubHeadingText"><?= $this->translator->_('cms.v3.admin.editpage.facsubheadingtext'); ?></label>
+                    <input type="text" class="form-control" name="chapterSubHeadingText" id="chapterSubHeadingText" value="<?php if(isset($chapterSubHeadingText)){ echo $chapterSubHeadingText;}?>">
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label><?= $this->translator->_('cms.v3.admin.editpage.faccontenttextheadingtext'); ?></label>
+                        <textarea class="form-control" rows="3" name="chapterContentText" id="chapterContentText"><?php if(isset($chapterContentText)){ echo $chapterContentText;}?></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="chapterInputText"><?= $this->translator->_('cms.v3.admin.editpage.facinputtextheadingtext'); ?></label>
+                    <input type="text" class="form-control" name="chapterInputText" id="chapterInputText" value="<?php if(isset($chapterInputText)){ echo $chapterInputText;}?>">
+                </div>
+				<?php */?>
+				
+            </form>
+        </div>
+    </div>
+
+<script>
+    // When the document is ready, check on intervals if the success alert is on display.
+    // If the success alert is on display then this means we've successfully completed our action and we can close the form
+    // Close modal function is highly specific to the bootstrap modal and expects some sort of successful alert in this file to process
+    $(document).ready(function(){
+        closeModal('#pageContentSettingsModal');
+    });
+</script>

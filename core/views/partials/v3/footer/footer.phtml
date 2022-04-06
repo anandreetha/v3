@@ -1,0 +1,505 @@
+<!-- FOOTER WIDGET -->
+<?php
+if($website->getTypeId() !=3) {
+    $this->partial('partials/v3/footer/footer-widgets');
+}
+?>
+
+<!-- RSS WIDGET -->
+<?php
+$latestFromText=isset($contentSettings["pagecontent_latest_text"]) ?  $contentSettings["pagecontent_latest_text"] : "The Latest From BNI";
+$latestFromLinkText=isset($contentSettings["pagecontent_latest_link_text"]) ?  $contentSettings["pagecontent_latest_link_text"] : "View All";
+$rssVisible=isset($contentSettings["pagecontent_rss_visibility"]) ?  $contentSettings["pagecontent_rss_visibility"] : 1;
+?>
+
+<?php if($rssVisible == 1) { ?>
+    <section class="widgetBniFeed">
+        <div class="holder">
+            <div class="topRow">
+                <div class="col-xs-12 col-sm-8 col-md-8">
+                    <h2><?= $latestFromText ?></h2>
+                </div>
+				<div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="viewOuter">
+                            <a href="https://www.bni.com/the-latest/blog-news" target="_blank">
+                                <?= $latestFromLinkText ?>
+                                <svg class="icon-redarrow" xmlns="http://www.w3.org/2000/svg" width="25.967" height="26.7" viewBox="0 0 25.967 26.7">
+                                  <g data-name="Group 261" transform="translate(-1732.5 -1677.672)">
+                                    <path data-name="Path 40" class="cls-1" d="M1757.443,1680.379l10.521,10.521-10.521,10.521" transform="translate(-11.498 0.121)"/>
+                                    <line data-name="Line 19" class="cls-2" x1="21.857" transform="translate(1734.5 1690.87)"/>
+                                  </g>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+            </div>
+            <div class="rss-box">
+
+                <ul id="rss-list" class="rss-items">
+                    <img loading="lazy" id="rssLoader" style="display: block; margin: 0 auto;"
+                         src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif" alt="Ajax loader image"/>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <?php
+}
+if($website->getTypeId() ==1) {
+    $this->partial('partials/v3/footer/footer-newsletter');
+}
+?>
+
+<footer>
+	<input type="hidden" id="website_type" value="<?php echo $website->getTypeId(); ?>">
+	<input type="hidden" id="website_id" value="<?php echo $website->getId(); ?>">
+	<?php 
+		$cookie_group_id='';
+		foreach($websettings['allSettings'] as $websetting):
+			if ($websetting->getSettingsId() == '403'):
+				$cookie_group_id=$websetting->getValue();
+				break;
+			endif;
+		endforeach;
+	?>
+	<input type="hidden" id="cookie_group_id" value="<?php echo $cookie_group_id;?>">
+    <?php
+    if($website->getTypeId() !=3) {
+        $this->partial('partials/v3/footer/footer-links');
+    }
+    $this->partial('partials/v3/footer/copyright-bar');
+    ?>
+</footer>
+
+<?php $this->partial('partials/v3/footer/mobile-navbar'); ?>
+</div>
+
+
+<?php
+// Users google analytics to be output here
+foreach($websettings['allSettings'] as $websetting) { ?>
+    <?php if ($websetting->getSettingsId() == '4') { ?>
+        <?php
+			if($cookie_group_id!=""):
+				$google_alytics=$this->renderService->convertHexToAscii($websetting->getValue());
+				if($google_alytics):
+					$scriptChar = array('<script>');
+					$replace_char='<script data-cookieconsent="statistics">';
+					$google_alytics = str_replace($scriptChar, $replace_char, $google_alytics);
+					$google_alytics=$google_alytics;
+				endif;
+				echo $google_alytics;
+			else:
+				echo $this->renderService->convertHexToAscii($websetting->getValue());
+			endif;	
+		?>
+    <?php } ?>
+<?php }
+
+// The link for the RSS feed will vary depending of if we're in publish or preview 'mode'
+$rssFeedUrl = $renderStaticContent ? '/bnicms/v3/frontend/rss/getrssvalues' : $this->url->get('frontend/rss/getrssvalues');
+?>
+
+<script>
+        $(function () {
+            var url = "<?php echo $rssFeedUrl; ?>";
+            $.ajax({
+
+                type: 'GET',
+                url: url,
+                success: function(data) {
+                    $("#rssLoader").hide();
+                    if (!Array.isArray(data)) {
+                        console.log("No RSS feed found");
+                        return;
+                    }
+                    $.each(data, function(index, values) {
+                        // Incoming date has a gap between date and time. Here it concat the date and time with a T between them.
+                        dateTimeArray = values.dateModified.date.split(" ");
+                        dateTime = dateTimeArray[0].concat("T"+dateTimeArray[1]);
+                        var dateString = new Date(dateTime);
+
+                        dateString = dateFormat(dateString, "ddd, dd mmmm yyyy");
+
+                        $("#rss-list").append("<li><a class='rss-item' href='"+ values["link"] +"' target='_blank'>" +
+                            "<img loading='lazy' id='img01" + index + "' src='" + values["image"] + "' style='width:100%' alt='netimage'>" + values["title"] +"</a>" +
+                            " <span class='rss-item-auth'>" + "(" + values["authors"]["0"]["name"] + ")" + "</span><br>" +
+                            " <span class='rss-date'>" + dateString + "</span><br> " + values["description"] + "</li>");
+                    });
+                }
+            });
+
+            <?php if($page->getTemplate() == "find-a-chapter") { ?>
+                if (navigator.userAgent.indexOf("MSIE ") > -1 || navigator.userAgent.indexOf("Trident/") > -1 || navigator.userAgent.indexOf("Edge/") > -1) {
+                    $("#custom-ie-styles").text("@media (min-width: 768px) { .widgetVisitChapter .map-and-list .map-list .scrollArea { min-height: 727px; }}");
+                }
+            <?php } ?>
+			
+			$(window).on('resize load', adjustIframes);
+			$(window).on('load', adjustIframes);
+			$(window).on('unload', adjustIframes);
+			
+			if (window.matchMedia("(max-width: 991px)").matches) 
+			{ 
+				HidemenuLoader();
+			}else{
+				NavfontSize();
+				setTimeout( function(){
+					HidemenuLoader();
+				}  , 100 );
+			}
+			
+			$(document).on('click',".dropdown-toggle",function(e){
+				e.stopPropagation();
+				if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+					$('.dropdown-menu').hide();					
+					$(this).parent().find('.dropdown-menu').toggle();
+				}				
+			});
+			$(document).on('click',".dropdown",function(e){
+				e.stopPropagation();
+				if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+					$('.dropdown-menu').hide();					
+					$(this).find('.dropdown-menu').toggle();
+				}				
+			});
+			$(document).mouseup(function (e) {
+				e.stopPropagation();
+				if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+					$('.dropdown-menu').hide();	
+				}
+			});
+        });
+		function HidemenuLoader(hidemenu)
+		{
+			if(hidemenu=="s"){	
+				$('.menuLoader').removeClass('hide');
+				$('.colLogo').addClass('hide');
+				$('.colNav').addClass('hide');
+			}else{
+				$('.menuLoader').addClass('hide');
+				$('.colLogo').removeClass('hide');
+				$('.colNav').removeClass('hide');
+			}
+		}
+		function topBarWidth()
+		{
+			let arr=[]; let obj={};
+			HidemenuLoader();
+			let colNav=$(".colNav").width();
+			let colLogo=$(".colLogo").width();
+			let navli=NavULwidth();
+			$('.bottomRow .holder .colLogo .bniLogo .texts .name').css("max-width",'none');
+			let logotxt=$('.bottomRow .holder .colLogo .bniLogo .texts .name').width();	
+			$('.bottomRow .holder .colLogo .bniLogo .texts .name').css("max-width",'400px');
+			HidemenuLoader('s');
+			
+			let menupercent=(navli/colNav)*100;
+			let webpercent=(logotxt/colLogo)*100;
+			
+			//console.log(webpercent);
+			
+			obj['menupercent']=menupercent;
+			obj['webpercent']=webpercent;
+			arr.push(obj);
+			return arr;
+			
+		}
+		function NavfontSize()
+		{
+			let changes='n';let navfont=''; let webfont='';		
+			let topbar=topBarWidth();
+			
+			let menupercent=topbar[0].menupercent;
+			let webpercent=topbar[0].webpercent;
+		
+			
+			if((menupercent<=83)&&(webpercent<=61)){
+				changes='n';
+			}else{
+				changes='y';
+			}
+			
+			
+			if(changes=="y"){
+				$('.colNav ul li a').css("font-size",'15px');
+				$('.bottomRow .holder .colLogo .bniLogo .texts .name').css("font-size",'21px');
+			}
+			
+			HidemenuLoader();
+			let colNav_height=$(".colNav ul").height();
+			let colLogo_height=$('.colLogo .bniLogo .texts').height();
+			if((colNav_height<=72)&&(colLogo_height<=65)){
+				var logoname=$('.bottomRow .holder .colLogo .bniLogo .texts .name').position();
+				$('header .bottomRow .holder .colNav').css("padding-top",logoname.top+'px');
+			}
+			HidemenuLoader('s');
+			
+			//HidemenuLoader();
+			//var logoname=$('.bottomRow .holder .colLogo .bniLogo .texts .name').position();
+			//$('header .bottomRow .holder .colNav').css("padding-top",logoname.top+'px');
+			//HidemenuLoader('s');
+			
+			/*topbar=topBarWidth();
+			if (window.matchMedia("(max-width: 1439px)").matches) 
+			{ 
+				if (navigator.userAgent.indexOf("Firefox") != -1) {
+					if(topbar[0].webpercent>58){
+						topbar[0].webpercent=62;
+					}//console.log(topbar);
+				}	
+				if(topbar[0].webpercent<61){
+					$('header .bottomRow .holder .colNav').css("padding-top",'42px');
+				}
+		
+			}else{
+				if (navigator.userAgent.indexOf("Firefox") != -1) {
+					if(topbar[0].webpercent<=63){ 
+						topbar[0].webpercent=62;
+					}					 
+				}
+				if(topbar[0].webpercent<60){
+					$('header .bottomRow .holder .colNav').css("padding-top",'48px');
+				}	
+			}
+			
+			if ((navigator.userAgent.indexOf("Firefox") != -1)&&(topbar[0].webpercent=="62")){
+				$('header .bottomRow .holder .colNav').css("padding-top",'48px');
+			}
+			if(($('#website_type').val()=="3")&&(topbar[0].webpercent>"50")){
+				$('header .bottomRow .holder .colNav').css("padding-top",'48px');
+			}*/
+			
+		}
+		function NavULwidth()
+		{
+			let navli=[];let total_li=0;
+			$('.colNav ul li').each(function (i) {
+				let liwidth = $(this).width();
+				total_li+=parseFloat(liwidth);
+			});
+			//let liwidth=navli.reduce((tot,nav)=>{return tot=tot+nav;},0);
+			return total_li;
+		}
+		function adjustIframes()
+		{
+			console.log("function");
+			$('iframe').each(function () {
+			var
+			$this = $(this),
+			proportion = $this.data('proportion'),
+			w = $this.attr('width'),
+			actual_w = $this.width();
+			let noheight="";
+			
+			console.log("parent width="+$(this).parent().width()+"==W=="+w);
+			
+				if (($(window).width() < 1199)||($(window).width()<w)||($(this).parent().width()<w)){
+					//let actual_w=($(window).width());
+					let actual_w=($(this).parent().width());
+					if(($(window).width()<w)&&($(window).width() > 1199)){
+						noheight="1";
+					}
+					if(($(this).parent().width()<w)&&($(window).width() > 1199)){
+						noheight="1";
+					}					
+					
+					$this.css('width',actual_w);
+					console.log(actual_w);
+					console.log("Frame width="+w+"==Parent Width="+$(this).parent().width()+"==Window width="+$(window).width());
+					
+					if (!proportion)
+					{
+						proportion = $this.attr('height') / w;
+						$this.data('proportion', proportion);
+					}
+
+					if (actual_w != w)
+					{
+						if(noheight==""){
+							$this.css('height', Math.round(actual_w * proportion) + 'px');
+						}
+					}
+				}else{
+					$this.css('width','');
+					$this.css('height','');
+				}	
+				$this.css('overflow','hidden');	
+			});
+		}
+	$(function(){
+		$('.youtube-iframe').each(function(){
+
+			$imgID = $(this).data('embed');
+			$imgWidth = $(this).data('width');
+			$imgHeight = $(this).data('height');
+			$imgURL = '<a href="javascript:;" class="youtubeimg"><img loading="lazy" src="https://i.ytimg.com/vi/'+ $imgID +'/sddefault.jpg" width="'+$imgWidth+'" height="'+$imgHeight+'"></a>';
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				$imgURL ='<img loading="lazy" class="videoloader" src="<?php echo $this->config->general->cdn; ?>/images/ajax-loader.gif" alt="Ajax loader image">';
+			}
+			$(this).html($imgURL);
+		});
+
+		$('.youtube-iframe').click(function(){
+			var iframe = document.createElement( "iframe" );
+			
+			var datawidth=this.dataset.width;
+			var dataheight=this.dataset.height;
+			
+			if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+				datawidth="100%";
+				dataheight="100%";
+			}
+
+			iframe.setAttribute( "frameborder", "0" );
+			iframe.setAttribute( "allowfullscreen", "" );
+			iframe.setAttribute( "allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" );
+			// set width for your video here
+			iframe.setAttribute( "width", datawidth );
+			// set height for your video here
+			iframe.setAttribute( "height", dataheight );
+			iframe.setAttribute( "src", "https://www.youtube.com/embed/"+ this.dataset.embed +"?rel=0&showinfo=0&autoplay=1" );
+
+			this.innerHTML = "";
+			this.appendChild( iframe );
+
+		}) ;
+
+	});	
+
+	$(window).bind("load", function() {
+	  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			setTimeout( function(){
+				$('.youtube-iframe').trigger('click');
+			}  , 1500 );
+		}
+	});
+
+</script>
+<!-- CSS Files -->
+<?php /*?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/jquery.mmenu-6.1.0/jquery.mmenu.all.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/fancybox-master-3.1.20/dist/jquery.fancybox.min.css">
+
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/bni-font-icon-4.0/style.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/styles/css/ieonly.css" />
+
+
+
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/fullcalendar-3.4.0/lib/moment.min.js" async></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/jquery-ui-1.12.1.custom/jquery-ui.min.js" async></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/jquery-validation-1.16.0/dist/jquery.validate.min.js" async></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/jquery-validation-1.16.0/dist/additional-methods.min.js" async></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/jquery-validation-1.16.0/lib/jquery.form.min.js" async></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/bootstrap-3.3.7-dist/js/bootstrap.min.js" async></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/jquery.mmenu-6.1.0/jquery.mmenu.all.js" async></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/fancybox-master-3.1.20/dist/jquery.fancybox.min.js" async></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/assets/scripts/common.js" async></script>
+<?php */?>
+
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/combine.js" defer data-cookieconsent="ignore"></script>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/combine.css">
+
+<?php 
+$page_url = $canonicalUrl;
+$alloweddt=array("advanced-chapter-search-list","chapter-detail","find-a-member-list","chapters-forming","region-list");
+$call_datatbl='n';
+foreach($alloweddt as $dt):
+	if(strpos($pageTemplate, $dt) !== false): $call_datatbl='y'; break; endif;
+endforeach;
+
+if($call_datatbl=="y"):
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/DataTables-1.10.15/Responsive-2.1.1/css/responsive.bootstrap.min.css">
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/DataTables-1.10.15/datatables.min.js" defer data-cookieconsent="ignore"></script>
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/DataTables-1.10.15/Responsive-2.1.1/js/responsive.bootstrap.min.js" defer data-cookieconsent="ignore"></script>
+<?php endif;
+if(strpos($pageTemplate, "event-calendar") !== false):
+?>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/fullcalendar-3.4.0/fullcalendar.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/libs/fullcalendar-3.4.0/fullcalendar.print.css" media="print">
+
+<script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/fullcalendar-3.4.0/fullcalendar.min.js" defer></script>
+<?php endif;?>
+
+
+
+<?php
+if($cookie_group_id!=""):
+else:
+?>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script>
+	window.addEventListener("load", function(){
+		window.cookieconsent.initialise({
+			"palette": {
+				"popup": {
+					"background": "#CF2030",
+					"text": "#ffffff"
+				},
+				"button": {
+					"background": "#ffffff",
+					"text": "#000000"
+				}
+			},
+			"theme": "classic",
+			"content": {
+				"message": "<?php echo isset($contentSettings["Cookie policy message text"]) ? $contentSettings["Cookie policy message text"] : "By continuing to use this website, you consent to the use of cookies in accordance with our "; ?>",
+				"dismiss": "<?php echo isset($contentSettings["Cookie policy button text"]) ? $contentSettings["Cookie policy button text"] : "I understand"; ?>",
+				"link": "<?php echo isset($contentSettings["Cookie policy link text"]) ? $contentSettings["Cookie policy link text"] : "Cookie Policy."; ?>",
+				"href": "http://bnitos.com/cookiepolicy.html"
+			}
+		})});
+</script>
+<?php
+endif;	
+?>
+<script>
+	var headerName = getQueryParameterByName('name');
+	
+	if (headerName) {
+		document.title = document.title + ' - ' + headerName;
+	}
+
+	function getQueryParameterByName(name) {
+		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
+		return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+</script>
+
+<script type='application/ld+json'> 
+{
+  "@context": "http://www.schema.org",
+  "@type": "Organization",
+  "name": "<?php echo $website->getName(); ?>",
+  "url": "<?php echo $canonicalUrl; ?>",
+  "logo": "<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/socialmedia.png",
+  "image": "<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/socialmedia.png",
+  "description": "<?php echo isset($contentSettings["meta_description"]) ?  $contentSettings["meta_description"] : $pageTitle ?>",
+  "address": {
+	"@type": "PostalAddress",
+	"streetAddress": "",
+	"addressLocality": "",
+	"addressRegion": "",
+	"postalCode": "",
+	"addressCountry": ""
+  },
+  "contactPoint": {
+	"@type": "ContactPoint",
+	"telephone": "",
+	"contactType": "customer support"
+  }
+}
+</script>
+
+</body>
+</html>

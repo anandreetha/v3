@@ -1,0 +1,186 @@
+<div class="box-header">
+    <div class='box-tools' id='backbutton'>
+        <?php echo $redirectToUrl; ?>
+    </div>
+</div>
+<div class="box box-default albumFileUploader">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?php echo $this->translator->_('cms.v3.admin.gallery.upload'); ?></h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
+
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12" id="alertArea">
+                <div id="activeConnections" class="alert alert-warning" style="display: none"></div>
+                <div id="active" style="display: none"></div>
+                <div id="alertBox" class="alert <?php echo $this->view->alertType; ?>"
+                     style="display:none"><?php echo $this->view->message; ?></div>
+                <ul id="successMessagelist" class="alert alert-success"></ul>
+                <ul id="errorMessagelist" class="alert alert-danger"></ul>
+                <ul id="clientSideAlert" class="alert alert-danger"
+                    style="display: none"
+                    data-file-size-warning="<?php echo $this->translator->_('cms.v3.admin.gallery.maxfilesizewarning'); ?>"
+                    data-file-type-warning="<?php echo $this->translator->_('cms.v3.admin.gallery.filetypewarning'); ?>"></ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <?= $this->flashSession->output(); ?>
+                <?= $this->getContent(); ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <form id="imageUploadForm" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label id="inputLabel"
+                               for="inputFile"><?php echo $this->translator->_('cms.v3.admin.gallery.selectafiletxt'); ?></label>
+                        <input type="file" id="inputFile" name="inputFile[]" multiple="multiple"
+                               accept=".jpg,.jpeg,.png,.gif">
+                    </div>
+                    <button type="submit" id="submit-button"
+                            class="btn btn-default"><?php echo $this->translator->_('cms.v3.admin.gallery.submit'); ?></button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div class="box-footer">
+            <div class="notification alert-warning ">
+                <h4><?= $this->translator->_('cms.v3.admin.gallery.note'); ?></h4>
+                <p><?= $this->translator->_('cms.v3.admin.gallery.supportedimgformats'); ?> JPEG, PNG, GIF</p>
+                <p><?= $this->translator->_('cms.v3.admin.gallery.maxfilesize'); ?> 10MB</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="box box-default albumFileViewer">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?php echo $this->translator->_('cms.v3.admin.gallery.view'); ?></h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
+
+    <!-- /.box-header -->
+    <div class="box-body" id="holder">
+        <div class="row">
+            <?php
+            if (empty($images)) {
+                ?>
+                <div class="col-sm-6 col-md-12">
+                    <p><?php echo $this->translator->_('cms.v3.admin.gallery.zeroimages'); ?></p>
+                </div>
+                <?php
+            } else {
+
+                foreach ($images as $key => $image) {
+                    ?>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="thumbnail">
+                            <?php echo $this->tag->linkTo(array("backend/album/deleteAlbumItem/" . $widgetId . "/" . $image->_id, "<i class=\"fa fa-times\"></i>", "class" => "btn pull-right closeIcon",'onClick' => 'return confirm("'.$this->translator->_("cms.v3.admin.gallery.deleteconfirmationmsg").'");', "title" => $this->translator->_('cms.v3.admin.gallery.deleteimage'))); ?>
+
+                            <div class="imgHolder">
+                                <img src="<?= $this->url->get('backend/render/renderImage/' . $image->thumbnail_id) ?>"
+                                     width="304" height="236"
+                                     data-imgp="<?= $this->url->get('backend/render/renderImage/' . $image->_id) ?>">
+                            </div>
+
+                            <div class="caption">
+                                <p><?php echo $image->filename; ?>
+                                    , <?php echo $this->viewHelper->formatBytes((double)$image->length); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+            } ?>
+        </div>
+        <hr>
+        <div class="box-footer">
+        </div>
+    </div>
+</div>
+<script>
+    $("#errorMessagelist").hide();
+    $("#successMessagelist").hide();
+    var button = $("#submit-button");
+    var label = $("#inputLabel");
+    changeButtonColour(0);
+
+    //binds to onchange event of your input field
+    $('#inputFile').bind('change', function () {
+        changeButtonColour(this.files.length);
+        var allValidFileSize = true;
+        var clientAlert = $("#clientSideAlert");
+        var translatedWarning = clientAlert.attr("data-file-size-warning");
+
+        for (var i = 0; i < this.files.length; i++) {
+            // 10Mb in bytes
+            if (this.files[i].size >= 10485760) {
+                allValidFileSize = false;
+                $(clientAlert).append("<li>" + this.files[i].name + ' ' + translatedWarning + "</li>");
+            }
+        }
+
+        if (allValidFileSize) {
+            $("#clientSideAlert").hide();
+        } else {
+            $("#clientSideAlert").show();
+        }
+    });
+
+    createDragAndDrop(<?php echo "'" . $this->url->get('backend/album/manage/' . $widgetId . "'") ?>);
+
+    var numberOfImagesRequiredToUpload = 0;
+    var totalImagesUploaded = 0;
+    $("#imageUploadForm").validate({
+        submitHandler: function (form, event) {
+            event.preventDefault();
+
+            // Prevent multiple uploads
+            if (!$("#activeConnections").is(":visible")) {
+                $("div.alert-danger").hide();
+                var inputFiles = $('#inputFile')[0].files;
+                var formData;
+                numberOfImagesRequiredToUpload = inputFiles.length;
+                // Loop around all files to upload and create a ajax for each file
+                for (var i = 0; i < inputFiles.length; i++) {
+                    if (inputFiles[i].size <= 10485760) {
+                        formData = new FormData;
+                        formData.append('file[]', inputFiles[i]);
+                        //submit via ajax
+                        ajaxCall(<?php echo "'" . $this->url->get('backend/album/manage/' . $widgetId . "'") ?>,
+                            formData, numberOfImagesRequiredToUpload, $("#alertArea"));
+                    }
+                }
+            }
+        }
+    });
+
+    function changeButtonColour(length) {
+
+        if (length > 0) {
+            label.hide(150);
+            button.css("background-color", "#CF2030");
+            button.css("border-color", "#CF2030");
+            button.css("color", "#fff");
+        } else {
+            label.show(150);
+            button.css("background-color", "#f4f4f4");
+            button.css("border-color", "#ddd");
+            button.css("color", "#444");
+        }
+
+    }
+
+</script>
+

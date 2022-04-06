@@ -1,0 +1,526 @@
+/* Event Detail Start */
+.widgetEventDetail {
+    display: block;
+    margin: 0px;
+    padding: 80px 0px;
+    
+    .headingRow {
+        padding-bottom: 10px;
+        h2 {
+            display: block;
+            margin: 0px;
+            padding: 0px 0px 15px 0px;
+            font-size: 36px;
+            line-height: 42px;
+            font-weight: 500;
+            color: $black;
+        }
+        p {
+            display: block;
+            margin: 0px;
+            padding: 5px 0px 5px 0px;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 500;
+            color: $black;
+            
+            .fa {
+                color: $grey;
+                padding-left: 4px;
+            }
+            
+            span {
+                padding-left: 6px;
+                padding-right: 6px;
+                color: $grey;
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: 400;
+            }
+            
+            .dtValue {
+                color: $black;
+            }
+        }
+    }
+    
+    .threeColRow {
+        p {
+            display: block;
+            margin: 0px;
+            padding: 25px 0px 25px 0px;
+            font-size: 18px;
+            line-height: 28px;
+            font-weight: 400;
+            color: $black;
+        }
+        
+        .box {
+            display: block;
+            margin: 30px 0px 0px 0px;
+            padding: 25px;
+            overflow: hidden;
+            background-color: $greyLight;
+            
+            h3 {
+                display: block;
+                margin: 0px;
+                padding: 0px 0px 15px 0px;
+                font-size: 28px;
+                line-height: 32px;
+                font-weight: 500;
+                color: $black;
+            }
+            
+            .contactPersonDetail {
+                display: block;
+                margin: 0px;
+                padding: 9px 0px 9px 0px;
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: 400;
+                color: #000000;
+                min-height: 140px;
+
+                .linkone {
+                    display: inline-block;
+                    color: $first;
+                    text-decoration: none;
+                    font-weight: 500;
+                    &:hover {
+                        color: $blue;
+                        text-decoration: none;
+                    }
+                }
+            }
+            
+            .contactLink {
+                display: table;
+                width: 100%;
+                padding: 0px;
+                margin: 15px 0px;
+                text-decoration: none;
+                
+                .lCol {
+                    display: table-cell;
+                    vertical-align: middle;
+                    .name {
+                        display: block;
+                        font-size: 22px;
+                        line-height: 26px;
+                        font-weight: 500;
+                        color: $black;
+                    }
+                    .phone {
+                        display: block;
+                        font-size: 16px;
+                        line-height: 20px;
+                        font-weight: 400;
+                        color: $grey;
+                    }
+                }
+                .rCol {
+                    display: table-cell;
+                    width: 2%;
+                    vertical-align: middle;
+                    .email {
+                        display: block;
+                        font-size: 38px;
+                        line-height: 38px;
+                        font-weight: 400;
+                        color: $first;
+                        &:hover {
+                            .fa-envelope-o {
+                                animation: nudge .4s linear;
+                            }
+                        }
+                    }
+                    .iconEmail {
+                        display: block;
+                        font-size: 38px;
+                        line-height: 38px;
+                        font-weight: 400;
+                        color: $first;
+                        text-decoration: none !important;
+                        &:hover {
+                            .fa-envelope-o {
+                                animation: nudge .4s linear;
+                            }
+                        }
+                    }
+                    
+                }
+                
+                
+            }
+            
+            
+            .twoColRow {
+                display: table;
+                width: 100%;
+                margin: 25px 0px 0px 0px;
+                padding: 25px 0px 0px 0px;
+                border-top: 1px solid $greyDark;
+                .lCol {
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+                .rCol {
+                    display: table-cell;
+                    vertical-align: middle;
+                    text-align: left;
+                }
+                
+                .iconEmail {
+                    display: block;
+                    font-size: 38px;
+                    line-height: 38px;
+                    font-weight: 400;
+                    color: $first;
+                    text-decoration: none !important;
+                    &:hover {
+                        .fa-envelope-o {
+                            animation: nudge .4s linear;
+                        }
+                    }
+                }
+                
+                h4 {
+                    display: block;
+                    font-size: 36px;
+                    line-height: 36px;
+                    color: $first;
+                    font-weight: 300;
+                    margin: 0px;
+                    padding: 0px;
+                    span {
+                        display: block;
+                        color: $black;
+                        font-weight: 600;
+                        font-size: 12px;
+                        line-height: 18px;
+                        text-transform: uppercase;
+                    }
+                }
+            }
+        }
+        
+        .lastCol {
+            .box {
+                h3 {
+                    padding: 0px 0px 13px 0px;
+                }
+                p.address {
+                    display: block;
+                    margin: 0px;
+                    padding: 9px 0px 9px 0px;
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 400;
+                    color: $black;
+                    min-height: 157px;
+                }
+                .twoColRow {
+                    display: table;
+                    width: 100%;
+                    margin: 10px 0px 0px 0px;
+                    padding: 25px 0px 0px 0px;
+                }
+            }
+        }
+    }
+    
+    .buttonsRow {
+        padding-top: 50px;
+        
+        .button {
+            position: relative;
+            display: inline-block;
+            padding: 15px 20px 15px 20px;
+            margin: 0px 0px 0px 15px;
+            background-color: $first;
+            color: $white;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
+            span {
+                font-size: 10px;
+                line-height: 10px;
+                padding-right: 30px;
+                color: $white;
+            }
+            &:hover {
+                background-color: $third;
+            }
+        }
+    }
+}
+
+@media (max-width: 1439px) {
+    .widgetEventDetail {
+        .headingRow {
+            padding-bottom: 5px;
+            h2 {
+                font-size: 34px;
+                line-height: 40px;
+            }
+            p {
+                font-size: 14px;
+                line-height: 18px;
+
+                span {
+                    font-size: 14px;
+                    line-height: 18px;
+                }
+            }
+        }
+
+        .threeColRow {
+            p {
+                padding: 20px 0px 20px 0px;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            .box {
+                margin: 20px 0px 0px 0px;
+                padding: 20px;
+
+                h3 {
+                    padding: 0px 0px 10px 0px;
+                    font-size: 24px;
+                    line-height: 28px;
+                }
+
+                .contactLink {
+                    .lCol {
+                        .name {
+                            font-size: 18px;
+                            line-height: 22px;
+                        }
+                        .phone {
+                            font-size: 14px;
+                            line-height: 18px;
+                        }
+                    }
+                    .rCol {
+                        .email {
+                            font-size: 32px;
+                            line-height: 32px;
+                        }
+                    }
+                }
+
+                .twoColRow {
+                    margin: 20px 0px 0px 0px;
+                    padding: 20px 0px 0px 0px;
+                    h4 {
+                        font-size: 26px;
+                        line-height: 26px;
+                        font-weight: 400;
+                        span {
+                            font-size: 11px;
+                            line-height: 16px;
+                            font-weight: 400;
+                        }
+                    }
+                }
+            }
+
+            .lastCol {
+                .box {
+                    h3 {
+                        padding: 0px 0px 7px 0px;
+                    }
+                    p.address {
+                        padding: 7px 0px 7px 0px;
+                        font-size: 14px;
+                        line-height: 18px;
+                    }
+                    .twoColRow {
+                        margin: 10px 0px 0px 0px;
+                        padding: 20px 0px 0px 0px;
+                    }
+                }
+            }
+        }
+
+        .buttonsRow {
+            padding-top: 40px;
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetEventDetail {
+        padding: 60px 0px;
+        .headingRow {
+            padding-bottom: 0px;
+            h2 {
+                font-size: 32px;
+                line-height: 38px;
+            }
+        }
+
+        .threeColRow {
+
+            .box {
+                margin: 25px 0px 0px 0px;
+                padding: 20px;
+
+                h3 {
+                    font-size: 22px;
+                    line-height: 26px;
+                }
+
+                .contactLink {
+                    .lCol {
+                        .name {
+                            font-size: 16px;
+                            line-height: 20px;
+                        }
+                        .phone {
+                            font-size: 14px;
+                            line-height: 18px;
+                        }
+                    }
+                    .rCol {
+                        .email {
+                            font-size: 28px;
+                            line-height: 28px;
+                        }
+                    }
+                }
+
+                .twoColRow {
+                    margin: 15px 0px 0px 0px;
+                    padding: 15px 0px 0px 0px;
+                    h4 {
+                        font-size: 24px;
+                        line-height: 24px;
+                        span {
+                            font-size: 10px;
+                            line-height: 14px;
+                            font-weight: 500;
+                        }
+                    }
+                }
+            }
+
+            .lastCol {
+                .box {
+                    .twoColRow {
+                        margin: 3px 0px 0px 0px;
+                        padding: 15px 0px 0px 0px;
+                    }
+                }
+            }
+        }
+
+        .buttonsRow {
+            padding-top: 15px;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetEventDetail {
+        padding: 50px 0px;
+        .headingRow {
+            padding-bottom: 0px;
+            h2 {
+                font-size: 32px;
+                line-height: 38px;
+            }
+        }
+
+        .threeColRow {
+
+            .box {
+                margin: 5px 0px 0px 0px;
+                padding: 15px;
+
+                .twoColRow {
+                    h4 {
+                        span {
+                            font-size: 11px;
+                            line-height: 15px;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        .buttonsRow {
+            padding-top: 25px;
+            .button {
+                padding: 13px 15px 13px 15px;
+                font-size: 14px;
+                line-height: 20px;
+                span {
+                    font-size: 10px;
+                    line-height: 10px;
+                    padding-right: 15px;
+                    color: $white;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetEventDetail {
+        padding: 40px 0px;
+        .headingRow {
+            padding-bottom: 0px;
+            h2 {
+                font-size: 28px;
+                line-height: 34px;
+            }
+        }
+
+        .threeColRow {
+
+            .box {
+                margin: 15px 0px 0px 0px;
+                
+                .contactPersonDetail {
+                    min-height: unset;
+                }
+                
+                p.address {
+                    min-height: unset !important;
+                }
+            }
+
+        }
+
+        .buttonsRow {
+            padding-top: 25px;
+            .button {
+                padding: 13px 15px 13px 15px;
+                font-size: 14px;
+                line-height: 20px;
+                margin-bottom: 15px;
+            }
+        }
+    }
+}
+
+@media (max-width: 413px) {
+    .widgetEventDetail {
+        .buttonsRow {
+            .button {
+                display: block;
+                margin-left: 0px;
+                span {
+                    float: left;
+                    padding-top: 5px;
+                }
+            }
+        }
+    }
+}
+/* Event Detail End*/

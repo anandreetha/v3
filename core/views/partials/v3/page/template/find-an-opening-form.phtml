@@ -1,0 +1,16 @@
+<?php
+$this->partial('partials/v3/page/page-header');
+$widgetProperties = array();
+$widgetProperties["languages"] = $languages;
+//temporaly seting to be able to test the find an opening form from the default region website
+$widgetProperties["orgIds"] = $orgIds;
+
+
+if(isset($renderStaticContent)){
+    $widgetProperties['renderStaticContent'] = $renderStaticContent;
+}
+
+$this->widgetRenderService->renderWidgets($pageWidgets, $widgetProperties);
+
+$this->partial('partials/v3/footer/footer');
+?>

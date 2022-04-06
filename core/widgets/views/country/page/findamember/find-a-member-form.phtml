@@ -1,0 +1,295 @@
+<section class="widgetForm">
+    <div class="holder">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab"
+                                  href="#search-simple-tab"><?= $mappedWidgetSettings->getValueByName("Simple Search") ?></a>
+            </li>
+            <li><a data-toggle="tab"
+                   href="#search-advanced-tab"><?= $mappedWidgetSettings->getValueByName("Advanced Search") ?></a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div id="search-simple-tab" class="tab-pane fade in active">
+                <form id="search-simple" name="search-simple" class="form" method="post" action="memberlist"
+                      novalidate="novalidate">
+                    <input type="hidden" name="countryIds" id="countryIds2"
+                           value="<?php echo implode(",", $orgIds); ?>">
+
+                    <div class="col-xs-12 col-sm-6 col-md-8">
+                        <div class="formRow">
+                            <input type="text" class="textField" name="keywords" id="keywords"
+                                   placeholder="<?= $mappedWidgetSettings->getValueByName("Please enter a keyword") ?>">
+                            <div class="error"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="formButtonsRow">
+                            <button type="submit" name="submit" class="button"
+                                    id="simpleSubmit"><?= $mappedWidgetSettings->getValueByName("Search") ?></button>
+                            <span id="simpleFormAjaxLoader" style="display:none;"><i
+                                        class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div id="search-advanced-tab" class="tab-pane fade">
+                <form id="search-advanced" name="search-advanced" class="form" method="post" action="memberlist">
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+
+
+                        <div class="formRow">
+                            <label for="countryIds"><?= $mappedWidgetSettings->getValueByName("Country") ?></label>
+                            <select name="countryIds" id="countryIds" class="selectField"></select>
+                        </div>
+
+                        <?php
+                        if ($website->getTypeId() == 1) {
+                            ?>
+                            <div class="formRow">
+                                <label for="regionId"><?= $mappedWidgetSettings->getValueByName("Region") ?></label>
+                                <select name="regionId" id="regionId" class="selectField">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+
+                        <?php } ?>
+                        <div class="formRow">
+                            <label for="chapterName"><?= $mappedWidgetSettings->getValueByName("Chapter") ?></label>
+                            <select name="chapterName" id="chapterName" class="selectField">
+                                <option value=""></option>
+                            </select>
+                            <div class="error"></div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="formRow">
+                            <label for="chapterArea"><?= $mappedWidgetSettings->getValueByName("Area") ?></label>
+                            <select name="chapterArea" id="chapterArea" class="selectField">
+                                <option value=""></option>
+                            </select>
+                            <div class="error"></div>
+                        </div>
+
+                        <div class="formRow">
+                            <label for="memberKeywords"><?= $mappedWidgetSettings->getValueByName("Keywords") ?></label>
+                            <input type="text" name="memberKeywords" id="memberKeywords" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+
+                        <div class="formRow">
+                            <label for="chapterCity"><?= $mappedWidgetSettings->getValueByName("City") ?></label>
+                            <input type="text" name="chapterCity" id="chapterCity" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="formRow">
+                            <label for="memberFirstName"><?= $mappedWidgetSettings->getValueByName("First Name") ?></label>
+                            <input type="text" name="memberFirstName" id="memberFirstName" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+
+                        <div class="formRow">
+                            <label for="memberLastName"><?= $mappedWidgetSettings->getValueByName("Last Name") ?></label>
+                            <input type="text" name="memberLastName" id="memberLastName" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+
+                        <div class="formRow">
+                            <label for="formCompany"><?= $mappedWidgetSettings->getValueByName("Company") ?></label>
+                            <input type="text" name="memberCompany" id="memberCompany" class="textField" value="">
+                            <div class="error"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="formButtonsRow">
+                            <button type="submit" name="submit" class="button"
+                                    id="advancedSubmit"><?= $mappedWidgetSettings->getValueByName("Search") ?></button>
+                            <span id="advancedFormAjaxLoader" style="display:none;"><i
+                                        class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+
+            getCountryNamesJsonData({
+                countryIds: '<?php echo implode(",", $orgIds); ?>'
+            });
+
+            function FAMsortByName(a, b) {
+                var aName = a.name;
+                aName = aName.toLowerCase();
+                var bName = b.name;
+                bName = bName.toLowerCase();
+                if (aName == bName) {
+                    return 0;
+                }
+                return aName > bName ? 1 : -1;
+            }
+
+            function getCountryNamesJsonData(params) {
+                $.ajax({
+                    async: false,
+                    url: "/web/open/appsCmsCountryListJson?<?php echo $languages ?>",
+                    type: "POST",
+                    dataType: "json",
+                    data: params,
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $("#countryIds").empty();
+                            $.each(data.sort(FAMsortByName), function (i, item) {
+                                $("<option/>", {value: item.id}).text(item.name).appendTo("#countryIds");
+                            });
+                        }
+                    }
+                });
+
+            }
+
+            $("#simpleSubmit").removeAttr("disabled");
+            $("#advancedSubmit").removeAttr("disabled");
+
+            if ($("#search-advanced #countryIds").val() != "") {
+                getJsonData({
+                    countryId: $("#search-advanced #countryIds").val(),
+                    init: true
+                });
+            }
+
+            if ($("#search-advanced #countryIds").get(0).tagName.toLowerCase() == "select") {
+                $("#search-advanced #countryIds").on("change", function () {
+                    getJsonData({
+                        countryId: $("#search-advanced #countryIds").val(),
+                        init: true
+                    });
+                });
+            }
+
+
+            function getJsonData(params) {
+                $.ajax({
+                    async: false,
+                    url: "/web/open/appsCmsNationalMemberSearchFilterJson?<?php echo $languages ?>",
+                    type: "POST",
+                    dataType: "json",
+                    data: params,
+                    success: function (data) {
+                        if (data.regions && data.regions.length > 0) {
+                            $("#regionId").empty().append("<option></option>");
+                            $.each($(data.regions).sort(FAMsortByName), function (i, item) {
+                                $("<option/>", {value: item.id}).text(item.name).appendTo("#regionId");
+                            });
+
+                            $("#regionId").on("change", function () {
+                                if ($("#regionId").val() != "") {
+                                    getRegionJsonData({
+                                        countryId: $("#countryIds").val(),
+                                        regionId: $(this).val()
+                                    });
+                                } else {
+                                    getJsonData({
+                                        countryId: $("#countryIds").val(),
+                                        init: true
+                                    });
+                                }
+                            });
+                        }
+
+                        $("#chapterArea").empty().append("<option></option>");
+                        $.each($(data.areas).sort(FAMsortByName), function (i, item) {
+                            $("<option/>", {value: item.id}).text(item.name).appendTo("#chapterArea");
+                        });
+                    }
+                });
+            }
+
+            function getRegionJsonData(params) {
+                $.ajax({
+                    async: false,
+                    url: "/web/open/appsCmsNationalMemberSearchFilterJson?<?php echo $languages ?>",
+                    type: "POST",
+                    dataType: "json",
+                    data: params,
+                    success: function (data) {
+                        if (data.regions && data.regions.length > 0) {
+                            $("#regionId").empty().append("<option></option>");
+                            $.each($(data.regions).sort(FAMsortByName), function (i, item) {
+                                $("<option/>", {value: item.id}).text(item.name).appendTo("#regionId");
+                            });
+
+                            $("#regionId").on("change", function () {
+                                if ($("#regionId").val() != "") {
+                                    getJsonData({
+                                        countryId: $("#countryIds").val(),
+                                        regionId: $(this).val()
+                                    });
+                                } else {
+                                    getJsonData({
+                                        countryId: $("#countryIds").val(),
+                                        init: true
+                                    });
+                                }
+                            });
+                        }
+
+                        $("#chapterName").empty().append("<option></option>");
+                        $.each($(data.chapters).sort(FAMsortByName), function (i, item) {
+                            $("<option/>", {value: item.id}).text(item.name).appendTo("#chapterName");
+                        });
+
+                        $("#chapterArea").empty().append("<option></option>");
+                        $.each($(data.areas).sort(FAMsortByName), function (i, item) {
+                            $("<option/>", {value: item.id}).text(item.name).appendTo("#chapterArea");
+                        });
+                    }
+                });
+            }
+
+            $("#search-simple").validate({
+                rules: {
+                    keywords: {
+                        required: true,
+                        minlength: 2
+                    }
+                },
+                messages: {
+                    keywords: {
+                        required: "<?=$mappedWidgetSettings->getValueByName("Please enter a keyword")?>",
+                        minlength: "<?=$mappedWidgetSettings->getValueByName("Please enter at least 2 characters")?>"
+                    }
+                },
+                errorClass: "error",
+                errorElement: "div",
+                submitHandler: function (form) {
+                    $("#simpleSubmit").attr("disabled", true);
+                    $("#simpleFormAjaxLoader").show();
+                    window.location.assign($(form).attr("action") + "?" + $(form).serialize());
+                }
+            });
+            $("#advancedSubmit").bind("click", function () {
+                $(this).attr("disabled", true);
+                $("#advancedFormAjaxLoader").show();
+                window.location.assign($("#search-advanced").attr("action") + "?" + $("#search-advanced").serialize());
+                return false;
+            });
+            $("#advancedSubmit, #simpleSubmit").removeAttr("disabled");
+
+        });
+    </script>
+</section>

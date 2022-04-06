@@ -1,0 +1,22 @@
+<?php
+use Multiple\Core\Models\Website;
+
+if($cookie_group_id!=""):
+	$cookieBotCode="";
+	if($languages['activeLanguage']['cookieBotCode']): 
+		$cookieBotCode=$languages['activeLanguage']['cookieBotCode'];
+	endif; 
+
+
+?>
+<section class="widgetCookieBotDeclaration widgetTextColumns">
+	<div class="holder">
+		<div class="col-xs-12 col-sm-12 col-md-12">	
+			<script id="CookieDeclaration" src="https://consent.cookiebot.com/<?php echo $cookie_group_id;?>/cd.js" data-culture="<?php echo $cookieBotCode;?>" type="text/javascript" async></script>
+		</div>
+	</div>	
+</section>
+<style type="text/css">
+.widgetBanners, .widgetBniFeed,.widgetNewsLetterBox{display:none;}
+</style>
+<?php endif;?>

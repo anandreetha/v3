@@ -1,0 +1,3 @@
+(RtoL) CSS for AdminLTE V2.3.5 (thanks to https://github.com/airani/adminlte-rtl) which broadly works okay with LtoR AdminLTE V2.4
+
+If we upgrade in the future, we need to manually merge in 1 change to AdminLTE.css and multiple (colour) changes from skin-red.css.

@@ -1,0 +1,131 @@
+<?php
+
+use Multiple\Core\Models\Website;
+
+
+?>
+<section class="widgetEventDetail">
+    <p id="responcemessageerror" align="center"
+       style="display: none; margin-top:10px;"><?php echo isset($errorMessage) ? $errorMessage : "" ?></p>
+
+    <script type="text/javascript">
+        $(function () {
+            var getCurrentPageHeading = $("#templatePageHeading").text();
+            var getCurrentWindowTitle = $("title").text();
+            $("#responcemessageerror").hide();
+            $(".widgetProfile").last().removeClass("widgetForm");
+
+            <?php if (isset($errorMessage)){ ?>;
+            $("#responcemessageerror").show();
+            $(".widgetProfile").last().addClass("widgetForm");
+            <?php } else {?>
+            $("#templatePageHeading").text(getCurrentPageHeading + ': <?php echo $jsonResponse->eventName;?>');
+            $("title").text(getCurrentWindowTitle + ': <?php echo $jsonResponse->eventName;?>');
+            <?php }?>
+        });
+    </script>
+    <?php if (!isset($errorMessage)) { ?>
+        <div class="holder headingRow">
+            <div class="col-xs-12 col-sm-12 col-md-12"><h2><?= $jsonResponse->eventName; ?></h2>
+                <p><i class="fa fa-calendar-o" aria-hidden="true"></i> <span
+                            class="dtValue"><?= $jsonResponse->eventStartDate; ?></span>
+                    <span><?= $mappedWidgetSettings->getValueByName("to") ?></span> <span
+                            class="dtValue"><?= $jsonResponse->eventEndDate; ?></span></p>
+                <p><i class="fa fa-clock-o" aria-hidden="true"></i> <span
+                            class="dtValue"><?= $jsonResponse->eventStartTime; ?></span>
+                    <span><?= $mappedWidgetSettings->getValueByName("to") ?></span>
+                    <span class="dtValue"><?= $jsonResponse->eventEndTime; ?>
+					<?php
+						if((isset($jsonResponse->timezone))&&($jsonResponse->timezone!="")):
+							echo '('.$jsonResponse->timezone.')';
+						endif;
+					?>
+					</span></p></div>
+        </div>
+        <div class="holder threeColRow">
+            <div class="col-xs-12 col-sm-12 col-md-4"><p><?= $jsonResponse->eventDetailHTML; ?></p>
+            </div>
+            <?php if ($contactDetails[0] != "") { ?>
+
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="box"><h3><?= $mappedWidgetSettings->getValueByName("Contact Person") ?></h3>
+                        <div class="twoColRow">
+                            <div class="contactPersonDetail lCol"><?= $contactDetails[1] ?>
+
+                            </div>
+                            <div class="rCol">
+                                <p><?= $contactDetails[0] ?></p>
+                            </div>
+                        </div>
+                        <div class="twoColRow">
+                            <div class="lCol"><h4>
+                                    <span><?= $mappedWidgetSettings->getValueByName("Cost for members:") ?></span><?= $jsonResponse->costForMembers; ?>
+                                </h4></div>
+                            <div class="rCol"><h4>
+                                    <span><?= $mappedWidgetSettings->getValueByName("Cost for non-members:") ?></span><?= $jsonResponse->costForNonMembers; ?>
+                                </h4></div>
+                        </div>
+                    </div>
+                </div>
+            <?php } else { ?>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="box"><h3><?= $mappedWidgetSettings->getValueByName("Contact Person") ?></h3>
+                        <div class="twoColRow">
+                            <div class="lCol"><h4>
+                                    <span><?= $mappedWidgetSettings->getValueByName("Cost for members:") ?></span><?= $jsonResponse->costForMembers; ?>
+                                </h4></div>
+                            <div class="rCol"><h4>
+                                    <span><?= $mappedWidgetSettings->getValueByName("Cost for non-members:") ?></span><?= $jsonResponse->costForNonMembers; ?>
+                                </h4></div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="col-xs-12 col-sm-6 col-md-4 lastCol">
+                <div class="box"><h3><?= $mappedWidgetSettings->getValueByName("Location/Area") ?></h3>
+                    <p class="address"><?= $jsonResponse->location; ?><br></p>
+                    <div class="twoColRow">
+                        <div class="lCol">
+                            <h4><span>
+                                <?php if ($jsonResponse->maxNoAttendees !== ''){ ?><?= $mappedWidgetSettings->getValueByName("Max No of attendees:") ?></span><?= $jsonResponse->maxNoAttendees; ?><?php } ?>
+                            </h4>
+                        </div>
+                        <div class="rCol"><h4>
+                                <span><?= $mappedWidgetSettings->getValueByName("No of registrations:") ?></span><?= $jsonResponse->noOfRegistrations; ?>
+                            </h4></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="holder buttonsRow">
+            <div class="col-xs-12 col-sm-12 col-md-12 widgetTextColumns">
+				<p class="legend">
+                <?php
+                $eventIdStr = "";
+                if (!empty($jsonResponse->registrationURLforNonMembers)) {
+                    $eventIdStr = strstr($jsonResponse->registrationURLforNonMembers, "eventId=");
+                    $eventIdStr = substr($eventIdStr, 0, strpos($eventIdStr, "&"));
+                }
+
+                if ($jsonResponse->allowRegistrations == true && !$hideUrls) {
+                    if ($jsonResponse->allowOnlineRegistration == true) { ?>
+                        <a href="<?= $jsonResponse->registrationURLforMembers; ?>"
+                           target="_blank"
+                           ><?= $mappedWidgetSettings->getValueByName("Registration for members") ?></a>&nbsp;&nbsp;
+                    <?php }
+                    if ($jsonResponse->allowNonMembers == true && $jsonResponse->allowOnlineRegistration == true) {
+                        $eventRegUrl = ($useLatestCode == true ? "eventregistration?" . $eventIdStr : $jsonResponse->registrationURLforNonMembers);
+                        ?>
+                        <a href="<?= $eventRegUrl ?>"
+                           ><?= $mappedWidgetSettings->getValueByName("Registration for non-members") ?>
+                        </a>&nbsp;&nbsp;
+                    <?php }
+                } ?>
+                <a href="javascript:history.back();"><?= $mappedWidgetSettings->getValueByName("Back") ?>
+                    </a>&nbsp;&nbsp;
+				</p>	
+            </div>
+        </div>
+    <?php } ?>
+</section>

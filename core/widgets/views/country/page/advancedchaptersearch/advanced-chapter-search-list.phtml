@@ -1,0 +1,25 @@
+<div id="chapterList">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script>
+    //This will make a ajax post request to the chapter list controller which return html and we render that in ajax response.
+    $(function () {
+        var languages = <?php echo json_encode($languages) ?>;
+        var pageMode = <?php echo json_encode($pageMode) ?>;
+        var cmsv3 = <?php echo json_encode($cmsv3) ?>;
+        var parameters = window.location.href.slice(window.location.href.indexOf('?') + 1);
+        var mappedWidgetSettings = '<?php echo json_encode($mappedWidgetSettingsObj) ?>';
+        var url = "<?php echo $ajaxUrl; ?>";
+        $.post(url,{parameters: parameters,
+            languages:languages,
+            pageMode : pageMode,
+            cmsv3:cmsv3,
+            mappedWidgetSettings:mappedWidgetSettings
+        } ,function (data) {
+            $("#rssLoaderAjax").hide();
+            $("#chapterList").html(data);
+        });
+    });
+
+</script>

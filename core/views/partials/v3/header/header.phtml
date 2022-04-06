@@ -1,0 +1,137 @@
+<?php $this->partial('partials/v3/header/head');
+$this->session->set('websitetype', $website->getTypeId());
+?>
+<body>
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/styles/css/<?php echo $cssFilename; ?>">
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/styles/css/dropdown.css">
+    <div class="page">
+        
+        <header>
+            <div class="row topRow">
+                <div class="holder">
+                    <div class="col-xs-6 col-sm-4 col-md-6 lCol">
+						 <?php
+					if (!$renderStaticContent && (count($languages->availableLanguages) > 1)) {
+                        ?>
+                        <ul class="menuDropdown">
+							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><?php echo $languages->activeLanguage->descriptionKey; ?> <i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                                <ul class="dropdown-menu">
+                                    <?php
+                                    foreach ($languages->availableLanguages as $lang) {
+                                            $localisedUri = $lang->url;
+                                        ?>
+                                        <li>
+                                            <a class="<?= $lang->type ?>_language_link"
+                                               href="<?php echo $localisedUri; ?>"><?php echo $lang->descriptionKey; ?></a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <?php
+                    } else {
+                        if (count($languages->availableLanguages) > 1) { ?>
+                            <ul class="menuDropdown">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                       aria-expanded="false"><?php echo $languages->activeLanguage->descriptionKey; ?>
+                                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <?php
+                                        foreach ($languages->availableLanguages as $lang) {
+                                            if ($lang->type === 'preview') {
+                                                $localisedUri = str_replace('/' . $languages->activeLanguage->localeCode . '/', '/' . $lang->localeCode . '/', $_SERVER['REQUEST_URI']);
+                                            } else if ($lang->type == 'published') {
+                                                $localisedUri = $lang->url;
+                                            }
+                                            ?>
+                                            <li>
+                                                <a class="<?= $lang->type ?>_language_link"
+                                                   href="<?php echo $localisedUri; ?>"><?php echo $lang->descriptionKey; ?></a>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <?php
+                        }
+                    }
+                    ?>
+					
+                    </div>
+                    <div class="col-xs-6 col-sm-8 col-md-6 rCol">
+						
+                    <?php if ($regionWebsite !== null) {
+                            echo Phalcon\Tag::linkTo(
+                                [
+                                    "action" => $regionWebsite->website,
+                                    "text" =>  isset($contentSettings['region_website_link']) ? $contentSettings['region_website_link'] : "Regional Website",
+                                    "local" => false,
+                                    "target" => "_blank"
+                                ]
+                            );
+                    } ?>
+
+                        <a href="https://www.bni.com/" target="_blank" class="hidden-xs"><?php echo isset($contentSettings['bni_international']) ? $contentSettings['bni_international'] : 'BNI International'; ?></a>
+                        <ul class="menuDropdown">
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><?php echo isset($contentSettings['account_login']) ? $contentSettings['account_login'] : 'Account Login'; ?> <i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="https://www.bniconnectglobal.com/" target="_blank"><?php echo isset($contentSettings['bni_connect']) ? $contentSettings['bni_connect'] : 'BNI Connect'; ?></a></li>
+									<li><a href="https://www.bnibusinessbuilder.com" target="_blank"><?php echo isset($contentSettings['bni_business_builder']) ? $contentSettings['bni_business_builder'] : 'BNI Business Builder'; ?></a></li>
+									<li class="hidden-sm hidden-md hidden-lg"><a href="http://www.bni.com/" target="_blank"><?php echo isset($contentSettings['bni_international']) ? $contentSettings['bni_international'] : 'BNI International'; ?></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row bottomRow">
+                <div class="holder">
+
+                    <div class="col-xs-10 col-sm-9 col-md-12 col-lg-5 colLogo hide">
+                        <a class="bniLogo" href="<?php echo 'index'; ?>">
+                            <span class="ico-068"></span>
+                            <span class="texts">
+                                <span class="name"><?php echo $websettings['websiteName']; ?></span>
+                                <?php /*?><span class="tagline"><?php echo $websettings['websiteTagLine']; ?></span><?php */?>
+                            </span>
+                        </a>
+                    </div>
+					<?php $this->partial('partials/v3/header/navbar'); ?>
+					<div class="col-xs-12 col-sm-12 col-md-12 menuLoader">
+						<?php if($pageTemplate!="find-a-member-detail"):?>
+						<img loading="lazy" id="menuLoaderAjax" style="display: block; margin: 0 auto;" src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+						<?php endif;?>
+					</div>
+                </div>
+            </div>
+        </header>
+		
+		<script>
+			$("a.published_language_link").each(function () {
+				this.search = location.search;
+			});
+
+			$(".colNav a").click(function() {
+				localStorage.clear();
+			});
+
+			$(".navTwo a").click(function() {
+				localStorage.clear();
+			});
+
+			$(".navLinks a").click(function() {
+				localStorage.clear();
+			});
+			
+			$(function(){
+				$('.dropdown').hover(function(){ 
+					if($(".dropdown-menu:hover").length != 0){
+					}else{	
+						$('.dropdown-toggle',this).trigger('click'); 
+					}
+				});		
+			});
+		</script>

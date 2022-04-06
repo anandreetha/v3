@@ -1,0 +1,387 @@
+<section class="widgetMemberProfileTop">
+            <div class="memberProfileInner">
+                <div class="memberProfileBanner">
+                    <div class="holder">
+						<div class="col-xs-12 col-sm-12 col-md-12">
+							<h1>&nbsp;</h1>
+						</div>
+					</div>
+                </div>
+                <div class="memberProfileInfo">
+                    <div class="holder holderSec">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <?php
+									//print"<pre>";print_r($jsonResponse);print"</pre>";
+								
+								 if ($mockSendmessageurl) {
+									$sendmessageurl = "#";
+								} else {
+									$sendmessageurl = 'sendmessage?userId=' . $jsonResponse['memberId'] . '&userName=' . $jsonResponse['memberFirstName'] . ' '
+										. $jsonResponse['memberLastName'];
+								} 
+								
+								if (!empty(trim($jsonResponse['memberPhoto']))) { ?>
+									<div class="profilephoto">
+										<img loading="lazy" src="<?= $jsonResponse['memberPhoto'] ?>" alt="x" class="img-responsive">
+									</div>
+									<?php
+								} else { ?>
+									<div class="profilephoto">
+										<img loading="lazy" src="<?= $this->config->general->cdn; ?>/images/profile-default.jpg" alt="profile pic"
+											 class="img-responsive">
+									</div>
+									<?php
+								} ?>
+								
+                                <h2><?= $jsonResponse['memberFirstName'] . ' ' . $jsonResponse['memberLastName'] ?></h2>
+                                <p>
+									<?php if(($jsonResponse['memberWebsiteDisplay']=="1")&&($jsonResponse['memberWebsite']!="")):?><a href="<?php echo $jsonResponse['memberWebsite'];?>" target="_blank"><?php endif;?><?php echo $jsonResponse['memberCompany'];?><?php if(($jsonResponse['memberWebsiteDisplay']=="1")&&($jsonResponse['memberWebsite']!="")):?></a><?php endif;?>
+								</p>
+                                <h6><?php echo $jsonResponse['memberSpeciality'];?></h6>
+                                <ul class="memberContactInfo">
+                                    <li>
+										<?php
+											if(($jsonResponse['memberPhoneNumberDisplay']=="1")&&($jsonResponse['memberPhone']!="")):
+												$tel_href='tel:'.$jsonResponse["memberPhone"];
+												$tel_cls='';
+											else:
+												$tel_href='javascript:;';
+												$tel_cls='fadeoutphone';
+											endif;
+										?>
+                                        <a href="<?php echo $tel_href;?>" class="<?php echo $tel_cls;?>">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" class="phone-red">
+                                              <g data-name="Group 273" transform="translate(-0.092 -0.419)">
+                                                <ellipse data-name="Ellipse 3" class="cls-1" cx="18.5" cy="18" rx="18.5" ry="18" transform="translate(0.092 0.419)"/>
+                                                <g transform="translate(9.224 9.839)">
+                                                  <g data-name="Group 269" transform="translate(0 0)">
+                                                    <path data-name="Path 47" class="cls-2" d="M2.616,271.059a1.126,1.126,0,0,0-.782.366l-1.457,1.6s-.006,0-.047.054a.354.354,0,0,0-.051.1,8.07,8.07,0,0,0,.773,5.945,17.955,17.955,0,0,0,4.287,5.421,16.567,16.567,0,0,0,5.683,3.369,5.689,5.689,0,0,0,5.13-.4.354.354,0,0,0,.042-.036c.036-.036.037-.04.031-.035l.006-.007,1.45-1.6a1.134,1.134,0,0,0-.075-1.6l-3.441-3.129a1.135,1.135,0,0,0-1.6.075L11.014,282.9a8.346,8.346,0,0,1-3.383-1.931,8.347,8.347,0,0,1-2.243-3.186l1.556-1.712a1.134,1.134,0,0,0-.075-1.6L3.429,271.35a1.126,1.126,0,0,0-.813-.291Zm.033.7a.421.421,0,0,1,.3.113L6.393,275a.413.413,0,0,1,.028.6L4.7,277.49a.354.354,0,0,0-.07.359A9.065,9.065,0,0,0,7.154,281.5a9.063,9.063,0,0,0,3.869,2.168.354.354,0,0,0,.352-.1l1.721-1.891a.413.413,0,0,1,.6-.028l3.441,3.129a.413.413,0,0,1,.028.6l-1.438,1.581a5.012,5.012,0,0,1-4.486.293,15.941,15.941,0,0,1-5.429-3.226,17.308,17.308,0,0,1-4.118-5.2,7.409,7.409,0,0,1-.737-5.369L2.356,271.9a.421.421,0,0,1,.292-.141Z" transform="translate(0 -271.058)"/>
+                                                  </g>
+                                                </g>
+                                              </g>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li>
+										<?php
+											if (array_key_exists('memberSendMessage', $jsonResponse) && $jsonResponse['memberSendMessage'] !== false):											
+												$mail_href=$sendmessageurl;
+												$mail_cls='';
+												if($WebsiteSetting=="off"):
+													$mail_href='javascript:;';
+													$mail_cls='fadeoutmsg';
+												endif;
+											else:
+												$mail_href='javascript:;';
+												$mail_cls='fadeoutmsg';
+											endif;
+										?>
+                                        <a href="<?php echo $mail_href;?>" class="<?php echo $mail_cls;?>">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" class="msg-red">  
+                                              <g  data-name="Group 272" transform="translate(-0.448 -0.419)">
+                                                <circle data-name="Ellipse 4" class="cls-1" cx="18" cy="18" r="18" transform="translate(0.448 0.419)"/>
+                                                <path data-name="Path 48" class="cls-2" d="M39.728,27.333H23.022a.652.652,0,0,0-.652.652V41.456a.652.652,0,0,0,.652.652H39.728a.652.652,0,0,0,.652-.652V27.985A.652.652,0,0,0,39.728,27.333Zm-.652,1.3v2.933l-7.7,4-7.7-4V28.637h15.4ZM23.674,40.8V33.038l7.4,3.845a.652.652,0,0,0,.6,0l7.4-3.845V40.8h-15.4Z" transform="translate(-13.146 -16.264)"/>
+                                              </g>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" class="moredots">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="37" height="36" viewBox="0 0 37 36" class="dots-red">
+                                              <g  data-name="Group 274" transform="translate(0.195 -0.419)">
+                                                <ellipse data-name="Ellipse 5" class="cls-1" cx="18.5" cy="18" rx="18.5" ry="18" transform="translate(-0.195 0.419)"/>
+                                                <g data-name="Group 271" transform="translate(7.38 15.374)">
+                                                  <g data-name="Group 270" transform="translate(0)">
+                                                    <path data-name="Path 49" class="cls-2" d="M215.809,1052a2.833,2.833,0,1,0,2.833,2.833A2.834,2.834,0,0,0,215.809,1052Zm0,4.721a1.888,1.888,0,1,1,1.888-1.888A1.89,1.89,0,0,1,215.809,1056.721Z" transform="translate(-212.976 -1052)"/>
+                                                    <path data-name="Path 50" class="cls-2" d="M224.809,1052a2.833,2.833,0,1,0,2.833,2.833A2.834,2.834,0,0,0,224.809,1052Zm0,4.721a1.888,1.888,0,1,1,1.888-1.888A1.89,1.89,0,0,1,224.809,1056.721Z" transform="translate(-213.478 -1052)"/>
+                                                    <path data-name="Path 51" class="cls-2" d="M233.809,1052a2.833,2.833,0,1,0,2.833,2.833A2.834,2.834,0,0,0,233.809,1052Zm0,4.721a1.888,1.888,0,1,1,1.888-1.888A1.89,1.89,0,0,1,233.809,1056.721Z" transform="translate(-213.98 -1052)"/>
+                                                  </g>
+                                                </g>
+                                              </g>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="memberContactDetails">
+                                    <ul>
+
+									<?php if ($jsonResponse['memberPhoneNumberDisplay']) { ?>
+										<li><strong><?=$mappedWidgetSettings->getValueByName("Phone") ?></strong>
+										<a href="tel:<?= $jsonResponse["memberPhone"] ?>"><?= $jsonResponse["memberPhone"] ?></a></li><?php } ?>
+									<?php if ($jsonResponse['memberDirectNumberDisplay']) { ?>
+										<li><strong><?= $mappedWidgetSettings->getValueByName("Direct") ?></strong>
+										<a href="tel:<?= $jsonResponse["memberDirectNumber"] ?>"><?= $jsonResponse["memberDirectNumber"] ?></a></li> <?php } ?>
+									<?php if ($jsonResponse['memberMobileDisplay']) { ?>
+										<li><strong><?= $mappedWidgetSettings->getValueByName("Mobile") ?></strong>
+										<a href="tel:<?= $jsonResponse["memberMobile"] ?>"><?= $jsonResponse["memberMobile"] ?></a></li><?php } ?>
+									<?php if ($jsonResponse['memberTollFreeNumberDisplay']) { ?>
+										<li><strong><?=$mappedWidgetSettings->getValueByName("Freephone")?></strong>
+										<a href="tel:<?= $jsonResponse["memberTollFreeNumber"] ?>"><?= $jsonResponse["memberTollFreeNumber"] ?></a></li><?php } ?>
+									<?php if ($jsonResponse['memberFaxNumberDisplay']) { ?>
+										<li><strong><?= $mappedWidgetSettings->getValueByName("Fax") ?></strong>
+										<a href="tel:<?= $jsonResponse["memberFaxNumber"] ?>"><?= $jsonResponse["memberFaxNumber"] ?></a></li><?php } ?>
+										
+                                    </ul>
+                                    
+									
+									
+									
+									<?php //if (!$hideUrls) { ?>
+										<p><strong><?php echo $jsonResponse['memberChapterText'];?></strong>
+										<?php  	
+											$websitetype=$this->request->getPost("websitetype");
+											if($websitetype=="3"){
+											}else{
+										?>
+										<a href="chapterdetail?chapterId=<?php echo $this->securityUtils->encryptUrlEncoded(substr($jsonResponse["memberChapId"], 0, strpos($jsonResponse["memberChapId"], '&'))) ?>" target="_blank">
+											<?php } echo $jsonResponse["memberChapter"];
+										if($websitetype=="3"){ 
+										}else{
+										?>
+										</a>
+										<?php } ?>
+										</p>
+									
+								
+									<?php
+										if (count($jsonResponse['sub']) > 0) { ?>
+                                    <div class="smUrls">
+										<?php foreach ($jsonResponse['sub'] as $value) {
+                                $imgSrc = "";
+                                $alt = "";
+                                $imgId = $value['id'];
+                                $toolTipTitle = substr($value['name'], 7, -4);
+                                switch ($imgId) {
+                                    case 1:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.facebook.com";
+                                        $alt = "fbimage";
+                                        break;
+                                    case 2:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.orkut.com";
+                                        $alt = "orkutimage";
+                                        break;
+                                    case 3:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.linkedin.com";
+                                        $alt = "linkedinimage";
+                                        break;
+                                    case 4:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=twitter.com";
+                                        $alt = "twitterimage";
+                                        break;
+                                    case 5:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.xing.com";
+                                        $alt = "xingimage";
+                                        break;
+                                    case 6:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.ning.com";
+                                        $alt = "ningimage";
+                                        break;
+                                    case 7:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.ecademy.com";
+                                        $alt = "ecademyimage";
+                                        break;
+                                    case 8:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.blog.com";
+                                        $alt = "blogimage";
+                                        break;
+                                    case 9:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.plaxo.com";
+                                        $alt = "plaxoimage";
+                                        break;
+                                    case 10:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.youtube.com";
+                                        $alt = "youtubeimage";
+                                        break;
+                                    case 11:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=plus.google.com";
+                                        $alt = "googleimage";
+                                        break;
+                                    case 12:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.flickr.com";
+                                        $alt = "flickrimage";
+                                        break;
+                                    case 13:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.picasa.com";
+                                        $alt = "picasaimage";
+                                        break;
+                                    case 14:
+                                        $imgSrc = "https://www.google.com/s2/favicons?domain=www.pinterest.com";
+                                        $alt = "pinterestimage";
+                                        break;
+                                    default:
+                                        echo "Your favorite color is neither red, blue, nor green!";
+                                }
+                                ?>
+                                <a href="<?= $value['name'] ?>" target="_blank" data-toggle="tooltip" title
+                                   data-original-title="<?= $toolTipTitle ?>"><img loading="lazy" src="<?= $imgSrc ?>"
+                                                                                   alt="<?= $alt ?>"></a>
+                            <?php } ?>	
+									
+                                    </div>
+							<?php } ?>			
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(function() {
+                    function getDomain(url) {
+                       return url.match(/:\/\/(.[^/]+)/)[1];
+                    }
+                    
+                    $(".smUrls a[href^='http']").each(function() {
+                        $(this).html('<img loading="lazy" src="https://www.google.com/s2/favicons?domain='+ getDomain(this.href) +'">').attr("title", getDomain(this.href).replace('www.', '').replace('.com', '').replace('.net', ''));
+                    });
+                    $('[data-toggle="tooltip"]').tooltip();
+					
+					$('.moredots').on('click',function(){ 
+						$('.memberContactDetails').toggle();
+						
+						if($('.memberContactDetails').is(':visible')) {
+							$('.widgetMemberCompanyDetail').addClass('widgetMemberCompanyDetailTopfix');
+						}else{
+							$('.widgetMemberCompanyDetail').removeClass('widgetMemberCompanyDetailTopfix');
+						}
+					});
+					
+                });
+				
+            </script>
+        </section>
+
+        <section class="widgetMemberCompanyDetail">
+            <div class="holder">
+                <div class="topRow">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="innerwrap">
+                            <div class="companyLogo">
+								<?php
+									if($jsonResponse['memberHasCompanyLogo']){
+								?>
+									<?php if(($jsonResponse['memberWebsiteDisplay']=="1")&&($jsonResponse['memberWebsite']!="")):?><a href="<?php echo $jsonResponse['memberWebsite'];?>" target="_blank"><?php endif;?>
+									<img loading="lazy" src="<?php echo $jsonResponse['memberCompanyLogo'];?>" alt="profile-image-type-company">
+									<?php if(($jsonResponse['memberWebsiteDisplay']=="1")&&($jsonResponse['memberWebsite']!="")):?></a><?php endif;?>
+								<?php
+									}
+								?>
+                            </div>
+                            <div class="textHolder">
+                                <h6> 
+									<?php if ($jsonResponse["memberCompleteAddress"]) {
+										echo $jsonResponse["memberCompleteAddress"];
+									} else { ?>
+										<?php if ($jsonResponse['memberCountry'] != "") {
+											echo $jsonResponse['memberCountry'] . (($jsonResponse['memberState'] === "" ? '' : ','));
+										} ?>
+										<?php if ($jsonResponse['memberState'] != "") {
+											echo $jsonResponse['memberState'] . ($jsonResponse['memberCity'] === "" ? '' : ',');
+										} ?>
+
+										<?php if ($jsonResponse['memberCity'] != "") {
+											echo $jsonResponse['memberCity'];
+										}
+									} ?>
+								</h6>
+								<?php if(($jsonResponse['memberWebsiteDisplay']=="1")&&($jsonResponse['memberWebsite']!="")):?>
+									<p>
+										<a href="<?php echo $jsonResponse['memberWebsite'];?>" target="_blank">
+											<?php 
+											$domain_website = parse_url($jsonResponse['memberWebsite'], PHP_URL_HOST);
+											echo $domain_website;
+											//echo $jsonResponse['memberWebsite'];
+											?>
+										</a>
+									</p>
+								<?php endif;?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </section>
+		
+        <section class="widgetMemberTxtVideo">
+            <div class="holder">
+				<?php if($jsonResponse['memberMyBusiness']){?>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12">
+							<h2><?php echo $jsonResponse['memberMyBusinessHeading'];?></h2>
+						</div>
+						<?php
+							$business_display='';
+							$memberMyBusiness = str_replace("\\r\\n", "\n", $jsonResponse['memberMyBusiness']);
+							$memberMyBusiness = str_replace("\\n\\r", "\n", $memberMyBusiness);
+							$memberMyBusiness = str_replace("<br>", "\n\n", $memberMyBusiness);
+							$memberMyBusiness = preg_split("/\n\n/", $memberMyBusiness);							
+							$memberMyBusiness=array_filter($memberMyBusiness);
+							
+							$c=1; $left_arr=array();$right_arr=array();
+							foreach($memberMyBusiness as $ms):
+								if(trim($ms)!=""):
+									if($c=="1"): $left_arr[]=$ms; endif;
+									if($c=="2"): $right_arr[]=$ms; $c=0;endif;
+									$c++;
+								endif;	
+							endforeach;
+							if((count($right_arr)=="0")&&(count($left_arr)>="1")):
+								$business_display.='<div class="col-xs-12 col-sm-12 col-md-12">';
+								foreach($left_arr as $ms):
+									$business_display.='<p>'.nl2br($ms).'</p>';
+								endforeach;
+								$business_display.='</div>';
+							else:
+								$business_display.='<div class="col-xs-12 col-sm-12 col-md-6">';
+								foreach($left_arr as $ms):
+									$business_display.='<p>'.nl2br($ms).'</p>';
+								endforeach;
+								$business_display.='</div>';
+								
+								$business_display.='<div class="col-xs-12 col-sm-12 col-md-6">';
+								foreach($right_arr as $ms):
+									$business_display.='<p>'.nl2br($ms).'</p>';
+								endforeach;
+								$business_display.='</div>';								
+							endif;
+							echo $business_display;							
+						?>
+						
+					</div>
+				<?php } ?>
+            </div>
+        </section>
+		
+		<section class="widgetProfile">
+			<div class="rowTwoCol">
+                <div class="holder">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <?php  if (!empty(trim($jsonResponse['memberAnIdealReferralHeading'])) && !empty(trim($jsonResponse['memberAnIdealReferral']))) { ?>
+                        <h3><?= $jsonResponse['memberAnIdealReferralHeading'] ?></h3>
+                        <p><?= $jsonResponse['memberAnIdealReferral'] ?></p> <?php } ?>
+                        <?php if (!empty(trim($jsonResponse['memberAFavoriteProblemISolvedHeading'])) && !empty(trim($jsonResponse['memberAFavoriteProblemISolved']))) { ?>
+                        <h3><?= $jsonResponse['memberAFavoriteProblemISolvedHeading'] ?></h3>
+                        <p><?= $jsonResponse['memberAFavoriteProblemISolved'] ?></p> <?php } ?>
+                        <?php if (!empty(trim($jsonResponse['memberAnIdealReferralPartnerForMeHeading'])) && !empty(trim($jsonResponse['memberAnIdealReferralPartnerForMe']))) { ?>
+                        <h3><?= $jsonResponse['memberAnIdealReferralPartnerForMeHeading'] ?></h3>
+                         <p><?= $jsonResponse['memberAnIdealReferralPartnerForMe'] ?></p> <?php } ?>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <?php if (!empty(trim($jsonResponse['memberMyTopProductsRightNowHeading'])) && !empty(trim($jsonResponse['memberMyTopProductsRightNow']))) { ?>
+                        <h3><?= $jsonResponse['memberMyTopProductsRightNowHeading'] ?></h3>
+                        <p><?= $jsonResponse['memberMyTopProductsRightNow'] ?></p> <?php } ?>
+                        <?php if (!empty(trim($jsonResponse['memberMyFavoriteBNIStoryHeading'])) && !empty(trim($jsonResponse['memberMyFavoriteBNIStory']))) { ?>
+                        <h3><?= $jsonResponse['memberMyFavoriteBNIStoryHeading'] ?></h3>
+                        <p><?= $jsonResponse['memberMyFavoriteBNIStory'] ?></p> <?php } ?>
+                    </div>
+                </div>
+            </div>
+		</section>
+        
+<style type="text/css">
+	.widgetideal{padding-top:0px;}
+</style>
+		
+		
+	

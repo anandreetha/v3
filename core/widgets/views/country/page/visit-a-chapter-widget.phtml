@@ -1,0 +1,158 @@
+<section class="widgetVisitChapter">
+<div id="googleMapSearchRow" class="googleMapSearchRow">
+    <input type="text" id="freeText" name="freeText" class="searchField"
+           placeholder="<?=$mappedWidgetSettings->getValueByName("Enter Location or Postal Code")?>">
+        <button id="go" name="Search" class="button" type="submit"><span class="ico-048"></span></button>
+        <button id="reset" name="Reset" class="button" type="reset"><span class="ico-023"></span></button>
+    </div>
+    <div style="display: none;" class="googleMapSearchError" id="BNI_ZERO_RESULTS"><?=$mappedWidgetSettings->getValueByName("Address match not found")?></div>
+    <div style="display: none;" class="googleMapSearchError" id="BNI_OUT_OF_SCOPE"><?=$mappedWidgetSettings->getValueByName("A location was found but outside the bounds of this organisation")?></div>
+
+    <div class="map-and-list">
+
+        <div style="position: relative;" class="googleMapHolder">
+            <div class="map-canvas" id="map-canvas" style="left: 0px; top: 0px; width: 100%; position: absolute;"></div>
+        </div>
+
+        <div id="map-list" class="map-list">
+
+            <div id="map-canvas-legends" class="map-canvas-legends">
+                <span class="pinChapter" id="pinChapter"><?=$mappedWidgetSettings->getValueByName("Established BNI Group")?></span>
+                <span class="pinCoreGroup" id="pinCoreGroup"><?=$mappedWidgetSettings->getValueByName("Pre-Launch BNI Group")?></span>
+                <span class="pinPlannedGroup" id="pinPlannedGroup"><?=$mappedWidgetSettings->getValueByName("Potential BNI Group (Waiting List)")?></span>
+                <div class="clearboth"></div>
+            </div>
+            <div class="scrollArea">
+            </div>
+        </div>
+
+    </div>
+
+    <?php
+    if ($googleMapApiKey!= "") { ?>
+
+        <script type="text/javascript"
+                src="https://maps.googleapis.com/maps/api/js?key=<?php echo $googleMapApiKey; ?>" defer></script>
+        <script type="text/javascript" src="<?php echo $this->config->general->cdn; ?>/js/visit-a-chapter/markerclusterer.js" defer></script>
+        <script type="text/javascript" src="<?php echo $this->config->general->cdn; ?>/js/visit-a-chapter/BNIMap.js" defer></script>
+        <script type="text/javascript" src="<?php echo $this->config->general->cdn; ?>/js/visit-a-chapter/mustache.js" defer></script>
+        <script id="template" type="x-tmpl-mustache">
+
+                         <div class ="boxDetail">
+                                                <h1 class ={{classForOrgType}}>{{content.chapterDetails.name}}</h1>
+                                                <p class="venueTitle"><?=$mappedWidgetSettings->getValueByName("This Chapter meets at the following venue")?></p>
+                                                <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                                                    <p itemprop="streetAddress" class="locationName">{{content.chapterDetails.locationName}},
+                                                        {{content.chapterDetails.addressLine1}}</p>
+                                                    <p itemprop="addressLocality" class="addressVsCity">{{addressVsCity}}</p></div>
+                                                    <p itemprop="postalCode" class="addressVsCity">{{content.chapterDetails.postalCode}}</p>
+                                                    {{^content.isPlannedChapter}}
+                                                        <p class="dayTime"><?=$mappedWidgetSettings->getValueByName("Meets:Every")?>{{content.chapterDetails.meetingDay}}, {{content.chapterDetails.meetingTime}}</p>
+                                                    {{/content.isPlannedChapter}}
+                                                      <div class="buttonArea">
+                                                    <a href="{{orgTypeURL}}?chapterId={{cmsSecurityHash}}&name={{{encodedName}}}" class="button"><?= $mappedWidgetSettings->getValueByName("Chapter Details")?></a>
+                                                         <span class="clearbothgooglemapbubble"></span>
+                                                 </div>
+                                                </div>
+             </script>
+
+
+             <script type="text/javascript">
+                 $(function () {
+                     var suffix = "";
+                     var bniCoreAppDomainUrl = "<?= $this->config->general->baseUrl ?>";
+                     var bniMap = new BNIMap({
+                         div_id: "map-canvas",
+                         org_ids: '<?=implode(',', $countryIds)?>',
+                         bni_domain: "<?= $bniConnectDomain ?>",
+                         bni_api_domain: "<?= $apiDomain ?>",
+                         website_domain: '<?= $domainName ?>',
+                         search_suffix: suffix,
+                         debug: false,
+                         locale: '<?php echo $languages ?>',
+                         markers: {
+                             chapter: "<?= $this->config->general->cdn . '/new_template/assets/images/visit-a-chapter-marker-red.png' ?>",
+                             core_group: "<?= $this->config->general->cdn . '/new_template/assets/images/visit-a-chapter-marker-grey.png' ?>",
+                             planned_group: "<?= $this->config->general->cdn . '/new_template/assets/images/visit-a-chapter-marker-lightgrey.png' ?>",
+                             dropped_chapter: bniCoreAppDomainUrl + 'web/images/map/droppedchapter.png',
+                             dropped_group: bniCoreAppDomainUrl + 'web/images/map/droppedgroup.png',
+                             suspend_chapter: bniCoreAppDomainUrl + 'web/images/map/suspendedchapter.png',
+                             region: bniCoreAppDomainUrl + 'web/images/map/region.png',
+                             country: bniCoreAppDomainUrl + 'web/images/map/country.png',
+                             hq: bniCoreAppDomainUrl + 'web/images/map/hq.png',
+                         },
+                         after_search_completed: function (result) {
+                             if (result == "BNI_OUT_OF_SCOPE") {
+                                 $("#BNI_OUT_OF_SCOPE").show();
+                             } else if (result == "BNI_ZERO_RESULTS") {
+                                 $("#BNI_ZERO_RESULTS").show();
+                             }
+                         },
+                         region_bias: ""
+                     });
+
+
+                     $("#freeText").keypress(function (e) {
+                         $("#BNI_ZERO_RESULTS").hide();
+                         $("#BNI_OUT_OF_SCOPE").hide();
+                         if (e.which == 13) {
+                             if ($("#freeText").val() != "") {
+                                 bniMap.search($("#freeText").val());
+                             }
+                             return false;
+                         }
+                     });
+
+                     // If the input has not been set then lets pre-populate it
+                     if ($("#freeText").val() === '') {
+                         // Get the url parameters
+                         var urlParams = getUrlParams();
+                         // If we have the search param key and it's not empty then we can search, otherwise skip it
+                         // This will prevent the map for searching for ""
+                         if (typeof urlParams.search !== 'undefined' && urlParams.search !== "") {
+                             // Set the text the user will see in the search box and then preform a search
+                             $('#freeText').val(urlParams.search);
+                             bniMap.autoSearch($("#freeText").val());
+                         }
+                     }
+
+            $("#go").unbind("click");
+                $("#go").bind("click", function () {
+                    $("#BNI_ZERO_RESULTS").hide();
+                    $("#BNI_OUT_OF_SCOPE").hide();
+                    if ($("#freeText").val() != "") {
+                        bniMap.search($("#freeText").val());
+                    }
+                    return false;
+                });
+
+                $("#reset").unbind("click");
+                $("#reset").bind("click", function () {
+                    $("#BNI_ZERO_RESULTS").hide();
+                    $("#BNI_OUT_OF_SCOPE").hide();
+                    $("#freeText").val("");
+                    bniMap.reset();
+                    return false;
+                });
+
+                 });
+
+                 function getUrlParams() {
+                     var match,
+                         pl     = /\+/g,  // Regex for replacing addition symbol with a space
+                         search = /([^&=]+)=?([^&]*)/g,
+                         decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+                         query  = window.location.search.substring(1);
+
+                     var urlParams = {};
+                     while (match = search.exec(query)) {
+                         urlParams[decode(match[1])] = decode(match[2]);
+                     }
+
+                     return urlParams;
+                 }
+
+             </script>
+        <?php  } ?>
+</section>
+

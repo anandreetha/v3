@@ -1,0 +1,135 @@
+<p id="responcemessageerror" align="center"
+   style="display: none; margin-top:10px;"><?php echo isset($errorMessage) ? $errorMessage : "" ?></p>
+<section class="widgetDataTable">
+        <?php
+        if ($errorMessage != $exceptionTypeError) { ?>
+
+
+    <?php if(count($OrgMembers) >0 && !empty($OrgMembers)){ ?>
+        <table id="chapterListTable" class="table table-hover listtables dataTable no-footer dtr-inline"
+               width="100%"
+               id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"
+               style="width: 100%;">
+            <thead>
+                <tr role="row">
+
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $counter = 0;
+                foreach ($OrgMembers AS $row) {
+                    $classValue = $counter % 2 == 0 ? 'even' : 'odd';
+                    $counter++; ?>
+
+                    <tr role="row" class="<?php echo $classValue; ?>">
+
+                            <td tabindex="0"><a
+                                        href=<?php echo "memberdetails?encryptedMemberId=" . $this->securityUtils->encryptUrlEncoded($row["memberId"]) . "&cmsv3=true" . "&name=" . urlencode($row['firstName'] . ' ' . $row['lastName']) ?>
+                                        class="linkone"><?php echo $row['firstName'] . ' ' . $row['lastName'] ?></a></td>
+
+                        <td><?php echo $row['companyName'] ?></td>
+                        <td><?php echo $row['profession'] . ' > ' . $row['speciality'] ?></td>
+                        <td><bdi><?php echo $row['phone'] ?></bdi></td>
+                        <td>
+                            <?php if (!empty($row['emailAddress'] && substr($row['emailAddress'], 0, strlen('does-not-have-email')) != 'does-not-have-email')) { if($WebsiteSetting=="on"){ ?>
+
+                            <a href="<?php echo 'sendmessage?userId=' . $this->securityUtils->encryptUrlEncoded($row['userId']) . '&userName=' . urlencode($row['firstName'] . ' ' . $row['lastName']) ?>"
+                               class="sendMessageIcon"></a>
+                            <?php }
+							} ?>
+                        </td>
+                    </tr>
+                <?php }; ?>
+            </tbody>
+        </table>
+        <div id="DataTables_Table_0_processing" class="dataTables_processing panel panel-default" style="display: none;">Processing...</div>
+    <div class="row">
+        <div class="col-sm-5">
+        </div>
+    </div>
+    </div>
+<?php }
+        }
+?>
+    <script type="text/javascript">
+        var oTable;
+        var oDefault;
+        var oSettings;
+
+        $(function () {
+            $(".numberLink").click(function () {
+                $('html, body').animate({
+                    scrollTop: $(".widgetDataTable").offset().top
+                }, 2000);
+                return false;
+            });
+
+            $.fn.dataTableExt.oSort["string-asc"] = function (x, y) {
+                return x.toString().localeCompare(y.toString());
+            };
+
+            $.fn.dataTableExt.oSort["string-desc"] = function (x, y) {
+                return y.toString().localeCompare(x.toString());
+            };
+
+            oDefault = {
+                "bProcessing": true,
+                "responsive": true,
+                "bServerSide": false,
+                "bLengthChange": false,
+                "iDisplayLength": 50,
+                "bSort": true,
+                "bInfo": true,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "aaSorting": [],
+                "fnDrawCallback": function (oSettings) {
+                    if (oSettings.aiDisplay.length == 0) {
+
+                    }
+                }
+            };
+
+            oSettings = $.extend(true, {}, oDefault);
+
+            oSettings.oLanguage = {
+                sLengthMenu: "Show _MENU_ entries",
+                sSearch: "<i class='fa fa-filter' aria-hidden='true'></i>",
+                sZeroRecords: "<?=$mappedWidgetSettings->getValueByName("Zero Records")?>",
+                sEmptyTable: "<?=$mappedWidgetSettings->getValueByName("Zero Records")?>",
+                sInfo: "<?=$mappedWidgetSettings->getValueByName("Showing")?> _START_ <?=$mappedWidgetSettings->getValueByName("to")?> _END_ <?=$mappedWidgetSettings->getValueByName("of")?> _TOTAL_ <?=$mappedWidgetSettings->getValueByName("entries")?>",
+                sInfoEmpty: "<?=$mappedWidgetSettings->getValueByName("Showing")?> 0 <?=$mappedWidgetSettings->getValueByName("to")?> 0 <?=$mappedWidgetSettings->getValueByName("of")?> 0 <?=$mappedWidgetSettings->getValueByName("entries")?>",
+                sInfoFiltered: "",
+                oPaginate: {
+                    sFirst: "<i class='fa fa-step-backward' aria-hidden='true'></i>",
+                    sPrevious: "<i class='fa fa-chevron-left' aria-hidden='true'></i>",
+                    sNext: "<i class='fa fa-chevron-right' aria-hidden='true'></i>",
+                    sLast: "<i class='fa fa-step-forward' aria-hidden='true'></i>"
+                }
+            };
+
+            oSettings.aoColumns = [
+                {sWidth: "30%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Member Names")?>"},
+                {sWidth: "20%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Company")?>"},
+                {sWidth: "10%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Profession/Specialty")?>"},
+                {sWidth: "10%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Phone")?>"},
+                {sWidth: "15%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Send Mail")?>", bSortable: false}
+            ];
+
+            oTable = $('.listtables').dataTable(oSettings);
+            $("#chapterListTable").show();
+			
+        });
+        $("#responcemessageerror").hide();
+        <?php
+        if ($errorMessage == $exceptionTypeError){ ?>
+        $("#responcemessageerror").show();
+        $(".widgetChapterDetail").last().addClass("widgetForm");
+        <?php }?>
+
+    </script>
+
+
+</section>
+

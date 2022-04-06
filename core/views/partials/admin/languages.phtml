@@ -1,0 +1,169 @@
+<?php 
+if((!$website->is_default)||($allow_access=="y")) {
+	
+	?>
+    <div class="box no-shadow-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <?php echo $this->tag->linkTo(array('#', '<i class="fa fa-plus fa-lg"></i>', "class" => "addLanguagesModal btn btn-default " . $buttonPullDirection, "data-toggle" => "modal", "data-target" => "#addLanguagesModal", "data-tooltip" => "true", "title" => $this->translator->_('cms.v3.admin.editpage.addnewlanguage'), "id" => "", "data-href" => $this->url->get('backend/weblanguage/add/' . $website->id), "data-backdrop" => "static", "data-keyboard" => "false")); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php
+}
+
+if (isset($website) && count($website->WebsiteLanguage) > 0) {
+?>
+
+<div class="box no-border">
+    <div class="box-body no-padding">
+        <div class="table-responsive">
+            <table id="websiteViewLanguagesDatatable" class="table table-bordered table-striped dataTable dt-responsive">
+                <thead>
+                <tr>
+                    <th><?= $this->translator->_('cms.v3.admin.languages.localecode'); ?></th>
+                    <th><?= $this->translator->_('cms.v3.admin.languages.description'); ?></th>
+                    <th><?= $this->translator->_('cms.v3.admin.languages.orientation'); ?></th>
+                    <th><?= $this->translator->_('cms.v3.admin.languages.status'); ?></th>
+                    <th><?= $this->translator->_('cms.v3.admin.languages.options'); ?></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <?php
+                foreach ($website->WebsiteLanguage as $websiteLanguage) {
+                    echo "<tr>";
+                    echo("<td>" . $this->translationUtils->normalizeLocaleCode($websiteLanguage->Language->locale_code, false) . "</td>");
+                    echo("<td>" . $this->translator->_(trim($websiteLanguage->Language->description_key)) . "</td>");
+
+                    if($websiteLanguage->Language->language_orientation === "ltr") {
+                        echo("<td>" . $this->translator->_('cms.v3.admin.languages.orientationltr') . "</td>");
+                    }else {
+                        echo("<td>" . $this->translator->_('cms.v3.admin.languages.orientationrtl') . "</td>");
+                    }
+                    if ($websiteLanguage->status == 1) {
+                        echo "<td><span><i class=\"fa fa-check fa-lg text-success\"></i></span></td>";
+                    } else {
+                        echo "<td><span><i class=\"fa fa-times-circle fa-lg text-danger\"></i></span></td>";
+                    }
+                    echo "<td>";
+                    echo '<div class="btn-group" role="group" aria-label="...">';
+                    $activeClass = ((int)$websiteLanguage->status == 1 ? 'active' : '');
+                    echo "<button type='button' data-setting-languageid='",$websiteLanguage->id ,"'  data-display-language-select='",$websiteLanguage->status ,"'  class='display-select-btn btn btn-default ",$activeClass," '>".$this->translator->_('cms.v3.admin.languages.enable')."</button>";
+                    $activeClass = ((int)$websiteLanguage->status == 2 ? 'active' : '');
+                    echo "<button type='button' data-setting-languageid='",$websiteLanguage->id ,"'  data-display-language-select='",$websiteLanguage->status ,"'   class='display-select-btn btn btn-default ",$activeClass," '>".$this->translator->_('cms.v3.admin.languages.disable')."</button>";
+                    echo "</div>";
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <?php
+    } else {
+        ?>
+        <div class="alert alert-warning" role="alert">
+            <strong><?= $this->translator->_('cms.v3.admin.languages.allsupportedlangsmsg'); ?></strong>
+        </div>
+        <?php
+    }
+    ?>
+</div>
+
+
+<?php $this->partial('partials/admin/modal', [
+    'title' => $this->translator->_('cms.v3.admin.languages.addnewlanguagetitle'),
+    'iframeId' => 'newSupportedLanguageIframe',
+    'wrapperId' => 'addLanguagesModal',
+    'successButtonId' => 'newSupportedLanguageButton'
+]); ?>
+
+
+
+<script>
+
+    $('.display-select-btn').on('click', function () {
+        var self = $(this);
+        var setting = $(this).data('display-language-select');
+        var languageId = $(this).data('setting-languageid');
+        var url = "<?php echo $this->url->get('backend/weblanguage/edit/'); ?>" + languageId;
+        var updateSettings;
+
+        if (setting == 2) {
+            updateSettings = 1;
+        } else {
+            updateSettings = 2;
+        }
+
+        $.post(url, {statusValue: updateSettings}, function (data) {
+            if (data.complete !== null && data.complete === true) {
+                self.siblings().each(function() {
+                    $(this).removeClass('active');
+                    $(this).attr('data-display-language-select',updateSettings);
+                });
+                $(self).addClass('active');
+                var langSelect = self.attr('data-display-language-select');
+                var statusIcon = self.closest('td').prev('td').children("span").children("i");
+                var success = 'fa fa-check fa-lg text-success';
+                var danger = 'fa fa-times-circle fa-lg text-danger';
+                var appendClass =  updateSettings==1? success : danger;
+                statusIcon.attr("class", appendClass);
+            }
+
+        });
+    });
+
+    $('#newSupportedLanguageButton').on('click', function(e) {
+        var iframeElement = document.getElementById('newSupportedLanguageIframe').contentWindow.document;
+        var iframeArray = iframeElement.getElementsByTagName('form');
+        var selectedLanguages = $(iframeArray).find("#languageValue :selected").length;
+        // Remove on click if a language has been selected
+        if (selectedLanguages > 0) {
+            $('#newSupportedLanguageButton').attr("disabled", true);
+        }
+        submitModal('newSupportedLanguageIframe')
+    });
+
+    $(".addLanguagesModal").on("click", function () {
+        var frameSrc = $(this).data("href");
+        $('#addLanguagesModal iframe').attr("src", frameSrc);
+    });
+
+    $(function () {
+        $('#websiteViewLanguagesDatatable').DataTable({
+            'paging'      : true,
+            'responsive'  : true,
+            'lengthChange': true,
+            'searching'   : true,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false,
+            'columnDefs': [
+                { responsivePriority: 2, targets: 1 },
+                { responsivePriority: 1, targets: -1 },
+                { responsivePriority: 3, targets: 0 },
+                { responsivePriority: 4, targets: 2 },
+            ],
+            'language'    :{
+                "lengthMenu": "<?php echo  $this->translator->_('datatablesparameters.sLengthMenu')?>",
+                "zeroRecords": "<?php echo  $this->translator->_('datatablesparameters.sZeroRecords')?>",
+                "info": "<?php echo  $this->translator->_('datatablesparameters.sInfo')?>",
+                "search":" <?php echo  $this->translator->_('datatablesparameters.sSearch')?>",
+                "paginate": {
+                    "first":     "<?php echo  $this->translator->_('datatablesparameters.sFirst')?>",
+                    "last":       "<?php echo  $this->translator->_('datatablesparameters.sLast')?>",
+                    "next":      "<?php echo  $this->translator->_('datatablesparameters.sNext')?>",
+                    "previous":   "<?php echo  $this->translator->_('datatablesparameters.sPrevious')?>"
+                },
+            }
+        })
+
+
+    });
+</script>

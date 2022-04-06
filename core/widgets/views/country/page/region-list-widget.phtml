@@ -1,0 +1,22 @@
+<div id="regionList">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script>
+    //This will make a ajax post request to the region list controller which return html and we render that in ajax response.
+    $(function () {
+        var orgIds = <?php echo json_encode($orgIds) ?>;
+        var mappedWidgetSettings = '<?php echo json_encode($mappedWidgetSettingsObj) ?>';
+
+
+        var url = "<?php echo $ajaxUrl; ?>";
+        $.post(url, {
+            orgIds: orgIds,
+            mappedWidgetSettings: mappedWidgetSettings
+        }, function (data) {
+            $("#rssLoaderAjax").hide();
+            $("#regionList").html(data);
+        });
+    });
+
+</script>

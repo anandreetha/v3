@@ -1,0 +1,230 @@
+<section class="widgetForm">
+    <div class="holder">
+
+        <script type="text/javascript">
+            $(function () {
+                getCountryNamesJsonData({
+                    countryIds: '<?php echo implode(",",$orgIds); ?>',
+                    cmsv3:true
+                });
+
+                function FACsortByName(a, b) {
+                    var aName = a.name;
+                    aName = aName.toLowerCase();
+                    var bName = b.name;
+                    bName = bName.toLowerCase();
+                    if (aName == bName) {
+                        return 0;
+                    }
+                    return aName > bName ? 1 : -1;
+                }
+
+                function getCountryNamesJsonData(params) {
+                    $.ajax({
+                        async: false,
+                        url: "/web/open/appsCmsCountryListJson?<?php echo $languages ?>",
+                        type: "POST",
+                        dataType: "json",
+                        data: params,
+                        success: function (data) {
+                            if (data.length > 0) {
+                                $("#countryIds").empty();
+                                $.each(data.sort(FACsortByName), function (i, item) {
+                                    $("<option/>", {value: item.id}).text(item.name).appendTo("#countryIds");
+                                });
+                            }
+                        }
+                    });
+
+                }
+
+
+                    if ($("#countryIds").val() != "") {
+                        
+                        var ids = $("#countryIds").val();
+                        getJsonData(getJsonCountryData(ids));
+                    }
+
+                    if ($("#countryIds").get(0).tagName.toLowerCase() == "select") {
+                        $("#countryIds").on("change", function () {
+                            var ids = $(this).val();
+                            getJsonData(getJsonCountryData(ids));
+                        });
+                }
+
+                function getJsonData(params) {
+                    $.ajax({
+                        async: false,
+                        url: "/web/open/appsCmsNationalChapterSearchFilterJson?<?php echo $languages ?>",
+                        type: "POST",
+                        dataType: "json",
+                        data: params,
+                        success: function (data) {
+                            if (data.regions && data.regions.length > 0) {
+                                $("#regionId").empty().append("<option></option>");
+                                $.each($(data.regions).sort(FACsortByName), function (i, item) {
+                                    $("<option/>", {value: item.id}).text(item.name).appendTo("#regionId");
+                                });
+
+                                $("#regionId").on("change", function () {
+                                    if ($("#regionId").val() != "") {
+                                        var ids = $(this).val();
+                                        getJsonData(getJsonRegionData(ids));
+                                    } else {
+                                        var ids = $("#countryIds").val();
+                                        getJsonData(getJsonCountryData(ids));
+                                    }
+                                });
+                            }
+                            $("#chapterArea").empty().append("<option></option>");
+                            $.each($(data.areas).sort(FACsortByName), function (i, item) {
+                                $("<option/>", {value: item.id}).text(item.name).appendTo("#chapterArea");
+                            });
+							
+							let meetingType=data.meetingData.meetingType;
+							$('#chapterMeetingType').empty();
+							let optionval='<option value=""></option>';
+							$.each( meetingType, function(i, obj) {
+								optionval+='<option value='+i+'>'+obj.meetingTypeText+'</option>';
+							});
+							$('#chapterMeetingType').append(optionval);
+							
+                            $("#chapterMeetingDay option").each(function () {
+                                if ($(this).val() != "") {
+                                    if (data.meetingData.meetingDay[$(this).val()]) {
+                                        $(this).show();
+                                    } else {
+                                        $(this).hide();
+                                    }
+                                }
+                            });
+
+                            $("#chapterMeetingTime option").each(function () {
+                                if ($(this).val() != "") {
+                                    if (data.meetingData.meetingTime[$(this).val()]) {
+                                        $(this).show();
+                                    } else {
+                                        $(this).hide();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+
+                $("#submit").bind("click", function () {
+                    $(this).attr("disabled", true);
+                    $("#formAjaxLoader").show();
+                    window.location.assign($("#formFindChapter").attr("action") + "?" + $("#formFindChapter").serialize());
+                    return false;
+                });
+                $("#submit").removeAttr("disabled");
+            });
+
+            function getJsonCountryData(ids){
+                
+                var params = {
+                    countryId: ids
+                };
+                return params;
+            }
+
+            function getJsonRegionData(ids){
+                
+                var params = {
+                    regionId: ids
+                };
+                return params;
+            }
+
+        </script>
+
+
+
+        <!-- link to controller action-->
+        <form name="formFindChapter" action="chapterlist" method="post" class="form" id="formFindChapter">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="formRow">
+                        <label for="countryIds"><?=$mappedWidgetSettings->getValueByName("Country")?></label>
+                        <select name="countryIds" id="countryIds" class="selectField"></select>
+                    </div>
+                </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="formRow">
+
+                        <label for="regionId"><?=$mappedWidgetSettings->getValueByName("Region")?></label>
+                        <select name="regionId" id="regionId" class="selectField">
+                            <option></option>
+                        </select>
+
+                </div>
+
+                <div class="formRow">
+                    <label for="chapterName"><?=$mappedWidgetSettings->getValueByName("Chapter Name")?></label>
+                    <input type="text" name="chapterName" id="chapterName" value="" class="textField">
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="formRow">
+                    <label for="chapterCity"><?=$mappedWidgetSettings->getValueByName("City")?></label>
+                    <input type="text" name="chapterCity" id="chapterCity" value="" class="textField">
+                </div>
+                <div class="formRow">
+                    <label for="chapterArea"><?=$mappedWidgetSettings->getValueByName("Area")?></label>
+                    <select name="chapterArea" id="chapterArea" class="selectField">
+                        <option></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="formRow">
+                    <label for="chapterMeetingDay"><?=$mappedWidgetSettings->getValueByName("Meeting Day")?></label>
+                    <select name="chapterMeetingDay" id="chapterMeetingDay" class="selectField">
+                        <option value=""></option>
+                        <option value="0" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Sunday")?></option>
+                        <option value="1" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Monday")?></option>
+                        <option value="2" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Tuesday")?></option>
+                        <option value="3" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Wednesday")?></option>
+                        <option value="4" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Thursday")?></option>
+                        <option value="5" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Friday")?></option>
+                        <option value="6" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Saturday")?></option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+                <div class="formRow">
+                    <label for="chapterMeetingTime"><?=$mappedWidgetSettings->getValueByName("Approximate Meeting Time")?></label>
+                    <select name="chapterMeetingTime" id="chapterMeetingTime" class="selectField">
+                        <option value=""></option>
+                        <option value="am" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Morning")?></option>
+                        <option value="mid" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Lunch")?></option>
+                        <option value="pm" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Afternoon")?></option>
+                        <option value="eve" style="display: none;"><?=$mappedWidgetSettings->getValueByName("Evening")?></option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+				
+            </div>
+			
+			<div class="col-xs-12 col-sm-4 col-md-4">
+				<div class="formRow">
+                    <label for="chapterMeetingType"><?=$mappedWidgetSettings->getValueByName("Meeting Type")?></label>
+                    <select name="chapterMeetingType" id="chapterMeetingType" class="selectField">
+                        <option value=""></option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+			</div>	
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="formButtonsRow">
+                    <button type="submit" id="submit" name="submit" class="button"><?=$mappedWidgetSettings->getValueByName("Search")?></button>
+                    <span id="formAjaxLoader" style="display:none;"><i
+                                class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

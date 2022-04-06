@@ -1,0 +1,42 @@
+<script src="/bnicms/v3/js/modalClose/closeModal.js"></script>
+<?= $this->getContent(); ?>
+<div class="row modal-row">
+    <div class="col-md-12">
+        <form method="post">
+			<div class="form-group">
+                <label for="newsletterText"><?= $this->translator->_('cms.v3.admin.editpage.newslettertitleheading'); ?></label>
+                <input type="text" class="form-control" name="newsletterTitle" id="newsletterTitle"
+                       value="<?php if (isset($newsletterTitle)):echo $newsletterTitle;endif; ?>">
+            </div>
+            <div class="form-group">
+                <label for="newsletterText"><?= $this->translator->_('cms.v3.admin.editpage.newslettertextheading'); ?></label>
+                <input type="text" class="form-control" name="newsletterText" id="newsletterText"
+                       value="<?php if (isset($newsletterText)) {
+                           echo $newsletterText;
+                       } ?>">
+            </div>
+            <div class="form-group">
+                <label for="newsletterInputText"><?= $this->translator->_('cms.v3.admin.editpage.newsletterinputtextheading'); ?></label>
+                <input type="text" class="form-control" name="newsletterInputText" id="newsletterInputText"
+                       value="<?php if (isset($newsletterInputText)) {
+                           echo $newsletterInputText;
+                       } ?>">
+            </div>
+			<div class="form-group">
+                <label for="newsletterAlt"><?= $this->translator->_('cms.v3.admin.editpage.newsletteraltheading'); ?></label>
+                <input type="text" class="form-control" name="newsletterAlt" id="newsletterAlt"
+                       value="<?php if (isset($newsletterAlt)):echo $newsletterAlt;endif; ?>">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    // When the document is ready, check on intervals if the success alert is on display.
+    // If the success alert is on display then this means we've successfully completed our action and we can close the form
+    // Close modal function is highly specific to the bootstrap modal and expects some sort of successful alert in this file to process
+    $(document).ready(function () {
+        closeModal('#pageContentSettingsModal');
+    });
+</script>

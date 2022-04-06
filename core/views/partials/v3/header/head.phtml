@@ -1,0 +1,103 @@
+<!doctype html>
+<html itemscope itemtype="http://schema.org/WebSite" prefix="og: http://ogp.me/ns#" class="no-js" <?php echo $htmlTags; ?>>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    
+	<?php $pageTitle = $pageTitle ?? 'BNI';
+	  $actualPageTitle = $contentSettings["meta_title"] ?? $pageTitle; ?>
+    <title><?php echo $actualPageTitle ?></title>
+	
+	<meta name="title" content="<?php echo $actualPageTitle ?>">
+	
+	<meta name="keywords" content="<?php echo isset($contentSettings["meta_keywords"]) ?  $contentSettings["meta_keywords"] : $pageTitle ?>">
+	<meta name="description" content="<?php echo isset($contentSettings["meta_description"]) ?  $contentSettings["meta_description"] : $pageTitle ?>">
+    
+    <meta name="creation_Date" content="<?php echo $page->last_modified; ?>">
+	<meta name="ROBOTS" content="<?php echo isset($contentSettings["meta_robots"]) ?  $contentSettings["meta_robots"] : "Enter Meta Robots" ?>">
+	<meta name="author" content="<?php echo isset($contentSettings["meta_author"]) ?  $contentSettings["meta_author"] : "Enter Meta Author" ?>">
+	<meta name="copyright" content="{$copyright}">
+    
+    <link rel="shortcut icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/favicon.ico" type="image/ico">
+	<link rel="shortcut icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/favicon.png" type="image/x-icon">
+
+<!-- Apple mobile icons -->
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-57x57.png" sizes="57x57">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-60x60.png" sizes="60x60">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-72x72.png" sizes="72x72">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-76x76.png" sizes="76x76">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-114x114.png" sizes="114x114">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-120x120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-128x128.png" sizes="128x128">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-144x144.png" sizes="144x144">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-152x152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-180x180.png" sizes="180x180">
+
+<!-- iOS mobile icons and colors -->
+    <meta name="theme-color" content="#FFFFFF">
+    <link rel="icon" type="image/png" sizes="36x36" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-36x36.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-48x48.png">
+    <link rel="icon" type="image/png" sizes="72x72" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-72x72.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-96x96.png">
+    <link rel="icon" type="image/png" sizes="148x148" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-144x144.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-192x192.png">
+
+<!-- Android mobile icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-96x96.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-128x128.png">      
+
+<!-- Windows mobile icons and colors -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/icon-144x144.png">
+
+	<?php if (isset($canonicalUrl)) { ?>
+    <link rel="canonical" href="<?php echo $canonicalUrl;?>">
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:site_name" content="<?php echo $website->getName(); ?>">
+    <meta property="og:title" content="<?php echo $pageTitle ?>">
+    <meta property="og:description" content="<?php echo isset($contentSettings["meta_description"]) ?  $contentSettings["meta_description"] : $pageTitle ?>">
+    <meta property="og:url" content="<?php echo $canonicalUrl; ?>">
+    <meta property="og:image" content="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/socialmedia.png">
+
+    <!-- Twitter card meta tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="<?php echo $canonicalUrl; ?>">
+    <meta name="twitter:title" content="<?php echo $pageTitle; ?>">
+    <meta name="twitter:description" content="<?php echo isset($contentSettings["meta_description"]) ?  $contentSettings["meta_description"] : $pageTitle ?>">
+    <meta name="twitter:image" content="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/socialmedia.png">
+    <?php } ?>
+	
+    <meta itemprop="image" content="<?php echo $this->config->general->cdn; ?>/new_template/assets/appicon/socialmedia.png">
+	
+	<?php 
+	$cookie_group_id='';
+	foreach($websettings['allSettings'] as $websetting):
+		if ($websetting->getSettingsId() == '403'):
+			$cookie_group_id=$websetting->getValue();
+			break;
+		endif;
+	endforeach;
+	if($cookie_group_id!=""):
+		$cookieBotCode="";
+		if($languages->activeLanguage->cookieBotCode): 
+			$cookieBotCode=$languages->activeLanguage->cookieBotCode;
+		endif; 
+	?>
+	<script id="Cookiebot" data-culture="<?php echo $cookieBotCode;?>" src="https://consent.cookiebot.com/uc.js" data-cbid="<?php echo $cookie_group_id;?>" data-blockingmode="auto" type="text/javascript" async></script>
+	<?php
+	endif;
+	?>
+	<!-- JS Files -->
+    <script src="<?php echo $this->config->general->cdn; ?>/new_template/libs/jquery-3.2.1/jquery-3.2.1.min.js" data-cookieconsent="ignore"></script>
+</head>

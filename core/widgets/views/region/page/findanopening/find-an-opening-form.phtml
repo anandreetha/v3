@@ -1,0 +1,203 @@
+<section class="widgetForm">
+    <div class="holder">
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#search-simple-tab"><?=$mappedWidgetSettings->getValueByName("Simple Search")?></a></li>
+            <li><a data-toggle="tab" href="#search-advanced-tab"><?=$mappedWidgetSettings->getValueByName("Advanced Search")?></a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div id="search-simple-tab" class="tab-pane fade in active">
+
+                <form id="search-simple" name="search-simple" class="form" method="post" action="findanopeninglist">
+                    <input type="hidden" name="regionIds" id="regionIds" value="<?php echo implode(",",$orgIds); ?>">
+
+                    <div class="col-xs-12 col-sm-6 col-md-8">
+                        <div class="formRow">
+                            <input type="text" class="textField" value="" name="professionAutoComplete" id="professionAutoComplete" placeholder="<?=$mappedWidgetSettings->getValueByName("Enter your profession")?>">
+                            <input value="" id="secondaryCategoryIds" name="secondaryCategoryIds" type="hidden">
+                            <div class="error"></div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div id="search-advanced-tab" class="tab-pane fade">
+                <form id="search-advanced" name="search-advanced" class="form" method="post" action="findanopeninglist">
+                    <input type="hidden" name="regionIds" id="regionIds" value="<?php echo implode(",",$orgIds); ?>">
+
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="formRow">
+                            <label for="primaryCategory"><?=$mappedWidgetSettings->getValueByName("Primary Category")?></label>
+                            <select name="primaryCategory" id="primaryCategory" class="selectField valid"></select>
+                        </div>
+
+                        <div class="formRow">
+                            <label for="secondaryCategory"><?=$mappedWidgetSettings->getValueByName("Secondary Category")?> <small><?php echo $mappedWidgetSettings->getValueByName("(Ctrl click for multiple selection)") ?></small></label>
+                            <select name="secondaryCategory" id="secondaryCategory" class="selectFieldMultiple required" data-toggle="tooltip" title="<?=$mappedWidgetSettings->getValueByName("(Ctrl click for multiple selection)")?>" multiple></select>
+                            <div class="error"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="formButtonsRow">
+                            <button type="submit" name="submit" class="button" id="advancedSubmit"><?=$mappedWidgetSettings->getValueByName("Search")?></button>
+                            <span id="advancedFormAjaxLoader" style="display:none;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script type="text/javascript">
+    var catsubcatJsonData;
+    var autocompleteSecondaryCategoryArray = new Array();
+
+    $(function() {
+        $("#secondaryCategoryError").hide();
+        $("#secondaryCategoryIds").val("");
+        $("#professionAutoComplete").val("");
+        regionIds = $('#regionIds').val();
+        getCatSubCatJson(regionIds);
+
+        $("#primaryCategory").change(function() {
+            $('#secondaryCategory').removeClass("valid");
+            getSubCategory($(this).val());
+        });
+
+        jQuery.validator.addMethod("needsSelection", function (value, element) {
+            var count = $(element).find('option:selected').length;
+            if(count == 0){
+                return false;
+            } else {
+
+                return true;
+            }
+        });
+
+
+        $("#search-advanced").validate({
+            rules: {
+                secondaryCategory: {
+                    needsSelection: true
+                },
+            },
+            messages: {
+                secondaryCategory: {
+                    needsSelection: "<?=property_exists($widgetSettingObj[6],'value')?$widgetSettingObj[6]->value:$widgetSettingObj[6]->default_value?>"
+                },
+            },
+            submitHandler: function(form) {
+                $(this).attr("disabled", true);
+
+                window.location.assign($("#search-advanced").attr("action") + "?"  + "secondaryCategoryIds="+ $("#secondaryCategory").val() + "&regionIds="+ regionIds);
+            }
+        });
+
+        $("#advancedSubmit").removeAttr("disabled");
+
+        $("#professionAutoComplete").autocomplete({
+            source: autocompleteSecondaryCategoryArray,
+            select : function( event, ui ) {
+                event.preventDefault;
+                $("#secondaryCategoryIds").val(ui.item.id);
+                window.location.assign($("#search-simple").attr("action") + "?" + "secondaryCategoryIds="+$("#secondaryCategoryIds").val() +"&regionIds="+regionIds);
+            },
+            minLength: 2
+        });
+
+        $("#search-simple").on('keydown', function(e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+    });
+
+    function autocompleteSecondaryCategory() {
+        $.each($(catsubcatJsonData), function(i,item){
+            if(item.sub.length > 0) {
+                $.each($(item.sub), function(i,item){
+                    var object = {id:item.id,value:item.name};
+                    autocompleteSecondaryCategoryArray.push(object);
+                });
+           }
+        });
+    }
+
+    function getCatSubCatJson(regionIds) {
+        $.ajax({
+            async: false,
+            url: "/web/open/appsCmsCategoryTreeJson?<?=$languages?>",
+            type: "GET",
+            dataType: "json",
+            data: {regionIds:regionIds},
+            success: function(data) {
+                catsubcatJsonData = data;
+                autocompleteSecondaryCategory();
+                getCategory();
+            }
+        });
+
+    }
+
+    function getCategory() {
+        if(catsubcatJsonData.length > 0) {
+            $("#primaryCategory").empty();
+            $.each($(catsubcatJsonData), function(i,item){
+                $("<option/>", { value : item.id }).text(item.name).appendTo("#primaryCategory");
+
+            });
+        }
+
+        getSubCategory($("#primaryCategory").val());
+    }
+
+    function getSubCategory(catid) {
+        if(catid == "" || catid == null) {
+            $("#secondaryCategory").empty();
+        } else {
+            $.each($(catsubcatJsonData), function(i,item){
+
+                if(item.id == catid) {
+                    if(item.sub.length > 0) {
+                        $("#secondaryCategory").empty();
+                        $.each($(item.sub), function(i,item){
+                            $("<option/>", { value : item.id }).text(item.name).appendTo("#secondaryCategory");
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+
+    //Json Sort Function
+    $.fn.sort = function() {
+        return this.pushStack( [].sort.apply( this, arguments ), []);
+    }
+
+    function sortByName(a,b){
+        if (a.name == b.name){
+            return 0;
+        }
+        return a.name> b.name ? 1 : -1;
+    }
+
+    function sortById(a,b){
+        if (a.id == b.id){
+            return 0;
+        }
+        return a.id> b.id ? 1 : -1;
+    }
+
+</script>

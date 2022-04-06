@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html <?php echo $htmlTags; ?>>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CMS V3</title>
+
+    <style>
+        .transitions-disabled * {
+            -webkit-transition: none !important;
+            -moz-transition: none !important;
+            -ms-transition: none !important;
+            -o-transition: none !important;
+        }
+    </style>
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="icon" type="image/x-icon" href="<?php echo $this->config->general->cdn . '/new_template/assets/appicon/favicon.ico' ?>" />
+
+    <!-- ROBOTO FONT -->
+    <link rel="stylesheet" type="text/css" href="<?= $this->config->general->cdn; ?>/bundles/roboto-font/roboto.css">
+
+    <!-- Optional theme -->
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+    <?php $this->assets->outputCss(); ?>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="<?= $this->config->general->cdn; ?>/bundles/bni-font-icon-3.0/style.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        // Include this file AFTER both jQuery and bootstrap are loaded.
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {
+            modal_this = this;
+            $(document).on('focusin.modal', function (e) {
+                if (modal_this.$element[0] !== e.target && !modal_this.$element.has(e.target).length
+                    && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_select')
+                    && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_textarea')
+                    && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_text')) {
+                    modal_this.$element.focus()
+                }
+            })
+        };
+
+        $(document).ready(function () {
+            $(".transitions-disabled").each(function (index, element) {
+                setTimeout(function () { $(element).removeClass("transitions-disabled") }, 10);
+            });
+        });
+
+    </script>
+    <?php
+    // Include our custom modal js
+    $this->assets->addJs('/js/modalClose/listener.js');
+    $this->assets->addJs('/js/submitModal.js');
+
+    // Need to also include our custom ckeditor
+    $this->assets->addJs('/js/ckeditor/ckeditor.js');
+
+    $this->assets->outputInlineJs();
+    $this->assets->outputJs(); ?>
+
+</head>
+
+<?php $sidebarCollapse = ($this->session->get('nav-menu') !== 'true' ? '' : 'sidebar-collapse') ?>
+
+<!--<body class="skin-red sidebar-mini">-->
+<body class="skin-red sidebar-mini <?php echo $sidebarCollapse ?> transitions-disabled">
+
+<div id="publishLoadingBackground"></div>
+<div id="publishLoadingSpinner">
+    <img id="publish-spinner" src="<?= $this->config->general->cdn; ?>/images/published-action-loader.gif" />
+</div>
+
+<input type="hidden" name="TextIdleTimeout" id="TextIdleTimeout"
+       value=<?php echo $this->translator->_('common.header.idletimeoutwarningtitle') ?>/>
+<div id="idletimeout">
+    <?php echo $this->translator->_('common.header.preloggoffinactivitymessagepart1') ?>
+    &nbsp;<span></span>&nbsp;<?php echo $this->translator->_('common.header.preloggoffinactivitymessagepart2') ?>
+    <a id="idletimeout-resume" href="#"><?php echo $this->translator->_('common.header.preloggoffresumemessage') ?></a>
+</div>
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header class="main-header">
+
+        <!-- Logo -->
+        <div class="logo colLogo">
+            <a href="/bnicms/v3/backend/website/list/" class="bniLogo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini ico-068"><span class="logoText"><?php echo $this->translator->_('cms.v3.admin.sidebar.cms') ?></span></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg ico-068"><span class="logoText"><?php echo $this->translator->_('cms.v3.admin.sidebar.cms') ?></span></span>
+            </a>
+        </div>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" title="<?php echo $this->translator->_('cms.v3.admin.sidebar.menutoggle') ?>">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+                    <?php if (isset($profileImage) && isset($fullName)) { ?>
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle">
+                                <!-- The user image in the navbar-->
+                                <?= $this->tag->image(
+                                    [
+                                        $profileImage,
+                                        'alt' => 'User Image',
+                                        'class' => 'user-image',
+                                    ]
+                                ); ?>
+                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                <span class="hidden-xs"><?= $fullName ?></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- The user image in the menu -->
+                                <li class="user-header">
+                                    <?= $this->tag->image(
+                                        [
+                                            $profileImage,
+                                            'alt' => 'User Image',
+                                            'class' => 'img-circle',
+                                        ]
+                                    ); ?>
+
+                                    <p>
+                                        <?= $fullName ?>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                </li>
+                            </ul>
+                        </li>
+                        <?php
+                    }
+                    ?>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header"><?php echo $this->translator->_('cms.v3.admin.sidebar.menu') ?></li>
+
+                <?php
+				$current_url= $this->router->getRewriteUri();
+				$urlarr=explode("/",$current_url);
+				$urlparam=end($urlarr);
+                if ($showNavItem["all"]) { 
+					if($urlparam=="list"): $urlactivecls='active';else: $urlactivecls=''; endif;
+				?>
+                    <li class="<?php echo $urlactivecls;?>"><?= $this->tag->linkTo(array('backend/website/list', '<i class="fa fa-reply-all"></i> <span>' . $this->translator->_('cms.v3.admin.sidebar.allwebsites') . '</span>')); ?></li>
+                <?php }
+				if ($showNavItem["country"]) {
+					if(array_search("countrylevel",$urlarr,true)): $urlparam="countrylevel"; endif;
+					if($urlparam=="countrylevel"): $countrylevelactivecls='active';else: $countrylevelactivecls=''; endif;
+				?>
+				<li class="<?php echo $countrylevelactivecls;?>"><?= $this->tag->linkTo(array('backend/website/list/countrylevel', '<i class="fa fa-book"></i> <span>' . $this->translator->_('cms.v3.admin.sidebar.countryleveltemplates') . '</span>')); ?></li>
+				<?php
+				}
+                if ($showNavItem["country"]) {
+					if($urlparam=="countries"): $urlactivecls='active';else: $urlactivecls=''; endif;
+				?>
+                    <li class="<?php echo $urlactivecls;?>"><?= $this->tag->linkTo(array('backend/website/list/countries', '<i class="fa fa-globe"></i> <span>' . $this->translator->_('cms.v3.admin.sidebar.countrywebsites') . '</span>')); ?></li>
+                <?php }
+
+                if ($showNavItem["region"]) { 
+					if($urlparam=="regions"): $urlactivecls='active';else: $urlactivecls=''; endif;
+				?>
+                    <li class="<?php echo $urlactivecls;?>"><?= $this->tag->linkTo(array('backend/website/list/regions', '<i class="fa fa-map-o"></i> <span>' . $this->translator->_('cms.v3.admin.sidebar.regionwebsites') . '</span>')); ?></li>
+                <?php }
+
+                if ($showNavItem["chapter"]) {
+					if($urlparam=="chapters"): $urlactivecls='active';else: $urlactivecls=''; endif;
+				?>
+                    <li class="<?php echo $urlactivecls;?>"><?= $this->tag->linkTo(array('backend/website/list/chapters', '<i class="fa fa-map-marker"></i> <span>' . $this->translator->_('cms.v3.admin.sidebar.chapterwebsites') . '</span>')); ?></li>
+                <?php } ?>
+            </ul>
+            <!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <?php if (isset($contentTitle) && isset($contentSubTitle)) { ?>
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    <?= $contentTitle; ?>
+                    <small><?= $contentSubTitle; ?></small>
+                </h1>
+                <?php
+                // I don't think we need to look at the URL to determine whether to show the back button or not (aka we should just look at $redirectToUrl),
+                // but I don't want to completely remove this in-case it causes regressions in this 'Track RC' stage. So will leave as a TODO for now.
+                $isWebsiteView = strpos(implode('', $this->request->getQuery()), 'website/view') > 0;
+                $isPublish = strpos(implode('', $this->request->getQuery()), 'website/publish') > 0;
+                $isWebsetting = strpos(implode('', $this->request->getQuery()), 'websetting/edit') > 0;
+
+                if ($isWebsiteView || $isPublish || $isWebsetting) { ?>
+                    <div class="box-header">
+                        <div class='box-tools' id='backbutton'>
+                            <?php echo $redirectToUrl; ?>
+                        </div>
+                    </div>
+                <?php
+                } else if (strpos(implode('', $this->request->getQuery()), 'page/editPage') > 0) { ?>
+                    <div class="box-header">
+                        <div class='box-tools' id='backbutton'>
+                            <?php echo $redirectToUrl; ?>
+                        </div>
+                    </div>
+                <?php } ?>
+            </section>
+        <?php } ?>
+
+        <!-- Main content -->
+        <section class="content">
+            <?php echo $this->getContent(); ?>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+
+        <!-- Default to the left -->
+        <p><strong>&copy; <?php echo date('Y') ?> BNI Global LLC.</strong>  All Rights Reserved. All company names, product names logos included here may be registered trademarks or service marks of their respective owners.</p>
+        <p>BNIConnect: <?= $this->build->buildSummary->version?> , Build: <?= $this->build->buildSummary->number?>  | Last Changed Date: <?= $this->build->buildSummary->date?> </p>
+    </footer>
+
+    <!-- /.control-sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<?php
+// If we're on the edit page, add some JS to take the user back to the other page with the previously-selected languageId selected
+if (strpos(implode('', $this->request->getQuery()), 'page/editPage') > 0) { ?>
+    <script type="text/javascript">
+        if ($("#backbutton").length && $("#backbutton a").length && window.localStorage.getItem('selectedLanguageId') != null) {
+            $("#backbutton a").attr('href', $("#backbutton a").attr('href') + '/' + window.localStorage.getItem('selectedLanguageId'));
+        }
+    </script>
+<?php } ?>
+
+</body>
+
+<script>
+
+    $('.sidebar-toggle').on('click', function() {
+
+        var body = $('body');
+        var state = (body.hasClass('sidebar-collapse') ? 'false' : 'true');
+
+        var url = "<?php echo $this->config->general->baseUri . 'backend/website/navmenu/' ?>" + state;
+
+        // We get a 204 back for success, but I don't think we intent to do anything with the response either
+        $.post( url);
+
+    });
+</script>
+
+</html>

@@ -1,0 +1,42 @@
+<section class="widgetAccordion">
+    <div class="holder">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <p id="responcemessageerror" align="center" style="display: none; margin-top:10px;"><?php echo isset($errorMessage)? $errorMessage :"" ?></p>
+
+                <div class="panel-group" id="accordion">
+                    <?php if(!isset($errorMessage)){ ?>
+                        <?php
+                        foreach($jsonResponse as $row) {
+                            $uniqueId =  $row -> orgId;
+							$collapsetab='collapsed';$collapsebody='';$collapsestl='height: 0px;';
+							if(count($jsonResponse)=="1"):
+								$collapsetab='';$collapsebody='in';$collapsestl='';
+							endif;
+                            ?>
+                            <div class="panel panel-default">
+
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#<?= $uniqueId; ?>" class="<?php echo $collapsetab;?>" aria-expanded="false"><?= $row -> orgName; ?></a>
+                                </div>
+
+                                <div id="<?= $uniqueId; ?>" class="panel-collapse collapse <?php echo $collapsebody;?>" aria-expanded="false" style="<?php $collapsestl;?>">
+                                    <div class="panel-body">
+                                        <?= $row -> newsContent; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    <?php }?>
+                </div>
+
+        </div>
+    </div>
+</section>
+<script>
+    $("#responcemessageerror").hide();
+    $( ".widgetAccordion" ).last().removeClass( "widgetForm" );
+    <?php if (isset($errorMessage)){ ?>;
+        $("#responcemessageerror").show();
+        $( ".widgetAccordion" ).last().addClass( "widgetForm" );
+    <?php } ?>
+</script>

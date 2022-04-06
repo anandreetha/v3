@@ -1,0 +1,18 @@
+<?php
+
+$this->partial('partials/v3/page/page-header');
+
+$widgetProperties = array();
+$widgetProperties["languages"] = $languages;
+$widgetProperties["domainName"] = $domainName;
+$widgetProperties['renderStaticContent'] = $renderStaticContent;
+
+if($website->getTypeId() != 3){
+    $newsSetting = $this->websiteService->getWebsiteSetting($website, $this->constants->getNewsWebsiteSettingId($website->getTypeId()));
+    $widgetProperties["orgIds"] = explode(',', $newsSetting->value);
+} else {
+    $widgetProperties["orgIds"] = explode(',',$orgIds[0]);
+}
+
+$this->widgetRenderService->renderWidgets($pageWidgets, $widgetProperties);
+$this->partial('partials/v3/footer/footer');

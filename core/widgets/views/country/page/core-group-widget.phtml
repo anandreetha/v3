@@ -1,0 +1,35 @@
+<div id="coreGroup">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script>
+    //This will make a ajax post request to the core group controller which return html and we render that in ajax response.
+    $(document).ready(function(){
+
+        var languages = <?php echo json_encode($languages) ?>;
+		
+		$.urlParam = function(name){
+			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+			if(results==null) return;
+			return results[1] || 0;			
+		}
+        
+		if($.urlParam('chapterId')){
+			var orgIds=$.urlParam('chapterId');
+		}else {
+            var orgIds = $.urlParam('coreGroupId')
+        }
+		orgIds=decodeURIComponent(orgIds);
+
+		var website_id = $('#website_id').val();
+        var mappedWidgetSettings = '<?php echo json_encode($mappedWidgetSettingsObj) ?>';
+
+        $.post("<?php echo $ajaxUrl; ?>", {orgIds:orgIds, languages:languages,mappedWidgetSettings: mappedWidgetSettings,website_id:website_id} ,function (data) {
+            $("#rssLoaderAjax").hide();
+            $("#coreGroup").html(data);
+        }).fail(function (data) {
+            window.location.href = "chapterdetail?chapterId="+ data.responseJSON.chapterId;
+        });
+    });
+
+</script>

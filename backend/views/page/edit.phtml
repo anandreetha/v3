@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-md-12">
+        <div id="success" class="alert alert-success" style="display:none">
+            <?= $this->translator->_('cms.v3.admin.editpage.pagecontentsavesuccess'); ?>
+        </div>
+        <div id="failure" class="alert alert-danger" style="display:none">
+            <?= $this->translator->_('cms.v3.admin.editpage.pagecontentsavefailure'); ?>
+        </div>
+    </div>
+</div>
+<div id="formContent">
+    <div class="row">
+        <div class="col-md-12">
+            <?php
+            $pageContent = stripslashes($pageContent);
+            $pageContent = htmlspecialchars($pageContent);
+            ?>
+            <form id="contentForm" method="post">
+                <div class="form-group">
+                    <label for="editPageEditor"><?= $this->translator->_('cms.v3.admin.editpage.pagedraftcontenttxt'); ?></label>
+                    <textarea class="form-control" name="editPageEditor"
+                              id="editPageEditor"><?php echo $pageContent; ?></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group">
+                <button id="commonLibraryBtn" name="commonLibraryBtn" type="button" class="btn btn-danger"><?= $this->translator->_('cms.v3.admin.editpage.usecommonlibrary'); ?>
+                </button>
+                <button id="siteLibraryBtn" name="siteLibraryBtn" type="button" class="btn btn-success"><?= $this->translator->_('cms.v3.admin.editpage.usesitelibrary'); ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var commonLibUrl = "<?= $this->url->get("backend/commonLibrary/browse?type=Files&fileTypeExcluded=pdf"); ?>";
+    var siteLibUrl = "<?= $this->url->get("backend/library/ckeditorbrowse/" . $websiteId . "?type=Files"); ?>";
+
+    var url = siteLibUrl;
+
+    var selectedbBtn = "site";
+
+
+    CKEDITOR.replace('editPageEditor', {
+        customConfig: '<?= $this->url->get("" . "public/js/ckconfig.js"); ?>',
+        filebrowserBrowseUrl: url,
+
+    });
+
+    function buttonToggles() {
+
+        $("#siteLibraryBtn").toggleClass('btn-success');
+        $("#siteLibraryBtn").toggleClass('btn-danger');
+        $("#commonLibraryBtn").toggleClass('btn-success');
+        $("#commonLibraryBtn").toggleClass('btn-danger');
+
+        if ($("#siteLibraryBtn").hasClass('btn-success')) {
+            selectedbBtn = "site";
+            url = siteLibUrl;
+        } else {
+            selectedbBtn = "common";
+            url = commonLibUrl;
+        }
+
+        saveContent(true);
+
+        var editor = CKEDITOR.instances['editPageEditor'];
+        if (editor) {
+            editor.destroy(true);
+        }
+
+        CKEDITOR.replace('editPageEditor', {
+            customConfig: '<?= $this->url->get("" . "public/js/ckconfig.js"); ?>',
+            filebrowserBrowseUrl: url
+
+        });
+    }
+
+    $("#commonLibraryBtn").click(function () {
+        buttonToggles();
+    });
+
+    $("#siteLibraryBtn").click(function () {
+        buttonToggles();
+    });
+
+    CKEDITOR.on('dialogDefinition', function (ev) {
+
+        var dialogName = ev.data.name;
+        var dialogDefinition = ev.data.definition;
+        var dialog = dialogDefinition.dialog;
+
+        // Listen for the link dialog opening
+        if (dialogName == 'link') {
+
+            dialog.on('show', function () {
+
+            });
+        }
+    });
+</script>

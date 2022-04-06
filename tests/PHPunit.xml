@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../public/index.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         verbose="true"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="true">
+
+    <testsuite name="Backend Controllers - Testsuite">
+        <directory>./modules/backend/controllers/</directory>
+    </testsuite>
+
+    <testsuite name="Backend Helpers - Testsuite">
+        <directory>./modules/backend/helpers/</directory>
+    </testsuite>
+
+    <testsuite name="Backend Services - Testsuite">
+        <directory>./modules/backend/services/</directory>
+    </testsuite>
+
+    <testsuite name="Backend Validators - Testsuite">
+        <directory>./modules/backend/validators/</directory>
+    </testsuite>
+
+    <testsuite name="Core Utils - Testsuite">
+        <directory>./modules/core/utils/</directory>
+    </testsuite>
+
+    <testsuite name="Core Widgets - Testsuite">
+        <directory>./modules/core/widgets/</directory>
+    </testsuite>
+
+</phpunit>

@@ -1,0 +1,15 @@
+<?php
+//$this->partial('partials/v3/page/page-header');
+$widgetProperties = array();
+$widgetProperties["languages"] = $languages;
+$widgetProperties["orgIds"] = $orgIds;
+$widgetProperties["pageMode"] = $pageMode;
+$widgetProperties['renderStaticContent'] = $renderStaticContent;
+$widgetProperties["domainName"] = $domainName;
+$widgetProperties["website"] = $website;
+
+$this->widgetRenderService->renderWidgets($pageWidgets, $widgetProperties);
+
+$this->partial('partials/v3/footer/footer');
+?>
+

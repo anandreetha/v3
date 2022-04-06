@@ -1,0 +1,42 @@
+html[dir="rtl"] #backbutton, html[dir="rtl"] .box-header>.box-tools {
+    position: absolute;
+    left: 5px;
+    right: inherit;
+}
+
+html[dir="rtl"] #websiteViewPagesDatatable tbody tr.childLevel td:first-child:after {
+    transform: scaleX(-1) rotate(180deg);
+    padding-right: 0;
+    position: relative;
+    left: -15px;
+}
+
+html[dir="rtl"] #websiteViewPagesDatatable tbody tr.grandchildLevel td:first-child:after {
+    transform: scaleX(-1) rotate(180deg);
+    padding-right: 0;
+    position: relative;
+    left: -50px;
+}
+
+html[dir="rtl"] .modal > .modal-dialog > .modal-content > .modal-footer > button.btn-danger {
+    float: right;
+}
+
+html[dir="rtl"] .modal > .modal-dialog > .modal-content > .modal-footer > button.btn-success {
+    float: left;
+}
+
+html[dir="rtl"] #websiteListDatatable_filter,
+html[dir="rtl"] #websiteViewLanguagesDatatable_filter,
+html[dir="rtl"] #websiteViewPagesDatatable_filter {
+    float: left;
+}
+
+html[dir="rtl"] #websiteListDatatable_paginate ul.pagination,
+html[dir="rtl"] #websiteViewLanguagesDatatable_paginate ul.pagination {
+    float: left;
+}
+
+html[dir="rtl"] .main-header .colLogo .bniLogo .logo-lg .logoText {
+    padding: 0px 10px 0px 0px;
+}

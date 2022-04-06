@@ -1,0 +1,87 @@
+<script src="/bnicms/v3/js/modalClose/closeModal.js"></script>
+<style>
+	.btn-group .btn-default {
+        color: #CF2030;
+    }
+
+    .btn-group .btn-default.active {
+        color: #fff;
+        background-color: #CF2030;
+    }
+</style>
+<?= $this->getContent(); ?>
+<div class="row modal-row">
+    <div class="col-md-12">
+        <form method="post">
+            <div class="form-group">
+                <label for="latestText"><?= $this->translator->_('cms.v3.admin.editpage.rsslatesttexttextheading'); ?></label>
+                <input type="text" class="form-control" name="latestText" id="latestText"
+                       value="<?php if (isset($latestText)) {
+                           echo $latestText;
+                       } ?>">
+            </div>
+            <div class="form-group">
+                <label for="latestLinkText"><?= $this->translator->_('cms.v3.admin.editpage.rsslatestlinktextheading'); ?></label>
+                <input type="text" class="form-control" name="latestLinkText" id="latestLinkText"
+                       value="<?php if (isset($latestLinkText)) {
+                           echo $latestLinkText;
+                       } ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="rssVisibility"><?= $this->translator->_('cms.v3.admin.editpage.rssvisibilitytoggletext'); ?></label>
+                <br>
+                <div class="btn-group">
+                    <button id="rssOff" type="button" data-display-select="0"
+                            class="display-select-btn btn btn-default <?php if(isset($rssVisible)){echo $rssVisible==0 ? 'active' : '';}?> "><?= $this->translator->_('cms.v3.admin.editpage.rssvisibilitytoggleoff'); ?></button>
+                    <button id="rssOn" type="button" data-display-select="1"
+                            class="display-select-btn btn btn-default <?php if(isset($rssVisible)){echo $rssVisible==1 ? 'active' : '';}?> "><?= $this->translator->_('cms.v3.admin.editpage.rssvisibilitytoggleon'); ?></button>
+                </div>
+                <input type="hidden" name="rssVisibilityInput" value="0">
+
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    if ($('#rssOff').hasClass("active")) {
+        $('input[name="rssVisibilityInput"]').attr('value', '0');
+    } else {
+        $('input[name="rssVisibilityInput"]').attr('value', '1');
+
+    }
+
+    $('#rssOff').on('click', function (e) {
+        if ($(this).hasClass("active")) {
+            $(this).removeClass("active");
+            $('#rssOn').addClass("active");
+            $('input[name="rssVisibilityInput"]').attr('value', '1');
+        } else {
+            $(this).addClass("active");
+            $('#rssOn').removeClass("active");
+            $('input[name="rssVisibilityInput"]').attr('value', '0');
+        }
+    });
+
+    $('#rssOn').on('click', function (e) {
+        if ($(this).hasClass("active")) {
+            $(this).removeClass("active");
+            $('#rssOff').addClass("active");
+            $('input[name="rssVisibilityInput"]').attr('value', '0');
+        } else {
+            $(this).addClass("active");
+            $('#rssOff').removeClass("active");
+            $('input[name="rssVisibilityInput"]').attr('value', '1');
+        }
+    });
+
+</script>
+
+<script>
+    // When the document is ready, check on intervals if the success alert is on display.
+    // If the success alert is on display then this means we've successfully completed our action and we can close the form
+    // Close modal function is highly specific to the bootstrap modal and expects some sort of successful alert in this file to process
+    $(document).ready(function () {
+        closeModal('#newWebsiteModal');
+    });
+</script>

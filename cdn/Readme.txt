@@ -1,0 +1,1 @@
+Upload to /var/www/html/cdn on the server

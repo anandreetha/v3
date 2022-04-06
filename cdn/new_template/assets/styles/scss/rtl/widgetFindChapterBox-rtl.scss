@@ -1,0 +1,182 @@
+
+/* FindChapterBox Start */
+.widgetFindChapterBox {
+    position: absolute;
+    top: 560px;
+    left: 0px;
+    width: 50%;
+    background-color: $second;
+    z-index: 9000;
+
+    
+    h1 {
+        display: block;
+        margin: 0px;
+        padding: 35px 75px;
+        color: $white !important;
+        font-size: 34px;
+        line-height: 38px;
+        font-weight: 300;
+        border-bottom: 1px solid $third;
+    }
+    
+    .contentArea {
+        display: block;
+        margin: 0px;
+        padding: 35px 75px 75px 75px;
+        background: url(../../images/findchapterbox-map.png) no-repeat right center;
+        background-size: 40%;
+        h2 {
+            display: block;
+            margin: 0px;
+            padding: 5px 0px;
+            color: $white !important;
+            font-size: 24px;
+            line-height: 28px;
+            font-weight: 500;
+        }
+        p {
+            display: block;
+            margin: 0px;
+            padding: 10px 0px;
+            color: $white !important;
+            font-size: 18px;
+            line-height: 22px;
+            font-weight: 300;
+        }
+        
+        .input-group {
+            margin-top: 20px;
+            .form-control {
+                -webkit-border-radius: 0px;
+                -moz-border-radius: 0px;
+                border-radius: 0px;
+                border: 0px solid $white;
+                font-size: 16px;
+                line-height: 22px;
+                font-weight: 400;
+                color: $grey;
+                padding: 15px;
+                height: 52px;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
+            .form-control:focus {
+                outline: none;
+                outline-style:none;
+                box-shadow:none;
+            }
+            .btn-default {
+                background-color: $white;
+                -webkit-border-radius: 0px;
+                -moz-border-radius: 0px;
+                border-radius: 0px;
+                border: 0px solid $white;
+                padding: 19px 15px 19px 2px;
+                
+                span {
+                    display: block;
+                    color: $blue;
+                    font-size: 14px !important;
+                    line-height: 14px !important;
+                    border-right: 1px solid $greyLight;
+                    padding-right: 15px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1439px) {
+    .widgetFindChapterBox {
+        top: 540px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetFindChapterBox {
+        top: 550px;
+        h1 {
+            padding: 30px 60px;
+            font-size: 32px;
+            line-height: 36px;
+        }
+        .contentArea {
+            padding: 30px 60px 70px 60px;
+            background: url(../../images/findchapterbox-map.png) no-repeat right 40px;
+            background-size: 40%;
+            h2 {
+                font-size: 22px;
+                line-height: 26px;
+            }
+            p {
+                font-size: 16px;
+                line-height: 20px;
+            }
+
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetFindChapterBox {
+        top: 400px;
+        h1 {
+            padding: 20px 50px;
+            color: $white;
+            font-size: 30px;
+            line-height: 34px;
+        }
+        .contentArea {
+            padding: 30px 50px 50px 50px;
+            background-image: none;
+            h2 {
+                font-size: 22px;
+                line-height: 26px;
+            }
+            p {
+                font-size: 16px;
+                line-height: 20px;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetFindChapterBox {
+        position: relative;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        h1 {
+            padding: 20px 30px;
+            color: $white;
+            font-size: 24px;
+            line-height: 28px;
+        }
+        .contentArea {
+            padding: 25px 30px 50px 30px;
+            background-image: none;
+            h2 {
+                font-size: 20px;
+                line-height: 24px;
+            }
+            p {
+                display: block;
+                margin: 0px;
+                padding: 10px 0px;
+                color: $white;
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: 300;
+            }
+
+            .input-group {
+                max-width: 360px;
+                margin-top: 10px;
+            }
+        }
+    }
+}
+/* FindChapterBox End */

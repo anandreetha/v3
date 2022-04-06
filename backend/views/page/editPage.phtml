@@ -1,0 +1,1119 @@
+<style>
+    .widgetFindChapterBox {
+        z-index: 0;
+    }
+</style>
+<div class="box box-default">
+
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= $pageContent->title ?></h3>
+
+        <div class="box-tools pull-right">
+            <button title="<?php echo $this->translator->_('cms.v3.admin.editpage.toggletitle'); ?>" type="button"
+                    class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
+
+
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <?= $this->getContent(); ?>
+                <?= $this->flashSession->output(); ?>
+            </div>
+        </div>
+
+        <form method="post">
+
+            <div class="row">
+                <?php
+                // These 8 settings fields are all validated, so ensure the entered value isn't lost if there's a validation error
+                $pageTitle = $this->request->isPost() ? $this->filter->sanitize($this->request->getPost("inputPageTitle"), 'string') : $pageContent->title;
+                $pageLink = $this->request->isPost() ? $this->filter->sanitize($this->request->getPost("inputPageLink"), 'string') : $pageContent->nav_name;
+                $pageOrder = $this->request->isPost() ? $this->filter->sanitize($this->request->getPost("inputPageOrder"), 'string') : $pageContent->getPage()->nav_order;
+
+                $metaTitleFromDB = isset($contentSettings["meta_title"]) ? $contentSettings["meta_title"] : $this->translator->_('cms.v3.admin.editpage.metatitleplaceholder');
+                $metaTitle = $this->request->isPost() ? $this->filter->sanitize($this->request->getPost("inputMetaTitle"), 'string') : $metaTitleFromDB;
+
+                $metaKeywordsFromDB = isset($contentSettings["meta_keywords"]) ? $contentSettings["meta_keywords"] : $this->translator->_('cms.v3.admin.editpage.metakeywordplaceholder');
+                $metaKeywords = $this->request->isPost() ? $this->filter->sanitize($this->request->getPost("inputMetaKeywords"), 'string') : $metaKeywordsFromDB;
+
+                $metaDescriptionFromDB = isset($contentSettings["meta_description"]) ? $contentSettings["meta_description"] : $this->translator->_('cms.v3.admin.editpage.metadescplaceholder');
+                $metaDescription = $this->request->isPost() ? $this->filter->sanitize($this->request->getPost("inputMetaDescription"), 'string') : $metaDescriptionFromDB;
+
+                $metaAuthorFromDB = isset($contentSettings["meta_author"]) ? $contentSettings["meta_author"] : $this->translator->_('cms.v3.admin.editpage.metaauthorplaceholder');
+                $metaAuthor = $this->request->isPost() ? $this->filter->sanitize($this->request->getPost("inputMetaAuthor"), 'string') : $metaAuthorFromDB;
+
+                $metaRobotsFromDB = isset($contentSettings["meta_robots"]) ? $contentSettings["meta_robots"] : $this->translator->_('cms.v3.admin.editpage.metarobotsplaceholder');
+                $metaRobots = $this->request->isPost() ? $this->filter->sanitize($this->request->getPost("inputMetaRobots"), 'string') : $metaRobotsFromDB;
+                ?>
+                <!-- Page title and page link -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="inputPageTitle"><?= $this->translator->_('cms.v3.admin.editpage.pagename'); ?></label>
+                        <input type="text" class="form-control" id="inputPageTitle" name="inputPageTitle"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.editpage.pagenameplaceholder'); ?>"
+                               value="<?= $pageTitle ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPageLink"><?= $this->translator->_('cms.v3.admin.editpage.pagelink'); ?></label>
+                        <?php
+                        $optionalReadonly = "";
+                        if (!$isPageOrderEditable) {
+                            $optionalReadonly = "readonly=\"readonly\"";
+                        }
+                        ?>
+                        <input type="text" class="form-control" id="inputPageLink" name="inputPageLink"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.editpage.pagelinkplaceholder'); ?>"
+                               value="<?= $pageLink ?>"
+                            <?php echo $optionalReadonly; ?>>
+                    </div>
+                </div>
+                <!-- Meta title and page order -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="inputMetaTitle"><?= $this->translator->_('cms.v3.admin.editpage.metatitle'); ?></label>
+                        <input type="text" class="form-control" id="inputMetaTitle" name="inputMetaTitle"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.editpage.metatitleplaceholder'); ?>"
+                               value="<?php echo $metaTitle; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPageOrder"><?= $this->translator->_('cms.v3.admin.editpage.pageorder'); ?></label>
+                        <?php if ($isPageOrderEditable) { ?>
+                            <input type="text" class="form-control" id="inputPageOrder" name="inputPageOrder"
+                                   placeholder="<?= $this->translator->_('cms.v3.admin.editpage.pageorderplaceholder'); ?>"
+                                   value="<?= $pageOrder ?>">
+                        <?php } elseif ($pageContent->getPage()->getTemplate() === "home") { ?>
+                            <input type="text" class="form-control" id="inputPageOrder" name="inputPageOrder" value="0"
+                                   readonly="readonly"/>
+                        <?php } 
+							elseif ($pageContent->getPage()->getTemplate() === "find-a-chapter") { ?>
+                            <input type="text" class="form-control" id="inputPageOrder" name="inputPageOrder" value="<?= $pageOrder ?>"
+                                   readonly="readonly"/>
+							<?php } else { ?>
+                            <input type="text" class="form-control" value="N/A" disabled="disabled"/>
+                            <input type="hidden" name="inputPageOrder"
+                                   value="<?= $pageContent->getPage()->nav_order ?>"/>
+                        <?php } ?>
+                    </div>
+
+                </div>
+                <!-- Meta keywords and description -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="inputMetaKeywords"><?= $this->translator->_('cms.v3.admin.editpage.metakeyword'); ?></label>
+                        <input type="text" class="form-control" id="inputMetaKeywords" name="inputMetaKeywords"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.editpage.metakeywordplaceholder'); ?>"
+                               value="<?php echo $metaKeywords; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputMetaDescription"><?= $this->translator->_('cms.v3.admin.editpage.metadesc'); ?></label>
+                        <input type="text" class="form-control" id="inputMetaDescription" name="inputMetaDescription"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.editpage.metadescplaceholder'); ?>"
+                               value="<?php echo $metaDescription; ?>">
+                    </div>
+                </div>
+                <!-- Meta author and robots -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="inputMetaAuthor"><?= $this->translator->_('cms.v3.admin.editpage.metaauthor'); ?></label>
+                        <input type="text" class="form-control" id="inputMetaAuthor" name="inputMetaAuthor"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.editpage.metaauthorplaceholder'); ?>"
+                               value="<?php echo $metaAuthor; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputMetaRobots"><?= $this->translator->_('cms.v3.admin.editpage.metarobots'); ?></label>
+                        <input type="text" class="form-control" id="inputMetaRobots" name="inputMetaRobots"
+                               placeholder="<?= $this->translator->_('cms.v3.admin.editpage.metarobotsplaceholder'); ?>"
+                               value="<?php echo $metaRobots; ?>">
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <div class="col-md-6">
+                    <?php
+                    echo $this->tag->linkTo(
+                        array(
+                            'preview/' . $pageContent->getPage()->getWebsite()->clean_domain . '/' . $this->translationUtils->normalizeLocaleCode($pageContent->Language->locale_code, false) . '/' . $pageContent->nav_name,
+                            $this->translator->_('cms.v3.admin.editpage.previewbtn'),
+                            "class" => "btn btn-default",
+                            "target" => "self"));
+                    ?>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit"
+                            class="btn btn-default <?php echo $buttonPullDirection; ?>"><?= $this->translator->_('cms.v3.admin.editpage.savebtn'); ?></button>
+                </div>
+            </div>
+    </div>
+    </form>
+    <!-- /.box-body -->
+</div>
+
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= $this->translator->_('cms.v3.admin.editpage.edittext') . " " . $pageContent->title . " " . $this->translator->_('cms.v3.admin.editpage.editpagecontentwidgetstext') ?></h3>
+        <div class="box-tools pull-right">
+            <button title="<?php echo $this->translator->_('cms.v3.admin.editpage.togglecontent'); ?>" type="button"
+                    class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+        <div class="websiteTemplate" dir="<?php echo $pageOrientation; ?>">
+
+            <div class="page">
+
+                <header>
+                    <div class="row topRow">
+                        <div class="holder">
+                            <div class="col-xs-6 col-sm-4 col-md-6 lCol">
+                                <?php
+                                if (count($languages->availableLanguages) > 1) { ?>
+                                    <ul class="menuDropdown">
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                               aria-expanded="false"><?php echo $languages->activeLanguage->descriptionKey; ?>
+                                                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <?php
+                                                foreach ($languages->availableLanguages as $lang) { ?>
+                                                    <li>
+                                                        <a href="javascript:void(0);"
+                                                           onclick="return false;"><?php echo $lang->descriptionKey; ?></a>
+                                                    </li>
+                                                <?php } ?>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <?php
+                                }
+                                ?>
+                            </div>
+                            <div class="col-xs-6 col-sm-8 col-md-6 rCol">
+                                <?php
+                                if ($website->type_id == 3) { ?>
+                                    <a href="javascript:void(0);" onclick="return false;" target="_blank"
+                                       class="hidden-xs"><?php echo isset($contentSettings['region_website_link']) ? $contentSettings['region_website_link'] : 'Regional Website'; ?></a>
+                                    <?php
+                                }
+                                ?>
+                                <a href="javascript:void(0);" onclick="return false;" target="_blank"
+                                   class="hidden-xs"><?php echo isset($contentSettings['bni_international']) ? $contentSettings['bni_international'] : 'BNI International'; ?></a>
+                                <ul class="menuDropdown">
+                                    <li class="dropdown">
+                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"
+                                           aria-expanded="false">
+                                            <?php echo isset($contentSettings['account_login']) ? $contentSettings['account_login'] : 'Account Login'; ?>
+                                            <i class="fa fa-chevron-down" onclick="return false;"
+                                               aria-hidden="true"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="javascript:void(0);" onclick="return false;" target="_blank">
+                                                    <?php echo isset($contentSettings['bni_connect']) ? $contentSettings['bni_connect'] : 'BNI Connect'; ?>
+                                                </a>
+                                            </li>
+											<li>
+                                                <a href="javascript:void(0);" onclick="return false;" target="_blank">
+                                                    <?php echo isset($contentSettings['bni_business_builder']) ? $contentSettings['bni_business_builder'] : 'BNI Business Builder'; ?>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <?php if ($pageContent->getPage()->getTemplate() === "home") { ?>
+                                    <?php echo $this->tag->linkTo(
+                                        array(
+                                            '#',
+                                            $this->translator->_('cms.v3.admin.editpage.editbtntxt'),
+                                            "class" => "editPageHeaderSettings editButtonRight",
+                                            "data-toggle" => "modal",
+                                            "data-target" => "#editPageHeaderSettingsModal",
+                                            "id" => "pageHeaderSettingsModalButton",
+                                            "data-href" => $this->url->get("backend/pagecontent/editHeaderTop/" . $pageContent->id),
+                                            "data-backdrop" => "static", "data-keyboard" => "false"
+                                        )
+                                    );
+                                    ?>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row bottomRow">
+                        <div class="holder">
+
+                            <div class="col-xs-10 col-sm-9 col-md-12 col-lg-6 colLogo">
+                                <a class="bniLogo" href="javascript:void(0);">
+                                    <span class="ico-068"></span>
+                                    <span class="texts">
+                                        <span class="name"><?= $headerStrings->name; ?></span>
+                                        <?php /*?><span class="tagline"><?= $headerStrings->tagline; ?></span><?php */?>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div class="col-xs-2 col-sm-3 col-md-12 col-lg-6 colNav">
+                                <ul>
+                                    <?php /*?><li class="hidden-xs hidden-sm active"><a href="javascript:void(0);">Home</a></li><?php */?>
+                                    <li class="hidden-xs hidden-sm"><a href="javascript:void(0);">Why BNI</a></li>
+                                    <li class="hidden-xs hidden-sm"><a href="javascript:void(0);">Find a Chapter</a>
+                                    </li>
+                                    <li class="hidden-xs hidden-sm"><a href="javascript:void(0);">News</a></li>
+                                    <li class="hidden-xs hidden-sm"><a href="javascript:void(0);">Contact</a></li>
+                                    <li class="hidden-md hidden-lg"><a href="javascript:void(0);" class="mobileMenuIcon"
+                                                                       data-toggle="mobileMenu"
+                                                                       data-target="#mobileMenu"><i
+                                                    class="fa fa-bars"></i></a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </header>
+
+
+                <?php
+                if ($pageTemplate == "home" && $sliderWidget) {
+                    $first = $sliderWidget->getFirst();
+                    ?>
+                    <section class="<?= $website->type_id != 3 ? 'widgetSlider' : 'widgetImageHeading' ?>">
+                        <div class="<?= $website->type_id != 3 ? 'holder' : 'holder chapterwebsite' ?>">
+                            <?php
+                            if ($website->type_id != 3) { ?>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="editRow">
+                                            <?php echo $this->tag->linkTo(array("backend/pagecontentwidget/edit/" . $first->id, $this->translator->_('cms.v3.admin.editpage.editsliderwidget'), "class" => "editButtonLeft")); ?>
+											
+												<div class="sliderTxtContent">
+													<?php
+														echo $this->tag->linkTo(array('#', $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "pageContentSettingsModal editButtonRight", "data-toggle" => "modal", "data-target" => "#pageContentSettingsModal", "id" => "", "data-href" => $this->url->get("backend/pagecontent/editChapterBox/" . $pageContent->id), "data-backdrop" => "static", "data-keyboard" => "false"));
+													?>																							
+													<a href="#" class="invitedLink"><?php echo isset($contentSettings["pagecontent_find_a_chapter_getinvited_button_text"]) ? $contentSettings["pagecontent_find_a_chapter_getinvited_button_text"] : "Get invited" ?></a>
+											</div>
+										</div>
+                                    </div>
+                                </div>
+                            <?php }
+                            if ($website->type_id == 3) { ?>
+                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                    <div class="editRow">
+                                        <?php
+                                        echo $this->tag->linkTo(array('#', $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "pageContentSettingsModal editButtonLeft", "data-toggle" => "modal", "data-target" => "#pageContentSettingsModal", "id" => "", "data-href" => $this->url->get("backend/pagecontent/editHeading/" . $pageContent->id), "data-backdrop" => "static", "data-keyboard" => "false"));
+                                        ?>
+                                    </div>
+                                    <h1><?php echo isset($contentSettings["pagecontent_lead_heading"]) ? $contentSettings["pagecontent_lead_heading"] : $pageContent->title ?></h1>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </section>
+
+                    <?php
+                    if ($website->type_id != 3) {
+						/*
+						?>
+                        <section class="widgetFindChapterBox">
+                            <div class="editRow">
+                                <?=
+                                $this->tag->linkTo(array('#', $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "pageContentSettingsModal editButtonRight", "data-toggle" => "modal", "data-target" => "#pageContentSettingsModal", "id" => "", "data-href" => $this->url->get("backend/pagecontent/editChapterBox/" . $pageContent->id), "data-backdrop" => "static", "data-keyboard" => "false"));
+                                ?>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <h1><?php echo isset($contentSettings["pagecontent_find_a_chapter_heading"]) ? $contentSettings["pagecontent_find_a_chapter_heading"] : "Find a Chapter" ?></h1>
+                                </div>
+                            </div>
+                            <div class="contentArea">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+                                        <h2><?php echo isset($contentSettings["pagecontent_find_a_chapter_sub_heading"]) ? $contentSettings["pagecontent_find_a_chapter_sub_heading"] : "Find a Chapter" ?></h2>
+                                        <p><?php echo isset($contentSettings["pagecontent_find_a_chapter_text_content"]) ? $contentSettings["pagecontent_find_a_chapter_text_content"] : "Find a Chapter" ?></p>
+                                        <form class="input-group" name="findChapterBox" method="get" action="#">
+                                            <input type="text" class="form-control" name="s"
+                                                   placeholder="<?php echo isset($contentSettings["pagecontent_find_a_chapter_input_text"]) ? $contentSettings["pagecontent_find_a_chapter_input_text"] : "Search for chapter" ?>"
+                                                   value="">
+                                            <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit"><span
+                                                        class="ico-048"></span></button>
+                                            </span>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <?php
+						*/
+                    } // hiding the 'find a chapter' box for chapter
+                } // only show the slider widget on the first page
+                ?>
+
+                <?php
+                if (!($website->type_id == 3 && $pageTemplate == "home")) { ?>
+                    <section class="widgetPageHeader">
+                        <div class="holder">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+								<?php if($pageTemplate!="find-a-member-detail"){?>
+                                <div class="editRow">
+                                    <?php
+                                    echo $this->tag->linkTo(array('#', $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "pageContentSettingsModal editButtonLeft", "data-toggle" => "modal", "data-target" => "#pageContentSettingsModal", "id" => "", "data-href" => $this->url->get("backend/pagecontent/editHeading/" . $pageContent->id), "data-backdrop" => "static", "data-keyboard" => "false"));
+                                    ?>
+                                </div>
+                                <h1><?php echo isset($contentSettings["pagecontent_lead_heading"]) ? $contentSettings["pagecontent_lead_heading"] : $pageContent->title ?></h1>
+								<?php } ?>
+                            </div>
+                        </div>
+                    </section>
+                <?php } ?>
+
+                <section class="pageWidgets">
+                    <div class="holder">
+
+                        <div class="headingRow">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                                    <h2><?= $this->translator->_('cms.v3.admin.editpage.managewidgetstxt'); ?></h2>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="btn-group">
+                                        <div class="btn-group">
+                                            <button type="button" class="addButton dropdown-toggle"
+                                                    data-toggle="dropdown"
+                                                    aria-expanded="false"><?= $this->translator->_('cms.v3.admin.editpage.addwidgetsbtntxt'); ?>
+                                                <i
+                                                        class="fa fa-caret-down" aria-hidden="true"></i></button>
+                                            <ul class="dropdown-menu">
+                                                <?php
+                                                foreach ($allowedWidgets as $allowedWidget) {
+                                                    $name = $allowedWidget->widget->translate_token != "" ? $this->translator->_($allowedWidget->widget->translate_token) : $allowedWidget->widget->name;
+                                                    echo "<li><a class='addWidget' data-id='" . $allowedWidget->widget->id . "' href=\"#\">" . $name . "</a></li>";
+                                                }
+                                                ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="wysiwygModal" role="dialog"
+                             aria-labelledby="wysiwygModalLabel" data-pgcid="0" data-wid="0">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button title="<?php echo $this->translator->_('cms.v3.admin.modal.closebtn'); ?>"
+                                                type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title"
+                                            id="wysiwygModalLabel"><?php echo $this->translator->_('cms.v3.admin.editpage.editcontent'); ?></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger"
+                                                data-dismiss="modal"><?= $this->translator->_('cms.v3.admin.modal.closebtn'); ?></button>
+                                        <button id="saveContentBtn" name="saveContentBtn" type="button"
+                                                class="btn btn-success"><?= $this->translator->_('cms.v3.admin.modal.savebtn'); ?></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widgetListRow">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="draggablePanelList">
+
+                                    <?php
+                                    const ALBUM = "Album";
+                                    foreach ($widgets as $widget) {
+
+                                        // Skip in this particular case
+                                        if ($pageContent->page->template == "home" && $widget->widget->name == "Slider") {
+                                            continue;
+                                        }
+                                        ?>
+
+                                        <div class="item" id="<?= $widget->id ?>">
+                                            <div class="cols">
+                                                <?php
+                                                if ($widget->widget->name == ALBUM) {
+                                                    foreach ($albumTitleArray as $widgetContentId => $title) {
+                                                        if ($widgetContentId == $widget->id) {
+                                                            ?>
+                                                            <h3><?= isset($title) && $title != "" ? $title : ($widget->widget->translate_token != "" ? $this->translator->_($widget->widget->translate_token) : $widget->widget->name) ?></h3>
+                                                        <?php }
+                                                    }
+
+                                                } else {
+                                                    ?>
+                                                    <h3><?= $widget->widget->translate_token != "" ? $this->translator->_($widget->widget->translate_token) : $widget->widget->name ?></h3>
+                                                <?php } ?>
+                                            </div>
+                                            <?php
+                                            if ($widget->widget->name == ALBUM) {
+												if($allow_access=="n"){
+                                                ?>
+                                                <div class="cols colSmall">
+                                                    <?= $this->tag->linkTo(array("backend/album/manage/" . $widget->id, '<i class="fa fa-cogs"
+                                                                               aria-hidden="true"></i>', "data-toggle" => "tooltip", "title" => $this->translator->_('cms.v3.admin.editpage.configurealbum'), "class" => "iconLink")); ?>
+                                                </div>
+                                                <?php
+												}
+                                            }
+                                            if (strtolower($widget->widget->class_name) === 'wysiwygwidget') { ?>
+                                                <?php $deletetooltip = $this->translator->_('cms.v3.admin.editpage.deletewysiwyg'); ?>
+                                                <?php $edittooltip = $this->translator->_('cms.v3.admin.editpage.editwysiwyg'); ?>
+                                                <div class="cols colSmall">
+                                                    <a class="editors iconLink fakeLinkCursor" data-toggle="modal"
+                                                       data-tooltip="true" title="<?= $edittooltip ?>"
+                                                       data-target="#wysiwygModal"
+                                                       data-pgcid="<?php echo $pageContent->id ?>"
+                                                       data-wid="<?php echo $widget->id ?>" data-backdrop="static"
+                                                       data-keyboard="false">
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                </div>
+                                            <?php } else if ($widget->widget->is_editable == 1) {
+
+                                                switch ($widget->widget_id) {
+                                                    case 8 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editalbum');
+                                                        $deletetooltip = $this->translator->_('cms.v3.admin.editpage.deletealbum');
+                                                        break;
+                                                    case 6 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.edittestimonial');
+                                                        $deletetooltip = $this->translator->_('cms.v3.admin.editpage.deletetestimonial');
+                                                        break;
+                                                    case 13 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editnewsletter');
+                                                        break;
+                                                    case 12 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.eventdetail');
+                                                        break;
+                                                    case 11 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.eventcalendar');
+                                                        break;
+                                                    case 10 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editchaptermap');
+                                                        break;
+                                                    case 15 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editregionlist');
+                                                        break;
+                                                    case 16 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editsendmessage');
+                                                        break;
+                                                    case 23 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editcoregroup');
+                                                        break;
+                                                    case 17 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editchapterdetail');
+                                                        break;
+                                                    case 18 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editchapterlist');
+                                                        break;
+                                                    case 19 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editchapterform');
+                                                        break;
+                                                    case 20 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editmemberform');
+                                                        break;
+                                                    case 21 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editmemberlist');
+                                                        break;
+                                                    case 22 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editmemberdetail');
+                                                        break;
+                                                    case 7 :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editsliderwidget');
+                                                        $deletetooltip = $this->translator->_('cms.v3.admin.editpage.deletesliderwidget');
+                                                        break;
+                                                    default :
+                                                        $edittooltip = $this->translator->_('cms.v3.admin.editpage.editwidget');
+                                                        $deletetooltip = $this->translator->_('cms.v3.admin.editpage.deletewidget');
+                                                        break;
+                                                }
+
+                                                ?>
+
+                                                <div class="cols colSmall">
+                                                    <?= $this->tag->linkTo(array("backend/pagecontentwidget/edit/" . $widget->id, '<i class="fa fa-pencil"
+                                                                               aria-hidden="true"></i>', "data-tooltip" => "true", "title" => $edittooltip, "class" => "iconLink")); ?>
+                                                </div>
+
+                                            <?php }
+                                            if ($widget->widget->is_deletable == 1) {
+                                                ?>
+                                                <div class="cols colSmall">
+                                                    <?= $this->tag->linkTo(array("#", '<i class="fa fa-trash-o" aria-hidden="true"></i>', "data-tooltip" => "true", "title" => $deletetooltip, "class" => "iconLink deleteWidget", 'data-wid' => $widget->id)); ?>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </section>
+
+                <?php
+                if (($website->type_id != 3)&&($pageTemplate != "cookiebot-declaration")) { ?>
+                    <section class="widgetBanners">
+                        <div class="holder">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="holder">
+                            <div class="col-xs-12 col-sm-5 col-md-4 col-lg-4">
+								<div class="navTwo">
+									<ul>
+                                    <li><a href="javascript:void(0);" target="_self">Find a Member <span
+                                                    class="ico-048"></span></a></li>
+                                    <li><a href="javascript:void(0);" target="_self">Regions <span
+                                                    class="ico-048"></span></a></li>
+                                    <li><a href="javascript:void(0);" target="_self">Event Calendar <span
+                                                    class="ico-048"></span></a></li>
+                                    <?php
+                                    if ($websiteType == 1) {
+                                        ?>
+                                        <li><a href="javascript:void(0);" target="_self">Newsletter <span
+                                                        class="ico-048"></span></a></li>
+                                        <?php
+                                    }
+                                    ?>
+                                    <li><a href="javascript:void(0);" target="_self">Gallery <span
+                                                    class="ico-048"></span></a></li>
+                                </ul>
+                            </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+								<div class="bannerBox">
+									<img src="<?php echo $this->config->general->cdn; ?>/images/banner_connect_findachapter.jpg">
+									<a href="javascript:;" target="_self">BNI</a>
+								</div>	
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+								<div class="bannerBox">
+                                <?php
+                                if (isset($contentSettings) && array_key_exists('podcast_custom_img_path', $contentSettings)) {
+                                    if ($contentSettings['podcast_custom_img_path'] != "default") {
+                                        ?>
+                                        <style>
+                                            .widgetBanners .podcast {
+                                                background: #4e1127 url('<?=$contentSettings['podcast_custom_img_path']?>') no-repeat center center;
+                                                background-size: cover;
+                                            }
+                                        </style>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                                <img src="<?=$contentSettings['podcast_custom_img_path']?>">
+                                 <a href="javascript:;" target="_blank"><?php echo isset($contentSettings["pod_cast_content_title"]) ? $contentSettings["pod_cast_content_title"] : "Podcast" ?></a></a>
+                                <?php if ($enableEditFooter) {
+                                    ?>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="editRow">
+                                            <?=
+                                            $this->tag->linkTo(array("backend/pagecontent/editPodcast/" . $pageContent->id, $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "editButtonLeft"));
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+								</div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+								<div class="bannerBox">
+                                <?php
+                                if (isset($contentSettings) && array_key_exists('foundation_custom_img_path', $contentSettings)) {
+                                    if ($contentSettings['foundation_custom_img_path'] != "default") {
+                                        ?>
+                                        <style>
+                                            .widgetBanners .foundation {
+                                                background: #4e1127 url('<?=$contentSettings['foundation_custom_img_path']?>') no-repeat center center;
+                                                background-size: cover;
+                                            }
+                                        </style>
+                                        <?php
+                                    }
+                                }
+                                ?>
+								<img src="<?=$contentSettings['foundation_custom_img_path']?>">
+								<a href="javascript:;" target="_blank"><?php echo isset($contentSettings["foundation_content_title"]) ? $contentSettings["foundation_content_title"] : "Foundation" ?></a>
+                                <?php if ($enableEditFooter) {
+                                    ?>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="editRow">
+                                            <?=
+                                            $this->tag->linkTo(array("backend/pagecontent/editFoundation/" . $pageContent->id, $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "editButtonLeft"));
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+								</div>
+                            </div>
+							
+							<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+								<div class="bannerBox">
+									<img src="<?=$contentSettings['bniu_custom_img_path']?>">
+									<a href="javascript:;" target="_blank" target="_blank"><?php echo isset($contentSettings["bniu_content_title"]) ? $contentSettings["bniu_content_title"] : "BNI University" ?></a>
+									<?php if ($enableEditFooter) {
+                                    ?>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="editRow">
+                                            <?=
+                                            $this->tag->linkTo(array("backend/pagecontent/editBniu/" . $pageContent->id, $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "editButtonLeft"));
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+								</div>	
+							</div>
+							
+                        </div>
+                    </section>
+                <?php }
+
+                if ($enableRss === true) { ?>
+                    <section class="widgetBniFeed">
+                        <div class="holder">
+                            <div class="topRow">
+                                <div class="col-xs-12">
+                                    <div class="editRow">
+                                        <?php
+                                        echo $this->tag->linkTo(array('#', $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "pageContentSettingsModal editButtonLeft", "data-toggle" => "modal", "data-target" => "#pageContentSettingsModal", "id" => "", "data-href" => $this->url->get("backend/pagecontent/editFeed/" . $pageContent->id), "data-backdrop" => "static", "data-keyboard" => "false"));
+                                        ?>
+                                    </div>
+                                    <p><?php echo isset($contentSettings["pagecontent_latest_text"]) ? $contentSettings["pagecontent_latest_text"] : "The Latest From BNI" ?>
+                                        <a href="javascript:void(0);"
+                                           target="_blank"
+                                           onclick="return false;"><?php echo isset($contentSettings["pagecontent_latest_link_text"]) ? $contentSettings["pagecontent_latest_link_text"] : "View All" ?>
+                                            <span class="ico-048"></span></a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                <?php }
+
+                if ($enableNewsletter === true && $websiteType == 1) { ?>
+                    <section class="widgetNewsLetterBox">
+                        <div class="holder">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="editRow">
+                                    <?=
+                                    $this->tag->linkTo(array('#', $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "pageContentSettingsModal editButtonLeft", "data-toggle" => "modal", "data-target" => "#pageContentSettingsModal", "id" => "", "data-href" => $this->url->get("backend/pagecontent/editNewsletter/" . $pageContent->id), "data-backdrop" => "static", "data-keyboard" => "false"));
+                                    ?>                            </div>
+                            </div>
+                        </div>
+                        <div class="holder">
+							<div class="newsLetterOuter">
+								<div class="newsLetterLeft">
+									<img src="<?php echo $this->config->general->cdn;?>/new_template/assets/images/newspaperImg.png" alt="<?php echo isset($contentSettings["pagecontent_newsletter_alt"]) ? $contentSettings["pagecontent_newsletter_alt"] : "Newsletter" ?>">
+                            </div>
+								<div class="newsLetterRight">
+									<h2><?php echo isset($contentSettings["pagecontent_newsletter_title"]) ? $contentSettings["pagecontent_newsletter_title"] : "Newsletter" ?></h2>
+									<p>
+										<?php echo isset($contentSettings["pagecontent_newsletter_text"]) ? $contentSettings["pagecontent_newsletter_text"] : "Subscribe to our newsletter for exclusive tips on networking, public speaking and business." ?>
+									</p>
+                                <form class="input-group" name="newsLetterSubscribeBox" method="get"
+                                      action="javascript:void(0);">
+										<div class="inputOuter">
+                                    <input type="email" class="form-control" name="email"
+                                           placeholder="<?php echo isset($contentSettings["pagecontent_newsletter_input_text"]) ? $contentSettings["pagecontent_newsletter_input_text"] : "Your email address" ?>"
+                                           value="">
+											<div class="btnOuter">
+												<button class="btn btn-default" type="submit">
+													<span>
+														<svg class="icon-redarrow" xmlns="http://www.w3.org/2000/svg" width="25.967" height="26.7" viewBox="0 0 25.967 26.7">
+														  <g data-name="Group 261" transform="translate(-1732.5 -1677.672)">
+															<path data-name="Path 40" class="cls-1" d="M1757.443,1680.379l10.521,10.521-10.521,10.521" transform="translate(-11.498 0.121)"></path>
+															<line data-name="Line 19" class="cls-2" x1="21.857" transform="translate(1734.5 1690.87)"></line>
+														  </g>
+														</svg>
+                                    </span>
+												</button>
+											</div>
+										</div>	
+                                </form>
+                            </div>
+							</div>
+                           
+                        </div>
+                    </section>
+                <?php }
+                ?>
+
+                <!-- Cookie policy -->
+                <?php
+
+                if ($pageTemplate == "home") {
+                    ?>
+                    <div class="widgetCookiePolicyBox"
+                         style="display: block; margin: 0px;padding: 80px 0px;overflow: hidden; background-color: #CF2030;border-color: #4e1127;border-style: solid; border-width: 1px;">
+                        <div class="holder">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="editRow">
+                                    <p>
+                                        <?=
+                                        $this->tag->linkTo(
+                                            array('#', $this->translator->_('cms.v3.admin.editpage.editbtntxt'), "class" => "pageContentSettingsModal editButtonLeft", "data-toggle" => "modal", "data-target" => "#pageContentSettingsModal", "id" => "", "data-href" => $this->url->get("backend/pagecontent/editCookiePolicy/" . $pageContent->id), "data-backdrop" => "static", "data-keyboard" => "false"));
+                                        ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="holder">
+                            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
+                                <p style="color: #ffffff;font-size: 16px;line-height: 1.5em;"><?php echo isset($contentSettings["Cookie policy message text"]) ? $contentSettings["Cookie policy message text"] : "By continuing to use this website, you consent to the use of cookies in accordance with our "; ?>
+                                    <a href="javascript:void(0);" target="_blank"
+                                       onclick="return false;"><?php echo isset($contentSettings["Cookie policy link text"]) ? $contentSettings["Cookie policy link text"] : "Cookie Policy."; ?></a>
+                                </p>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-5">
+                                <div class="pull-right">
+                                    <button type="button" style="border-radius: 5px; word-break: break-word; white-space: normal;" class="btn btn-default">
+                                        <strong><?php echo isset($contentSettings["Cookie policy button text"]) ? $contentSettings["Cookie policy button text"] : "I understand"; ?></strong>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                } ?>
+
+                <?php
+                if ($website->type_id != 3) { ?>
+                <footer>
+                    <div class="navRow">
+                        <div class="holder">
+
+                            <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 navCol">
+                                <ul class="navLinks">
+                                    <li><a href="javascript:void(0);" target="_self">Home</a></li>
+                                    <li><a href="javascript:void(0);" target="_self">Why BNI</a></li>
+                                    <li><a href="javascript:void(0);" target="_self">Find a Chapter</a></li>
+                                    <li><a href="javascript:void(0);" target="_self">News</a></li>
+                                    <li><a href="javascript:void(0);" target="_self">Contact Us</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 navCol navColTwo">
+                                <ul class="navLinks">
+                                    <li><a href="javascript:void(0);" target="_self">Find a Member</a></li>
+                                    <li><a href="javascript:void(0);" target="_self">Regions</a></li>
+                                    <li><a href="javascript:void(0);" target="_self">Event Calendar</a></li>
+                                    <?php
+                                    if ($websiteType == 1) {
+                                        ?>
+                                        <li><a href="javascript:void(0);" target="_self">Newsletter</a></li>
+                                        <?php
+                                    }
+                                    ?>
+                                    <li><a href="javascript:void(0);" target="_self">Gallery</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 socialCol">
+                                <?php
+                                // Users social media javascript to be executed here, with accompanying html (if any)
+                                foreach ($website->websiteSettings as $websetting) {
+                                    if ($websetting->getSettingsId() == '123') {
+                                        echo $this->renderService->convertHexToAscii($websetting->getValue());
+                                    } else if ($websetting->getSettingsId() === '230') {
+                                        echo html_entity_decode($websetting->getValue(), ENT_QUOTES | ENT_XML1, 'UTF-8');
+                                    }
+                                }
+                                ?>
+
+                            </div>
+
+                        </div>
+                    </div>
+            </div>
+
+
+            <div class="copyrightRow">
+                <div class="holder">
+                    <div class="col-xs-12">
+                        <p><strong>&copy; <?php echo date('Y'); ?> BNI Global LLC.</strong> All Rights Reserved. All
+                            company names, product names logos included here may be registered trademarks or service
+                            marks of their respective owners.</p>
+                    </div>
+                </div>
+            </div>
+
+            </footer>
+
+            <?php } ?>
+
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Edit page content modal -->
+<?php $this->partial('partials/admin/modal', [
+    'title' => $this->translator->_('cms.v3.admin.editpage.editpagecontentmodaltitle'),
+    'iframeId' => 'editPageModalIFrame',
+    'wrapperId' => 'editPageModal',
+    'successButtonId' => 'editPageModalSubmit',
+    'modalBodyHeight' => '435px'
+]); ?>
+
+<!-- Edit page content modal -->
+<?php $this->partial('partials/admin/modal', [
+    'title' => $this->translator->_('cms.v3.admin.editpage.pageeditgeneralsettingsmodaltitletxt'),
+    'iframeId' => 'pageContentSettingsIFrame',
+    'wrapperId' => 'pageContentSettingsModal',
+    'successButtonId' => 'pageContentSettingsModalSubmit',
+    'modalBodyHeight' => '435px'
+]); ?>
+
+<!-- Edit header modal -->
+<?php $this->partial('partials/admin/modal', [
+    'title' => $this->translator->_('cms.v3.admin.editpage.pageeditheadersettingsmodaltitletxt'),
+    'iframeId' => 'editPageHeaderSettingsIFrame',
+    'wrapperId' => 'editPageHeaderSettingsModal',
+    'successButtonId' => 'editPageHeaderSettingsSubmit',
+    'modalBodyHeight' => '400px'
+]); ?>
+
+<div style="display:none">
+    <!-- Manage Widgets/Content cloneable list item -->
+    <?php $this->partial('partials/admin/widgetTestimonialListItem'); ?>
+    <?php $this->partial('partials/admin/widgetWYSIWYGListItem'); ?>
+    <?php $this->partial('partials/admin/albumListItem'); ?>
+</div>
+
+<script>
+    var selectedWysiwyg = '';
+    var editUrl = '<?php echo $this->url->get('backend/page/edit/') ?>';
+    var editAjaxUrl = '<?php echo $this->url->get('backend/page/editAjaxHandler/') ?>';
+
+    // Load the page header settings modal
+    $(".editPageHeaderSettings").on("click", function () {
+        var frameSrc = $(this).data("href");
+        $('#editPageHeaderSettingsModal iframe').attr("src", frameSrc);
+    });
+
+    // Submit the page header settings modal
+    $('#editPageHeaderSettingsSubmit').on('click', function (e) {
+        e.preventDefault();
+        submitModal('editPageHeaderSettingsIFrame');
+    });
+
+    // Load the page content settings modal
+    $(".pageContentSettingsModal").on("click", function () {
+        var frameSrc = $(this).data("href");
+        $('#pageContentSettingsModal iframe').attr("src", frameSrc);
+    });
+
+
+    // Save the page content settings modal
+    $('#pageContentSettingsModalSubmit').on('click', function (e) {
+        e.preventDefault();
+        submitModal('pageContentSettingsIFrame');
+    });
+
+    $("#pageContentSettingsModal").on("hidden.bs.modal", function () {
+        $('#pageContentSettingsModal iframe').attr("src", "");
+    });
+
+    $('#editPageModalSubmit').on('click', function (e) {
+        e.preventDefault();
+        submitModal('editPageModalIFrame');
+
+    });
+
+    $(".dropdown-menu li a").on("click", function () {
+
+        var selectedWidget = $(this).data("id");
+
+        $.ajax({
+            url: "<?php echo $this->config->general->baseUri . "backend/pagecontentwidget/addAjax/" . $pageContent->id; ?>",
+            async: false,
+            type: 'POST',
+            data: {newWebsiteWidget: selectedWidget},
+            success: function (data) {
+
+                if (data.pageContentWidget.widgetId === '8') {
+
+                    var albumWidgetListItemHtml = $('#album-ui-sortable-handle-cloneable').clone().html();
+                    var completeAlbumListHtml = albumWidgetListItemHtml.replace(/_PAGE_CONTENT_WIDGET_ID_/g, data.pageContentWidget.id);
+                    // Append the album list html but with a fancy fade in animation
+                    $(completeAlbumListHtml).hide().appendTo('.ui-sortable').fadeIn();
+
+                } else if (data.pageContentWidget.widgetId === '6') {
+
+                    var testimonialWidgetListItemHtml = $('#testimonial-ui-sortable-handle-cloneable').clone().html();
+                    var testimonialCompleteListItemHtml = testimonialWidgetListItemHtml.replace(/_PAGE_CONTENT_WIDGET_ID_/g, data.pageContentWidget.id);
+                    // Append the completeListHtml but with a fancy fade in animation
+                    $(testimonialCompleteListItemHtml).hide().appendTo('.ui-sortable').fadeIn();
+
+                } else if (data.pageContentWidget.widgetId === '5') {
+
+                    var widgetListItemHtml = $('#wysiwyg-ui-sortable-handle-cloneable').clone().html();
+                    var completeListItemHtml = widgetListItemHtml.replace(/_PAGE_CONTENT_WIDGET_ID_/g, data.pageContentWidget.id);
+                    var finalHtml = completeListItemHtml.replace(/_PAGE_CONTENT_ID_/g, data.pageContentWidget.pageContentId);
+                    // Append the completeListHtml but with a fancy fade in animation
+                    $(finalHtml).hide().appendTo('.ui-sortable').fadeIn();
+
+                }
+                else {
+                    // If we've any other widgets that we've missed
+                    // Just reload the page like how it worked before.
+                    location.reload();
+                }
+            }
+        });
+
+    });
+
+    /**
+     * Use event delegation on the deleteWidget class incase
+     * we're trying to delete a list item that's been added dynamically
+     */
+    $('#draggablePanelList').on('click', '.deleteWidget', function (e) {
+        e.preventDefault();
+
+        if (confirm('<?php echo $this->translator->_('cms.v3.admin.editpage.deletewidgetconfirm') ?>')) {
+            var deleteButton = $(this);
+
+            // Get the base URL from PhalconPHP framework and the data attribute from the html
+            var url = "<?php echo $this->config->general->baseUri . 'backend/pagecontentwidget/delete/' ?>" + $(this).data('wid');
+
+            $.get(url, function (data) {
+                // TODO: Do we need to alter the user, it didn't previously
+            }).done(function (data) {
+                // Find the parent element (the closest by class) to the current button we've clicked
+                $(deleteButton).closest('.ui-sortable-handle').fadeOut();
+            })
+        } else {
+            // The user pressed Cancel, so prevent the link from opening
+            e.preventDefault();
+        }
+
+
+    });
+
+    $('#draggablePanelList').sortable({
+        update: function (event, ui) {
+            var widget_items = [];
+            $('#draggablePanelList').find('.item').each(function () {
+                widget_items.push($(this).attr("id"));
+            });
+
+            $.ajax({
+                url: "<?php echo $this->config->general->baseUri . 'backend/pagecontentwidget/manageWidgetOrderAjax/'; ?>",
+                method: "POST",
+                data: {
+                    items: widget_items
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
+    });
+
+    /**
+     * editors class can have elements added dynamically
+     * which means we won't have any binding
+     * Use event delegation from the nearest element, in our case
+     * the draggablePanelList parent to attach a single event listener
+     * that will fire for descendants matching the selector (.editors)
+     */
+    $('#draggablePanelList').on('click', '.editors', function () {
+        var pgcid = $(this).data("pgcid");
+        var wid = $(this).data("wid");
+
+        $("#wysiwygModal").data("pgcid", pgcid);
+        $("#wysiwygModal").data("wid", wid);
+
+        selectedWysiwyg = editAjaxUrl + pgcid + "/" + wid;
+    });
+
+    $("#wysiwygModal").on("show.bs.modal", function (e) {
+
+
+        var url = editUrl + $(this).data("pgcid") + "/" + $(this).data("wid");
+        $.ajax({
+            type: 'get',
+            url: url,
+            dataType: 'html',
+            async: false,
+            success: function (data) {
+                $("#wysiwygModal .modal-body").html(data);
+            }
+        });
+    });
+
+    $("#wysiwygModal").on("hidden.bs.modal", function (e) {
+        $("#wysiwygModal .modal-body").html("");
+        selectedWysiwyg = "";
+    });
+
+    $('.addWidget').on('click', function (e) {
+        e.preventDefault();
+    });
+
+
+    function saveContent(flag) {
+
+        // If flag is not defined then set it to false, if it is defined then leave it alone bro
+        if (flag === undefined) {
+            flag = false;
+        }
+
+        CKEDITOR.instances.editPageEditor.updateElement();
+        var formData = $("#contentForm").serialize();
+
+        $.ajax({
+            type: 'post',
+            url: selectedWysiwyg,
+            data: formData,
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                if (flag === false) {
+                    if (data.success == true) {
+                        $("#success").show();
+                        $("#failure").hide();
+                    } else {
+                        $("#failure").show();
+                        $("#success").hide();
+                    }
+
+                    $("#formContent").hide();
+
+                    setTimeout(function () {
+                        $('#wysiwygModal').modal('hide')
+                    }, 2000);
+                }
+            }
+
+        });
+    }
+
+    $("#saveContentBtn").on("click", function (e) {
+        saveContent();
+    });
+
+</script>
+
+
+

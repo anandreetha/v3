@@ -1,0 +1,114 @@
+<section class="widgetAccordion">
+    <div class="holder">
+        <p id="responcemessageerror" align="center" style="display: none; margin-top:10px;"><?php echo isset($errorMessage)? $errorMessage :"" ?></p>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="panel-group" id="accordion">
+
+                <?php
+                if(!isset($errorMessage)) {
+					$i=1;
+                    foreach ($jsonResponse as $row) {
+                        $uniqueId = strtolower(preg_replace('/\PL/u', '', isset($row->countryName) ? $row->countryName : $row->regionName));
+						$uniqueId='contact_'.$i;
+                        ?>
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#<?= $uniqueId; ?>"
+                                   class="collapsed"
+                                   aria-expanded="false"><?= isset($row->countryName) ? $row->countryName : $row->regionName ?></a>
+                            </div>
+
+                            <div id="<?= $uniqueId; ?>" class="panel-collapse collapse" aria-expanded="false"
+                                 style="height: 0px;">
+                                <div class="panel-body">
+                                    <div class="contactDetailsRow">
+                                        <div class="col-sm-12 col-md-4 col-lg-4">
+                                            <?= isset($row->orgCountryAddress) ? $row->orgCountryAddress : $row->orgRegionAddress; ?>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-4 col-lg-4">
+                                            <?php if (!empty(isset($row->orgCountryPhone) ? $row->orgCountryPhone : $row->orgRegionPhone)) { ?>
+                                                <p><i class="fa fa-phone" aria-hidden="true"></i>
+                                                	<bdi><?= isset($row->orgCountryPhone) ? $row->orgCountryPhone : $row->orgRegionPhone; ?></bdi>
+                                                </p>
+                                            <?php }
+
+                                            if (!empty(isset($row->orgCountryFax) ? $row->orgCountryFax : $row->orgRegionFax)) { ?>
+                                                <p><i class="fa fa-fax"
+                                                      aria-hidden="true"></i> <?= isset($row->orgCountryFax) ? $row->orgCountryFax : $row->orgRegionFax ?>
+                                                </p>
+                                            <?php } ?>
+                                        </div>
+
+                                        <?php if (isset($row->orgCountryEmailPresent) ? $row->orgCountryEmailPresent : $row->orgRegionEmailPresent) { ?>
+                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                <p>
+                                                    <a href="sendmessage<?= isset($row->orgCountryEmail) ? $row->orgCountryEmail : $row->orgRegionEmail; ?>"
+                                                       class="iconEmail"><i class="fa fa-envelope-o"
+                                                                            data-toggle='tooltip'
+                                                                            title='<?php echo $this->translator->_('cms.v3.admin.editpage.sendmessage') ?>'
+                                                                            aria-hidden="true"></i></a></p>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+
+                                    <div class="contactLeadershipRow">
+                                        <?php
+                                        foreach ($row->aaData as $lt) { // lt = leadership team, AKA a member of a chapter who forms the LT within that chapter) ?>
+                                            <div class="card">
+                                                <div class="inside">
+                                                    <?php if (!empty($lt->directorProfileUrl)) { ?>
+                                                    <p><a href="memberdetails<?= $lt->directorProfileUrl; ?>"
+                                                          class="linkName">
+                                                            <em title="<?= $lt->name ?>" style="font-style: normal;"><?= $lt->name ?></em>
+                                                            <span class="ltPosition"><?= $lt->position ?></span></a>
+                                                        <?php } else { ?>
+                                                            <strong><?= $lt->name ?></strong>
+                                                        <?php } ?>
+
+                                                        <?php if (!empty($lt->phone)) { ?>
+                                                        <i class="fa fa-phone"
+                                                           aria-hidden="true"></i><bdi> <?= $lt->phone; ?></bdi></p>
+                                                <?php } ?>
+
+                                                    <?php if (!empty($lt->email)) { ?>
+                                                        <a href="sendmessage<?= $lt->email; ?>" class="iconEmail"><i
+                                                                    class="fa fa-envelope-o" data-toggle='tooltip'
+                                                                    title='<?php echo $this->translator->_('cms.v3.admin.editpage.sendmessage') ?>'
+                                                                    aria-hidden="true"></i></a>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php 
+						$i++;
+					}
+                }?>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $("#responcemessageerror").hide();
+    <?php if (isset($errorMessage)){ ?>
+        $("#responcemessageerror").show();
+        $( ".widgetAccordion" ).last().addClass( "widgetForm" );
+    <?php } else {?>
+            <?php if(count($jsonResponse) == 1){?>
+            $('#accordion .collapse').collapse('show');
+            <?php
+            }else{?>
+            $('#accordion .collapse').collapse('hide');
+            <?php
+            }
+        }
+    ?>
+
+
+</script>

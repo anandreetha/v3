@@ -1,0 +1,29 @@
+<section class="widgetTestimonial">
+    <div class="holder">
+		<div class="textmonialInner">
+			<?php
+				$imgarr=array("testimonial-001.jpg","testimonial-002.jpg","testimonial-003.jpg");
+				$rkeys=array_rand($imgarr,1);
+				$imgbox=$imgarr[$rkeys];
+			?>
+			<div class="imageBox"><img loading="lazy" src="<?php echo $this->config->general->cdn."/new_template/assets/images/".$imgbox;?>" alt="Testimonial image"></div>
+			<div class="textBox">
+				<?php if($widgetSettings != null){?>
+				<h3><?php
+					if(property_exists ($widgetSettings[0],'value')){
+						$testimonial_val=str_replace('"','',$widgetSettings[0]->value);
+						echo '“'.$testimonial_val.'”';
+					} ?></h3>
+				<p>
+				   <a href="<?= property_exists ($widgetSettings[4],'value') ? $widgetSettings[4]->value : ""; ?>" target="_blank" class="story"><?= property_exists ($widgetSettings[1],'value') ? $widgetSettings[1]->value : ""; ?></a>
+				</p>
+				<p>	
+				   <?= property_exists ($widgetSettings[2],'value') ? $widgetSettings[2]->value : ""; ?>
+				   <span><a href="<?= property_exists ($widgetSettings[5],'value') ? $widgetSettings[5]->value : ""; ?>" target="_blank"><?= property_exists ($widgetSettings[3],'value') ? $widgetSettings[3]->value : ""; ?></a></span>
+				</p>
+				<?php }?>
+
+			</div>
+		</div>	
+    </div>
+</section>

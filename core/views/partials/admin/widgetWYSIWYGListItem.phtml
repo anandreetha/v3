@@ -1,0 +1,20 @@
+<?php // _PAGECONTENTID_ will be replaced with an an actual page content using JavaScript.  ?>
+<?php // We're loading this partial to clone this HTML via javascript to append onto the end of the 'Manage Widgets/Content list'  ?>
+<?php // This will avoid the refresh (or flickering) screen that our darling QA team refer to.  ?>
+<div id="wysiwyg-ui-sortable-handle-cloneable">
+    <div class="item ui-sortable-handle" id="_PAGE_CONTENT_WIDGET_ID_">
+        <div class="cols">
+            <h3><?php echo $this->translator->_('cms.v3.admin.widget.wysiwygwidget'); ?></h3>
+        </div>
+
+        <div class="cols colSmall">
+            <a class="editors iconLink fakeLinkCursor" data-toggle="modal" data-target="#wysiwygModal"
+               data-pgcid="_PAGE_CONTENT_ID_" data-wid="_PAGE_CONTENT_WIDGET_ID_"
+               title="<?php echo $this->translator->_('cms.v3.admin.editpage.editwysiwyg'); ?>" data-backdrop="static"
+               data-keyboard="false"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+        </div>
+        <div class="cols colSmall">
+            <a href="#" data-wid="_PAGE_CONTENT_WIDGET_ID_" class="iconLink deleteWidget" title="<?php echo $this->translator->_('cms.v3.admin.editpage.deletewysiwyg') ?>"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+        </div>
+    </div>
+</div>

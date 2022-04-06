@@ -1,0 +1,20 @@
+<div id="chapterForming">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script>
+    //This will make a ajax post request to the chapter forming controller which return html and we render that in ajax response.
+    $(function () {
+        var languages = <?php echo json_encode($languages) ?>;
+        var regionIds = <?php echo json_encode($regionIds) ?>;
+        var mappedWidgetSettings = '<?php echo json_encode($mappedWidgetSettingsObj) ?>';
+        var url = "<?php echo $ajaxUrl; ?>";
+        $.post(url, {languages:languages,
+            regionIds:regionIds,
+            mappedWidgetSettings:mappedWidgetSettings},function (data) {
+            $("#rssLoaderAjax").hide();
+            $("#chapterForming").html(data);
+        });
+    });
+
+</script>

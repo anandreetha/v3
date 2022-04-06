@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CKEditor</title>
+    <script src="https://cdn.ckeditor.com/4.7.2/standard/ckeditor.js"></script>
+</head>
+<body>
+
+<?php
+header('X-XSS-Protection:0');
+
+dump($pre);
+
+dump($cleaned);
+
+?>
+
+<form method="post">
+
+<textarea name="editor1"><?php echo $cleaned; ?></textarea>
+<script>
+    CKEDITOR.replace( 'editor1' );
+</script>
+
+    <input type="submit" value="Save" />
+
+</form>
+</body>
+</html>

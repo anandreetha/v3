@@ -1,0 +1,294 @@
+<div class="box box-file-manager">
+    <div class="box-body">
+        <div class="row" id="alertArea">
+
+            <div id="activeConnections" class="alert alert-warning" style="display: none"></div>
+            <div id="active" style="display: none"></div>
+            <ul id="successMessagelist" class="alert alert-success"></ul>
+            <ul id="errorMessagelist" class="alert alert-danger"></ul>
+            <div id="clientSideAlert" class="alert alert-danger"
+                 style="display: none"
+                 data-file-size-warning="<?php echo $this->translator->_('cms.v3.admin.gallery.maxfilesizewarning'); ?>"
+                 data-file-type-warning="<?php echo $this->translator->_('cms.v3.admin.gallery.filetypewarning'); ?>"></div>
+            <div class="col-xs-12 col-sm-4 col-md-2">
+                <div class="list-group">
+                    <a id="images" class="list-group-item active" href="#" onclick="return changeTabFilter(this.id);"><i
+                                class="fa fa-folder-o fa-fw" aria-hidden="true"></i><?= $this->translator->_('cms.v3.admin.library.images'); ?></a>
+                    <a id="documents" class="list-group-item" href="#" onclick="return changeTabFilter(this.id);"><i
+                                class="fa fa-folder-o fa-fw" aria-hidden="true"></i><?= $this->translator->_('cms.v3.admin.library.documents'); ?></a>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12 col-sm-8 col-md-10 right-column">
+                <div class="toolbar">
+                    <div class="btn-group">
+                        <?php echo $this->tag->linkTo(array('#', '<i class="fa fa-plus"></i> ' . $this->translator->_('cms.v3.admin.library.upload'), "class" => "newLibraryItemModal btn btn-default", "data-toggle" => "modal", "data-target" => "#newLibraryItemModal", "data-href" => $this->url->get('backend/library/manage/' . $website->id), "data-backdrop" => "static", "data-keyboard" => "false")); ?>
+                        <?php echo $this->tag->linkTo(array('backend/website/view/' . $website->id . '#', '<i class="fa fa-trash-o"></i> '.$this->translator->_('cms.v3.admin.library.delete'), "id" => "delete", "class" => " btn btn-default", "data-toggle" => "", "data-target" => "")); ?>
+                        <?php echo $this->tag->linkTo(array('backend/website/view/' . $website->id . '#', '<i class="fa fa-pencil"></i> '.$this->translator->_('cms.v3.admin.library.rename'), "id" => "rename", "class" => " btn btn-default", "data-toggle" => "", "data-target" => "")); ?>
+                        <?php echo $this->tag->linkTo(array('backend/website/view/' . $website->id . '#', '<i class="fa fa-times-circle-o"></i> '.$this->translator->_('cms.v3.admin.library.cancel'), "id" => "cancel", "class" => " btn btn-default", "data-toggle" => "", "data-target" => "", "style" => "display: none")); ?>
+                        <?php echo $this->tag->linkTo(array('backend/website/view/' . $website->id . '#', '<i class="fa fa-floppy-o"></i> '.$this->translator->_('cms.v3.admin.library.save'), "id" => "save", "class" => " btn btn-default", "data-toggle" => "", "data-target" => "", "style" => "display: none")); ?>
+                    </div>
+                </div>
+
+                <?php $this->partial('partials/admin/fileViewer'); ?>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="box-footer">
+        <div class="notification alert-warning">
+            <h4><?= $this->translator->_('cms.v3.admin.library.note'); ?></h4>
+            <p><?= $this->translator->_('cms.v3.admin.library.supportedimgformats'); ?> JPEG, PNG, GIF</p>
+            <p><?= $this->translator->_('cms.v3.admin.library.supporteddocformats'); ?> PDF</p>
+            <p><?= $this->translator->_('cms.v3.admin.library.maxfilesize'); ?> 10MB</p>
+        </div>
+    </div>
+</div>
+
+
+<?php $this->partial('partials/admin/modal', [
+    'title' => $this->translator->_('cms.v3.admin.library.uploadfiles'),
+    'iframeId' => 'newLibraryItemIFrame',
+    'wrapperId' => 'newLibraryItemModal',
+    'successButtonId' => 'newLibraryItemButton',
+    'modalBodyHeight' => '500px'
+]); ?>
+
+<script>
+    $("#errorMessagelist").hide();
+    $("#successMessagelist").hide();
+    $.getUrlParamHelper = function (name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return decodeURI(results[1]) || 0;
+        }
+    };
+    var selectedLibrary = $.getUrlParamHelper('sel');
+
+    if (selectedLibrary !== null) {
+        if (selectedLibrary === "img") {
+            changeTabFilter("images");
+        }
+
+        if (selectedLibrary === "doc") {
+            changeTabFilter("documents");
+        }
+    }
+
+    var uploadedImage = false;
+
+    function refreshPage() {
+        if (uploadedImage) {
+            location.reload();
+        }
+    }
+
+    $(".btn.btn-danger").on('click', function () {
+        refreshPage();
+    });
+    $(".close").on('click', function () {
+        refreshPage();
+    });
+
+    $(".newLibraryItemModal").on("click", function () {
+        var frameSrc = $(this).data("href");
+        $('#newLibraryItemModal iframe').attr("src", frameSrc);
+    });
+
+    $('#newLibraryItemButton').on('click', function (e) {
+        e.preventDefault();
+        uploadedImage = true;
+        submitModal('newLibraryItemIFrame', undefined, function () {
+            // get iframe
+            var iframeElement = document.getElementById('newLibraryItemIFrame').contentWindow.document;
+            var iframeArray = iframeElement.getElementsByTagName('form');
+
+            // Hide the client side alert, so we don't have duplicate alert boxes
+            $(iframeElement).find("#clientSideAlert").hide();
+            var inputFiles = iframeArray[0][0].files;
+            var formData;
+            numberOfImagesRequiredToUpload = inputFiles.length;
+            // Remove on click once an image has been uploaded
+            if (numberOfImagesRequiredToUpload > 0) {
+                $('#newLibraryItemButton').attr("disabled", true);
+            }
+
+            var type = $(".list-group-item.active").attr("id");
+            // Loop around all files to upload and create a ajax for each file
+            for (var i = 0; i < inputFiles.length; i++) {
+                if (inputFiles[i].size <= 10485760) {
+                    formData = new FormData;
+                    formData.append('file[]', inputFiles[i]);
+                    //submit via ajax
+                    ajaxCall(<?php echo "'" . $this->url->get('backend/library/manage/' . $website->id . "/'") ?> +type,
+                        formData, numberOfImagesRequiredToUpload, iframeElement);
+                }
+            }
+
+        });
+
+        storeMediaTab();
+    });
+
+    var activeLibraryTab = window.localStorage.getItem('activeLibraryTab');
+    if (activeLibraryTab) {
+        changeTabFilter(activeLibraryTab)
+    }
+
+    $("#delete").on("click", function () {
+        var objectId = findSelectedItems('image');
+        var selection = "img";
+        if (objectId.length === 0) {
+            objectId = findSelectedItems('document');
+            selection = "doc";
+        }
+
+        if (objectId.length === 0) {
+            alert('<?= addslashes(html_entity_decode($this->translator->_('cms.v3.admin.library.deleteerrormsg'),ENT_QUOTES, 'UTF-8'));?>');
+        } else {
+            var result = confirm('<?= addslashes(html_entity_decode($this->translator->_('cms.v3.admin.library.deleteconfirmationmsg'),ENT_QUOTES, 'UTF-8'));?>');
+            if (result) {
+                modifyLibraryRequest("delete", objectId);
+                $(this).attr('href', function () {
+                    return this.href + '?sel=' + selection;
+                });
+                location.reload();
+            }
+        }
+    });
+
+    $("#rename").on("click", function () {
+        if ($('.image:checkbox:checked').length === 0 && $('.document:checkbox:checked').length === 0) {
+            alert('<?= addslashes(html_entity_decode($this->translator->_('cms.v3.admin.library.noitemselectedtorenamemsg'),ENT_QUOTES, 'UTF-8'));?>');
+        } else {
+            $("#save").toggle();
+            $("#cancel").toggle();
+            $("#rename").toggle();
+            convertCheckBoxesToInput();
+        }
+    });
+
+    function resetButtons() {
+        $("#save").hide();
+        $("#cancel").hide();
+        $("#rename").show();
+
+        $('.image:text').attr("type", "checkbox");
+        $('.document:text').attr("type", "checkbox");
+    }
+
+    $("#cancel").on("click", function () {
+        resetButtons();
+    });
+
+    $("#save").on("click", function () {
+        var objectId = findTextItems('image');
+        var fileName = findText("image");
+        var selection = "img";
+        if (objectId.length === 0) {
+            objectId = findTextItems('document');
+            fileName = findText("document");
+            selection = "doc";
+        }
+
+        if (jQuery.inArray("", fileName) === -1) {
+            $("#rename").toggle();
+            $("#cancel").toggle();
+            $("#save").toggle();
+            modifyLibraryRequest("rename", objectId, fileName);
+            $(this).attr('href', function () {
+                return this.href + '?sel=' + selection;
+            });
+            location.reload();
+        } else {
+            alert('<?= addslashes(html_entity_decode($this->translator->_('cms.v3.admin.library.renameblanknamemsg'),ENT_QUOTES, 'UTF-8'));?>');
+        }
+    });
+
+    function convertCheckBoxesToInput() {
+        $('.image:checkbox:checked').attr("type", "text");
+        $('.document:checkbox:checked').attr("type", "text");
+    }
+
+    function modifyLibraryRequest(action, objectId, fileName) {
+        var jsonObjectId = JSON.stringify(objectId);
+        var jsonFileName = JSON.stringify(fileName);
+        $.ajax({
+            url: "<?php echo $this->config->general->baseUri . "backend/library/"; ?>" + action,
+            async: false,
+            type: 'POST',
+            data: {objectId: jsonObjectId, newFileNames: jsonFileName},
+            success: function (data) {
+                $('#response').html(data);
+            }
+        });
+    }
+
+    function storeMediaTab() {
+        if ($("#images").hasClass("active")) {
+            window.localStorage.setItem('activeLibraryTab', "images");
+        }
+        if ($("#documents").hasClass("active")) {
+            window.localStorage.setItem('activeLibraryTab', "documents");
+        }
+    }
+
+    function changeTabFilter(id) {
+        resetButtons();
+        var element = $("#" + id);
+        if (!element.hasClass("active")) {
+            $(".documents").toggle();
+            $(".images").toggle();
+            $(".list-group-item").removeClass("active");
+            element.addClass("active");
+            allowedFileTypes(id);
+        }
+
+        // Remove all checked boxes when switching between tabs
+        if (!$(this).prop("checked")) {
+            $(".image").prop("checked", false);
+            $('.image:text').attr("type", "checkbox");
+        }
+        if (!$(this).prop("checked")) {
+            $(".document").prop("checked", false);
+            $('.document:text').attr("type", "checkbox");
+        }
+
+        storeMediaTab();
+    }
+
+    function findTextItems(className) {
+        var x = $('.' + className + ':text');
+        var id = [];
+        for (var i = 0; i < x.length; i++) {
+            id.push(x[i].getAttribute("data-id"));
+        }
+        return id;
+    }
+
+    function findSelectedItems(className) {
+        var x = $('.' + className + ':checkbox:checked');
+        var id = [];
+        for (var i = 0; i < x.length; i++) {
+            id.push(x[i].getAttribute("data-id"));
+        }
+        return id;
+    }
+
+    function findText(className) {
+        var x = $('.' + className + ':text');
+        var text = [];
+        for (var i = 0; i < x.length; i++) {
+            text.push(x[i].value.trim());
+        }
+        return text;
+    }
+
+    createDragAndDrop(<?php echo "'" . $this->url->get('backend/library/manage/' . $website->id . "'") ?>);
+
+</script>

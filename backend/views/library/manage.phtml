@@ -1,0 +1,118 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <?= $this->getContent(); ?>
+            <div id="activeConnections" class="alert alert-warning" style="display: none"></div>
+            <div id="active" style="display: none"></div>
+            <div id="alertBox" class="alert <?= $this->view->alertType; ?>"
+                 style="display: none"><?= $this->view->message; ?></div>
+            <ul id="successMessagelist" class="alert alert-success"></ul>
+            <ul id="errorMessagelist" class="alert alert-danger"></ul>
+            <ul id="clientSideAlert" class="alert alert-danger"
+                style="display: none"
+                data-file-size-warning="<?php echo $this->translator->_('cms.v3.admin.gallery.maxfilesizewarning'); ?>"
+                data-file-type-warning="<?php echo $this->translator->_('cms.v3.admin.gallery.filetypewarning'); ?>"></ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form id="imageUploadForm" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="inputFile"><?= $this->translator->_('cms.v3.admin.library.selectafiletxt'); ?></label>
+                    <input type="file" id="inputFile" name="inputFile[]" multiple="multiple"
+                           accept="">
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var numberOfFiles = 0;
+    $("#errorMessagelist").hide();
+    $("#successMessagelist").hide();
+    // When the document is ready, check on intervals if the success alert is on display.
+    // If the success alert is on display then this means we've successfully completed our action and we can close the form
+    // Close modal function is highly specific to the bootstrap modal and expects some sort of successful alert in this file to process
+    $(document).ready(function () {
+        if ($("#active").text === 0) {
+            closeModal('#newLibraryItemModal');
+        }
+
+        // Get the id of the tab selected from the base page
+        var type = $(parent.document).find(".list-group-item.active").attr("id");
+        var fileTypes;
+        // Depended on selected tab filter out the different file types
+        if (type === "images") {
+            fileTypes = ".jpg,.jpeg,.png,.gif";
+        } else {
+            fileTypes = "application/pdf";
+        }
+
+        $("#inputFile").attr("accept", fileTypes);
+    });
+
+    //binds to onchange event of your input field
+    $('#inputFile').bind('change', function () {
+        var allValidFileSize = true;
+        var clientAlert = $("#clientSideAlert");
+        var translatedWarning = clientAlert.attr("data-file-size-warning");
+        var translatedTypeWarning = clientAlert.attr("data-file-type-warning");
+
+        // Remove previous error message
+        $(clientAlert).empty();
+
+        numberOfFiles = this.files.length;
+        for (var i = 0; i < numberOfFiles; i++) {
+            // 10Mb in bytes
+            if (this.files[i].size >= 10485760) {
+                allValidFileSize = false;
+                $(clientAlert).append("<li>" + this.files[i].name + ' ' + translatedWarning + "</li>");
+                continue;
+            }
+
+            if (!isValidFileType(this.files[i].type)) {
+                allValidFileSize = false;
+                $(clientAlert).append("<li>" + this.files[i].name + ' ' + translatedTypeWarning + "</li>");
+            }
+        }
+
+        if (allValidFileSize) {
+            $(clientAlert).hide();
+        } else {
+            $(clientAlert).show(150);
+        }
+
+    });
+
+    function isValidFileType(filetype) {
+        var type = $(parent.document).find(".list-group-item.active").attr("id");
+        var ext = getExtension(filetype);
+        // Checks the allowed file types for images and for documents
+        if (type === "images") {
+            switch (ext.toLowerCase()) {
+                case 'jpg':
+                case 'jpeg':
+                case 'gif':
+                case 'png':
+                    return true;
+            }
+        } else {
+            // Switch for easy expansion later if javascript files are requested at a later date
+            switch (ext.toLowerCase()) {
+                case 'pdf':
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    function getExtension(filetype) {
+        var parts = filetype.split('/');
+        return parts[parts.length - 1];
+    }
+
+</script>

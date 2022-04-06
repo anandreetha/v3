@@ -1,0 +1,1129 @@
+/* Visit Chapter Start */
+.widgetVisitChapter {
+    display: block;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    /*border-top: 1px solid #d7d7d7;
+    border-bottom: 1px solid #d7d7d7;*/
+    overflow: hidden;
+    
+    .googleMapSearchRow {
+        position: relative;
+        display: block;
+        background-color: $greyDark;
+        border: 1px solid $greyDark;
+        padding: 8px 90px;
+        overflow: hidden;
+        
+        .searchField {
+            float: left;
+            -webkit-border-radius: 0px;
+            -moz-border-radius: 0px;
+            border-radius: 0px;
+            border: 0px solid rgba(0,0,0,0.2);
+            font-size: 16px;
+            line-height: 22px;
+            font-weight: 400;
+            color: $black;
+            padding: 0.9em;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 400px;
+            height: 50px;
+        }
+        
+        #go {
+            position: relative;
+            float: left;
+             -webkit-border-radius: 0px;
+            -moz-border-radius: 0px;
+            border-radius: 0px;
+            border: 0px solid rgba(0,0,0,0.2);
+            font-size: 14px;
+            line-height: 14px;
+            font-weight: 500;
+            color: $blue;
+            padding: 18px 15px 17px 15px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: $white;
+            margin: 0px 0px 0px -4px;
+            height: 50px;
+            span {
+                font-size: 14px;
+                line-height: 14px;
+                border-left: 1px solid rgba(0,0,0,0.1);
+                padding-left: 15px;
+            }
+            &:hover {
+                color: $third;
+            }
+        }
+        
+        #reset {
+            float: left;
+            position: relative;
+             -webkit-border-radius: 0px;
+            -moz-border-radius: 0px;
+            border-radius: 0px;
+            border: 0px solid rgba(0,0,0,0.2);
+            font-size: 14px;
+            line-height: 14px;
+            font-weight: 500;
+            color: $blue;
+            padding: 18px 15px 17px 0px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: $white;
+            margin: 0px 0px 0px -4px;
+            height: 50px;
+            span {
+                font-size: 14px;
+                line-height: 14px;
+                border-left: 1px solid rgba(0,0,0,0.1);
+                padding-left: 15px;
+            }
+            &:hover {
+                color: $third;
+            }
+        }
+    }
+    
+    .googleMapSearchError {
+        display: block;
+        background-color: $red;
+        color: $white;
+        padding: 15px 90px;
+        z-index: 9999;
+    }
+    
+    .map-and-list {
+        display: table;
+        width: 100%;
+        height: 850px;
+        
+        .map-canvas {
+            display: table-cell;
+            height: 850px;
+            background-color: #eaeaea;
+            overflow: hidden;
+        }
+
+        .map-list {
+            position: relative;
+            display: table-cell;
+            height: 850px;
+            width: 540px;
+            overflow: hidden;
+            vertical-align: top;
+            
+            .map-canvas-legends {
+                display: block;
+                border-bottom: 1px solid #d7d7d7;
+                padding: 25px;
+                
+                .pinChapter {
+                    position: relative;
+                    display: block;
+                    padding: 4px 0px 0px 22px;
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 500;
+                    white-space: nowrap;
+                }
+                .pinChapter:before {
+                    position: absolute;
+                    margin-left: -22px;
+                    top: 6px;
+                    content: "\f111";
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                    display: inline-block;
+                    font: normal normal normal 14px/1 FontAwesome;
+                    font-size: 14px;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    color: $first;
+                }
+                
+                .pinCoreGroup {
+                    position: relative;
+                    display: block;
+                    padding: 4px 0px 0px 22px;
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 500;
+                    white-space: nowrap;
+                }
+                .pinCoreGroup:before {
+                    position: absolute;
+                    margin-left: -22px;
+                    top: 6px;
+                    content: "\f111";
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                    display: inline-block;
+                    font: normal normal normal 14px/1 FontAwesome;
+                    font-size: 14px;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    color: $blue;
+                }
+                
+                .pinPlannedGroup {
+                    position: relative;
+                    display: block;
+                    padding: 4px 0px 0px 22px;
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 500;
+                    white-space: nowrap;
+                }
+                .pinPlannedGroup:before {
+                    position: absolute;
+                    margin-left: -22px;
+                    top: 6px;
+                    content: "\f111";
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                    display: inline-block;
+                    font: normal normal normal 14px/1 FontAwesome;
+                    font-size: 14px;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    color: $grey;
+                }
+                
+                
+            }
+            
+            .scrollArea {
+                position: absolute;
+                bottom: 0px;
+                top: 123px;
+                left: 0px;
+                right: 0px;
+                display: block;
+                margin: 0px;
+                padding: 0px;
+                overflow:hidden;
+                overflow-x: hidden;
+                overflow-y: auto;
+                height: 727px;
+                
+                .boxDetail {
+                    display: block;
+                    padding: 25px 25px 25px 21px;
+                    border-bottom: 1px solid #d7d7d7;
+                    border-left: 4px solid $white;
+                    transition: all 0.5s ease;
+                    -webkit-transition:  all 0.5s ease;
+                    overflow: hidden;
+                    
+                    h1 {
+                        display: block;
+                        margin: 0px;
+                        padding: 0px 10px 0px 0px;
+                        font-size: 22px;
+                        line-height: 26px;
+                        color: $black;
+                        font-weight: 500;
+                    }
+                    
+                    h1.chapter:after {
+                        position: absolute;
+                        margin-left: 10px;
+                        margin-top: 5px;
+                        content: "\f111";
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                        display: inline-block;
+                        font: normal normal normal 14px/1 FontAwesome;
+                        font-size: 14px;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        color: $first;
+                    }
+
+                    h1.coreGroup:after {
+                        position: absolute;
+                        margin-left: 10px;
+                        margin-top: 5px;
+                        content: "\f111";
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                        display: inline-block;
+                        font: normal normal normal 14px/1 FontAwesome;
+                        font-size: 14px;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        color: $blue;
+                    }
+
+                    h1.plannedGroup:after {
+                        position: absolute;
+                        margin-left: 10px;
+                        margin-top: 5px;
+                        content: "\f111";
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                        display: inline-block;
+                        font: normal normal normal 14px/1 FontAwesome;
+                        font-size: 14px;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        color: $grey;
+                    }
+                    
+                    p.venueTitle {
+                        display: block;
+                        margin: 0px;
+                        padding: 15px 0px 2px 0px;
+                        font-size: 14px;
+                        line-height: 18px;
+                        color: $grey;
+                        font-weight: 300;
+                    }
+                    p.locationName {
+                        display: block;
+                        margin: 0px;
+                        padding: 3px 0px 3px 0px;
+                        font-size: 18px;
+                        line-height: 22px;
+                        color: $black;
+                        font-weight: 400;
+                    }
+                    p.addressVsCity {
+                        display: block;
+                        margin: 0px;
+                        padding: 3px 0px 3px 0px;
+                        font-size: 16px;
+                        line-height: 20px;
+                        color: $black;
+                        font-weight: 400;
+                    }
+                    p.dayTime {
+                        display: block;
+                        margin: 0px;
+                        padding: 8px 0px 8px 0px;
+                        font-size: 16px;
+                        line-height: 20px;
+                        color: $black;
+                        font-weight: 500;
+                    }
+                    
+                    .buttonArea {
+                        display: inline-block;
+                        margin: 0px;
+                        padding: 15px 0px 0px 0px;
+                        border-bottom: 1px solid #d0b9c1;
+                        transition: all 0.5s ease;
+                        -webkit-transition:  all 0.5s ease;
+                        
+                        .clearbothgooglemapbubble {
+                            display: none;
+                        }
+                        
+                        a {
+                            display: block;
+                            padding: 0px 0px 10px 0px;
+                            font-size: 16px;
+                            line-height: 16px;
+                            font-weight: 500;
+                            color: $first;
+                            text-decoration: none;
+                        }
+                        
+                        &:hover {
+                            border-bottom: 1px solid $first;
+                            transition: all 0.5s ease;
+                            -webkit-transition:  all 0.5s ease;
+                        }
+                    }
+                    
+                    
+                    
+                    &:hover {
+                        border-left: 4px solid $second;
+                        transition: all 0.5s ease;
+                        -webkit-transition:  all 0.5s ease;
+                    }
+                }
+                
+                .boxDetail:last-child {
+                    border-bottom: 0px solid #d7d7d7;
+                }
+            }
+        }
+    }
+}
+
+.widgetVisitChapter {
+    .mapOuter{
+        position: relative;
+        padding: 0 0 90px 0;
+        z-index: 1;
+        .mapInner{
+            height: 900px;
+        }
+        .chapterSearch{
+            position: absolute;
+            top: 55px;
+            left: 70px;
+            width: 600px;
+            max-width: 100%;
+            box-shadow: 0px 3px 10px #00000076;
+            border-radius: 20px;
+            input{
+                background: $white;
+                color: $greyDark;
+                font-size: 22px;
+                line-height: 26px;
+                padding: 18px 55px 18px 30px;
+                width: 100%;
+                border-radius: 20px;
+                border: none;                
+            }
+            ::-webkit-input-placeholder {
+              color: $bniRed; }
+
+            :-moz-placeholder {
+              color: $bniRed; }
+
+            ::-moz-placeholder {
+              color: $bniRed; }
+
+            :-ms-input-placeholder {
+              color: $bniRed; }
+            button{
+                position: absolute;
+                top: 0;
+                right: 0;
+                padding: 18px;
+                border: none;
+                background: transparent;
+                svg{
+                    width: 28px;
+                    height: 28px;
+                }
+            }
+        }
+        .legendDiv{
+            position: absolute;
+            top: 0;
+            right: -1px;
+            background: $white;
+            padding: 26px 30px;
+            ul{
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                li{
+                    display: block;
+                    padding: 8px 0;
+                    font-size: 22px;
+                    line-height: 40px;
+                    color: $greyDark;
+                    font-weight: 700;
+                    vertical-align: top;
+                    span{
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 22px;
+                        height: 22px;
+                        border-radius: 50%;
+                        margin-right: 10px;
+                        &.chapter{
+                            background: $bniRed;
+                        }
+                        &.newly{
+                            background: $greyDark;
+                        }
+                        &.future{
+                            background: $grey;
+                        }
+                    }
+                }
+            }
+        }
+        .chapterDetails{
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            width: 100%;
+            z-index: 90;
+            text-align: center;
+            .leftArrowOuter{
+                height: 152px;
+                width: 2.4%;
+                overflow: hidden;
+                display: inline-block;
+                vertical-align: bottom;
+                margin-right: -4px;
+                border-right: 1px solid #ccc;
+                padding: 7px 0;
+                position: relative;
+                .prevArrow{
+                    vertical-align: middle;
+                    position: relative;
+                    top: 50%;
+                    left: 0px;  
+                    transform: translate(0%, -50%) rotate(180deg);
+                    -webkit-transform: translate(0%, -50%) rotate(180deg);
+                    -moz-transform: translate(0%, -50%) rotate(180deg);
+                    -ms-transform: translate(0%, -50%) rotate(180deg);
+                    -o-transform: translate(0%, -50%) rotate(180deg);
+                    display: inline-block;
+                    border: 1px solid $grey;
+                    border-left: none;
+                    background: $white;
+                    padding: 18px 8px 14px 8px;
+                    span{
+                        display: inline-block;
+                        svg{
+                            width: 16px;
+                            height: 16px;
+                            &.icon-redarrow{
+                                .cls-1, .cls-2 {
+                                    stroke: $bniRed;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .rightArrowOuter{
+                height: 152px;
+                width: 2.4%;
+                overflow: hidden;
+                display: inline-block;
+                vertical-align: bottom;
+                margin-left: -4px;
+                border-left: 1px solid #ccc;
+                padding: 7px 0;
+                position: relative;
+                .nextArrow{
+                    vertical-align: middle;
+                    position: relative;
+                    top: 50%;
+                    left: 0px;  
+                    transform: translate(0%, -50%);
+                    -webkit-transform: translate(0%, -50%);
+                    -moz-transform: translate(0%, -50%);
+                    -ms-transform: translate(0%, -50%);
+                    -o-transform: translate(0%, -50%);
+                    display: inline-block;
+                    border: 1px solid $grey;
+                    border-left: none;
+                    background: $white;
+                    padding: 16px 7px;
+                    span{
+                        display: inline-block;
+                        svg{
+                            width: 16px;
+                            height: 16px;
+                            &.icon-redarrow{
+                                .cls-1, .cls-2 {
+                                    stroke: $bniRed;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .chapterDetailsOuter{
+                width: 94%;
+                vertical-align: middle;
+                overflow-y: hidden;
+                overflow-x: auto;
+                margin: 0 auto;
+                padding: 0 0px 4px 0px;
+                display: inline-block;
+                .chapterDetailsInfo{
+                    width: 1538px;
+                    display: table;
+                    .chapterDetailsInner{
+                        display: table-cell;
+                        width: 309px;
+                        min-width: 313px;
+                        vertical-align: bottom;
+                        .chapterDetailsWrap{                        
+                            border: 1px solid #C8C9C7;
+                            border-right: none;
+                            background: $white;
+                            padding: 28px 30px;
+                            &.chapterDiv{
+                                border-top: 8px solid $bniRed;
+                            }
+                            &.newlyDiv{
+                                border-top: 8px solid $greyDark;
+                            }
+                            &.futureDiv{
+                                border-top: 8px solid $grey;
+                            }
+                            h5{
+                                color: $bniRed;
+                                font-weight: 700;
+                                margin: 0 0 4px 0;
+                                span{
+                                    color: $greyDark;
+                                }
+                            }
+                            h6{
+                                font-size: 14px;
+                                line-height: 20px;
+                                color: $greyDark;
+                                font-weight: 400;
+                                margin: 0 0 8px 0;
+                            }
+                            .selectedDiv{
+                                padding: 10px 0 0 0;
+                                display: none;
+                                h6{
+                                    text-align: left;
+                                    span{
+                                        color: $bniRed;
+                                        font-weight: 700;
+                                        display: block;
+                                    }
+                                }
+                                p{
+                                    &.viewChapterBtn{
+                                        text-align: center;
+                                        margin: 30px 0 0 0;
+                                        a{
+                                            display: inline-block;
+                                            font-size: 14px;
+                                            line-height: 20px;
+                                            color: $white;
+                                            background: $bniRed;
+                                            border: 1px solid $bniRed;
+                                            padding: 12px 40px;
+                                            border-radius: 25px;
+                                            font-weight: 700;
+                                            text-decoration: none;
+                                            &:hover{
+                                                background: $white;
+                                                color: $bniRed;
+                                                text-decoration: none;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            &.selected{
+                                .selectedDiv{
+                                    display: block;
+                                }
+                            }
+                        }
+                        &:last-child{
+                            .chapterDetailsWrap{
+                                border-right: 1px solid $grey;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1649px) {
+    .widgetVisitChapter {
+        .map-and-list {
+            height: 800px;
+
+            .map-canvas {
+                height: 800px;
+            }
+
+            .map-list {
+                width: 440px;
+                height: 800px;
+            }
+        }
+    }
+
+    .widgetVisitChapter {
+        .mapOuter {
+            .chapterDetails {
+                .leftArrowOuter{
+                }
+                .rightArrowOuter{
+                    padding: 16px 6px;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 2560px) and (min-width: 1920px) {
+    .widgetVisitChapter {
+        .mapOuter {
+            .chapterDetails {
+                .chapterDetailsOuter {
+                    width: 95%;
+                    .chapterDetailsInfo {
+                        width: 1605px;
+                        .chapterDetailsInner {
+                            .chapterDetailsWrap{
+                            }
+                        }
+                    }
+                }
+                .leftArrowOuter {
+                    .prevArrow{
+                        padding: 18px 10px 14px 10px;
+                    }
+                }
+                .rightArrowOuter {
+                    .nextArrow{
+                        padding: 16px 11px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+@media (max-width: 1439px) {
+    .widgetVisitChapter {
+        .map-and-list {
+            height: 750px;
+
+            .map-canvas {
+                height: 750px;
+            }
+
+            .map-list {
+                width: 400px;
+                height: 750px;
+            }
+        }
+    }
+
+    .widgetVisitChapter {
+        .mapOuter {
+            .mapInner{
+                height: 800px;
+            }
+            .chapterSearch{
+                left: 30px;
+                width: 500px;
+            }
+            .legendDiv{
+                ul{
+                    li{
+                        font-size: 20px;
+                        line-height: 26px;
+                        span{
+                            width: 18px;
+                            height: 18px;
+                            vertical-align: top;
+                            margin-top: 4px;
+                        }
+                    }
+                }
+            }
+            .chapterDetails {
+                .chapterDetailsOuter {
+                    .chapterDetailsInfo {
+                        .chapterDetailsInner {
+                            .chapterDetailsWrap{
+                                h5{
+                                    font-size: 20px;
+                                    line-height: 24px;
+                                }
+                            }
+                        }
+                    }
+                }
+                .leftArrowOuter{
+                    height: 149px;
+                    margin-bottom: 3px;
+                    .prevArrow {
+                        padding: 18px 5px 14px 4px;
+                    }
+                }
+                .rightArrowOuter{                    
+                    height: 149px;
+                    margin-bottom: 3px;
+                    .nextArrow {
+                        padding: 16px 4px 16px 5px;
+                    }
+                }   
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetVisitChapter {
+        .googleMapSearchRow {
+            padding: 8px 50px;
+        }
+        .map-and-list {
+            height: 700px;
+
+            .map-canvas {
+                height: 700px;
+            }
+
+            .map-list {
+                width: 350px;
+                height: 700px;
+            }
+        }
+    }
+
+    .widgetVisitChapter {
+        .mapOuter {
+            .mapInner{
+                height: 800px;
+            }
+            .chapterSearch {
+                width: 430px;
+                input{
+                    font-size: 19px;
+                    line-height: 24px;
+                }
+            }
+            .legendDiv{
+                padding: 16px 20px;
+                ul{
+                    li{
+                        font-size: 18px;
+                        line-height: 24px;
+                        span{
+                            margin-top: 3px;
+                        }
+                    }
+                }
+            }
+            .chapterDetails {
+                .leftArrowOuter{
+                   width: 2.8%;
+                }
+                .rightArrowOuter{                    
+                    width: 3%;
+                }   
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetVisitChapter {
+        .googleMapSearchRow {
+            padding: 8px 30px;
+            
+            .searchField {
+                font-size: 14px;
+                line-height: 14px;
+                font-weight: 400;
+                padding: 13px;
+                width: 300px;
+            }
+
+            #go {
+                font-size: 14px;
+                line-height: 14px;
+                padding: 15px 12px 14px 12px;
+                span {
+                    padding-left: 12px;
+                }
+            }
+
+            #reset {
+                font-size: 14px;
+                line-height: 14px;
+                padding: 15px 12px 14px 12px;
+                span {
+                    padding-left: 12px;
+                }
+            }
+        }
+        
+        .googleMapSearchError {
+            padding: 10px 50px;
+        }
+        
+        .map-and-list {
+            height: 650px;
+
+            .map-canvas {
+                height: 650px;
+            }
+
+            .map-list {
+                width: 300px;
+                height: 650px;
+                
+                .map-canvas-legends {
+                    padding: 20px;
+                }
+                
+                .scrollArea {
+                    top: 113px;
+                    .boxDetail {
+                        padding: 20px 20px 20px 16px;
+
+                        h1 {
+                            font-size: 20px;
+                            line-height: 24px;
+                        }
+                        p.locationName {
+                            font-size: 16px;
+                            line-height: 20px;
+                        }
+                        p.addressVsCity {
+                            font-size: 14px;
+                            line-height: 18px;
+                        }
+                        p.dayTime {
+                            font-size: 14px;
+                            line-height: 18px;
+                        }
+
+                        .buttonArea {
+                            padding: 10px 0px 0px 0px;
+
+                            a {
+                                padding: 0px 0px 6px 0px;
+                                font-size: 14px;
+                                line-height: 14px;
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    .widgetVisitChapter {
+        .mapOuter {
+            .mapInner{
+                height: 600px;
+            }
+            .chapterSearch{
+                width: 350px;
+                input{
+                    padding: 18px 55px 18px 20px;
+                }
+            }
+            .legendDiv {
+                padding: 12px 15px;
+                ul{
+                    li{
+                        font-size: 16px;
+                        line-height: 20px;
+                        span{
+                            width: 15px;
+                            height: 15px;
+                        }
+                    }
+                }
+            }
+            .chapterDetails {
+                .chapterDetailsOuter {
+                    width: 93%;
+                    .chapterDetailsInfo {
+                        .chapterDetailsInner {
+                            width: 300px;
+                            .chapterDetailsWrap{
+                                h5{
+                                    font-size: 18px;
+                                    line-height: 24px;
+                                }
+                                .selectedDiv {
+                                    p{
+                                        &.viewChapterBtn {
+                                            a{
+                                                padding: 10px 30px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .leftArrowOuter{
+                    width: 3.4%;
+                }
+                .rightArrowOuter{
+                    width: 3.4%;
+                    .nextArrow{
+                        padding: 16px 4px 16px 3px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetVisitChapter {
+        .googleMapSearchRow {
+            padding: 8px 20px;
+            .searchField {
+                width: 160px;
+            }
+        }
+        
+        .googleMapSearchError {
+            position: relative;
+            padding: 10px 15px;
+            font-size: 14px;
+            line-height: 17px;
+        }
+        
+        .map-and-list {
+            display: block;
+            height: auto;
+            
+            .googleMapHolder {
+                display: block;
+                overflow: hidden;
+                height: 350px;
+            }
+
+            .map-canvas {
+                display: block;
+                height: 350px;
+            }
+
+            .map-list {
+                display: block;
+                width: 100%;
+                height: auto;
+                
+                .scrollArea {
+                    position: relative;
+                    display: block;
+                    top: 0;
+                    height: unset;
+                    overflow: hidden;
+                }
+            }
+        }
+    }
+
+    .widgetVisitChapter {
+        .mapOuter {
+            .mapInner{
+                height: 600px;
+            }
+            .chapterSearch{
+                top: 20%;
+                width: 100%;
+                max-width: 90%;
+                left: 50%;
+                transform: translate(-50%, 0);
+                -webkit-transform: translate(-50%, 0);
+                -moz-transform: translate(-50%, 0);
+                -ms-transform: translate(-50%, 0);
+                -o-transform: translate(-50%, 0);
+                input{
+                }
+            }
+            .legendDiv {
+                position: relative;
+                top: auto;
+                right: auto;
+            }
+            .chapterDetails {
+                .chapterDetailsOuter{
+                    width: 90%;
+                }
+                .leftArrowOuter{
+                    width: 4.5%;
+                }                
+                .rightArrowOuter{
+                    width: 4.5%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 599px) {
+    .widgetVisitChapter {
+        .mapOuter { 
+            .mapInner{
+                height: 600px;
+            }          
+            .chapterDetails {
+                .chapterDetailsOuter{
+                    width: 88%;
+                }
+                .leftArrowOuter{
+                    width: 5.5%;
+                }                
+                .rightArrowOuter{
+                    width: 5.5%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 479px) {
+    .widgetVisitChapter {
+        .mapOuter {           
+            .chapterDetails {
+                .chapterDetailsOuter{
+                    width: 84%;
+                }
+                .leftArrowOuter{
+                    width: 7.5%;
+                }                
+                .rightArrowOuter{
+                    width: 7.5%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 374px) {
+    .widgetVisitChapter {
+        .mapOuter {           
+            .chapterDetails {
+                .chapterDetailsOuter{
+                    width: 83%;
+                }
+                .leftArrowOuter{
+                    width: 7.5%;
+                    .prevArrow{
+                        padding: 18px 3px 14px 4px;
+                    }
+                }                
+                .rightArrowOuter{
+                    width: 7.5%;
+                    .nextArrow{
+                        padding: 16px 2px 16px 1px;
+                    }
+                }
+            }
+        }
+    }
+}
+/* Visit Chapter End */

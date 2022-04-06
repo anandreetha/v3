@@ -1,0 +1,330 @@
+/* Form Start */
+.widgetForm {
+    display: block;
+    margin: 0px;
+    padding: 0px 0px 80px 0px;
+    overflow: hidden;
+    background-color: $white;
+    .holder {
+        
+        .nav-tabs {
+            margin: 0px 15px;
+            padding: 0px;
+            border: 0px solid $white;
+            li {
+                padding: 0px;
+                margin: 0px;
+                a {
+                    display: block;
+                    margin: 0px;
+                    padding: 15px 30px;
+                    border: 0px solid $white;
+                    background-color: $bniRed;
+                    color: $white;
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 500;
+                    -webkit-border-radius: 0px;
+                    -moz-border-radius: 0px;
+                    border-radius: 0px;
+                    white-space: nowrap;
+                }
+                a:focus {
+                    border: 0px solid $white;
+                }
+            }
+            li.active {
+                a {
+                    background-color: $greyLight;
+                    color: $bniBlack;
+                }
+                
+                a:focus {
+                    border: 0px solid $white;
+                }
+            }
+        }
+        
+        .tab-content {
+            display: block;
+            padding: 0px;
+            margin: 0px;
+            overflow: hidden;
+        }
+
+        .form {
+            display: block;
+            margin: 0px 15px;
+            background-color: $greyLight;
+            padding: 15px 15px;
+            overflow: hidden;
+            
+            .formRow {
+                display: block;
+                margin: 0px;
+                padding: 15px 0px;
+                overflow: hidden;
+
+                label {
+                    display: block;
+                    margin: 0px 0 2px 0;
+                    padding: 0px 0px 2px 0px;
+                    color: $greyDark;
+                    font-size: 12px;
+                    line-height: 12px;
+                    font-weight: 400;
+                    text-transform: uppercase;
+                }
+                
+                .selectField {
+                    display: block;
+                    width: 100%;
+                    background: $white url(../../images/select-bg.png) no-repeat right center;
+                    color: $bniBlack;
+                    border: 1px solid $greyDark;
+                    padding: 12px 40px 12px 15px;
+                    font-size: 16px;
+                    line-height: 22px;
+                    font-weight: 400;
+                    margin: 0px 0px 2px 0px;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                }
+                
+                select::-ms-expand {
+                    display: none;
+                }
+                
+                .selectFieldMultiple {
+                    display: block;
+                    width: 100%;
+                    height: 150px;
+                    background-color: $white;
+                    color: $bniBlack;
+                    border: 1px solid $greyDark;
+                    padding: 12px 15px 12px 15px;
+                    font-size: 16px;
+                    line-height: 22px;
+                    font-weight: 400;
+                    margin: 0px 0px 2px 0px;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                }
+                
+                .textField {
+                    display: block;
+                    width: 100%;
+                    background-color: $white;
+                    color: $bniBlack;
+                    border: 1px solid $greyDark;
+                    padding: 12px 15px 12px 15px;
+                    font-size: 16px;
+                    line-height: 22px;
+                    font-weight: 400;
+                    resize: none;
+                }
+                
+                .selectField.error,
+                .textField.error {
+                    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+                }
+                
+                div.error {
+                    display: none;
+                    margin: 0px;
+                    padding: 4px 15px;
+                    background-color: $bniRed;
+                    color: $white;
+                    font-size: 14px;
+                    line-height: 18px;
+                }
+
+                div.textField {
+                    background-color: $greyLight;
+                }
+                
+                
+            }
+
+            .formButtonsRow {
+                display: block;
+                margin: 0px;
+                padding: 15px 0px;
+                overflow: hidden;
+                
+                .button {
+                    /*margin: 15px 0px 0px 0px;*/
+                    display: inline-block;
+                    padding: 12px 30px 12px 30px;
+                    font-size: 20px;
+                    line-height: 26px;
+                    font-weight: 600;
+                    background-color: $bniRed;
+                    border: 1px solid $bniRed;
+                    color: $white;
+                    text-decoration: none;
+                    border-radius: 40px;                    
+                    &:hover {
+                        border: 1px solid $bniRed;
+                        background: $white;
+                        color: $bniRed;
+                    }
+                }
+                
+                #formAjaxLoader,
+                #simpleFormAjaxLoader, 
+                #advancedFormAjaxLoader {
+                    display: inline-block;
+                    .fa-spinner {
+                        color: $blue;
+                        font-size: 26px;
+                        line-height: 26px;
+                    }
+                }
+            }
+
+            #optionalHeading {
+                display: block;
+                margin: 15px -30px;
+                padding: 12px 30px;
+                color: $white;
+                background-color: $bniRed;
+                font-size: 16px;
+                line-height: 16px;
+                font-weight: 500;
+                text-decoration: none;
+                text-transform: uppercase;
+                .fa {
+                    padding-left: 10px;
+                }
+                &:hover {
+                    background-color: $bniRed;
+                }
+            }
+        }
+        
+        #formSendMessage {
+            .formRow {
+                textarea.textField {
+                    margin-top: 14px;
+                    height: 300px;
+                }
+            }
+        }
+        
+        #responcemessagesuccess {
+            clear: both;
+            display: block;
+            margin: 0px 15px;
+            padding: 8px 5px;
+            background-color: $bniRed;
+            color: $white;
+            font-size: 14px;
+            line-height: 18px;
+        }
+        #responcemessageerror {
+            clear: both;
+            display: block;
+            margin: 0px 15px;
+            padding: 8px 5px;
+            background-color: $bniRed;
+            color: $white;
+            font-size: 14px;
+            line-height: 18px;
+        }
+        
+        .required {
+            border-right: 6px solid $bniRed !important;
+        }
+        .valid {
+            border-right: 6px solid $green !important;
+        }
+        .agree {
+            cursor: pointer;
+            font-size: 16px !important;
+            line-height: 24px !important;
+            font-weight: 500 !important;
+            color: $bniBlack !important;
+            text-transform: none !important;
+            overflow: hidden;
+            .fa {                
+                display: inline-block;
+                vertical-align: middle;
+                color: $bniRed;
+                padding-right: 6px;
+                font-size: 20px;
+                line-height: 24px;
+                padding-right: 1px !important;
+            }
+            
+            input[type=checkbox] {
+                &:checked + .fa-check-square-o {
+                    color: $bniRed;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+                &:checked + .fa-check-square-o + .fa-square-o {
+                    display: none;
+                }
+            }
+            
+            input[type=checkbox] + .fa-check-square-o {
+                    display: none;
+            }
+            
+            input[type=checkbox] {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                opacity:0;
+            }
+
+        }
+
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetForm {
+        padding: 0px 0px 30px 0px;
+    }
+}
+
+@media (max-width: 413px) {
+    .widgetForm {
+        padding: 0px 0px 0px 0px;
+        .holder {
+            padding: 0px;
+            
+            .nav-tabs {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+                margin: 0px;
+                li {
+                    display: table-cell;
+                    width: 50%;
+                    a {
+                        padding: 15px 15px 15px 30px;
+                        font-size: 14px;
+                        line-height: 18px;
+                    }
+
+                }
+                
+                li:first-child {
+                    a {
+                        padding: 15px 30px 15px 5px;
+                    }
+                }
+            }
+            
+            .form {
+                margin: 0px;
+                padding-bottom: 30px;
+            }
+
+        }
+    }
+}
+/* Form End */

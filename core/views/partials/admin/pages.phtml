@@ -1,0 +1,379 @@
+<?php
+
+/**
+ * Three potential values we can have
+ * 0 = No navigation shown
+ * 1 = Show in the top navigation only
+ * 2 = Show in the bottom navigation only
+ */
+const DISPLAY_OPTION_OFF_VALUE = 0;
+const DISPLAY_OPTION_TOP_VALUE = 1;
+const DISPLAY_OPTION_SIDE_VALUE = 2;
+
+/**
+ * The setting id that we want to look out for
+ * that controls where the navigation will be set
+ */
+const DISPLAY_OPTION_SETTING_ID = 10;
+
+/**
+ * We want to force all users to have these following templates in the navigation bar
+ * any of the following template will have disabled buttons.
+ */
+const READ_ONLY_TEMPLATES = array('home', 'why-bni', 'find-a-chapter', 'contact','cookiebot-declaration');
+
+/**
+ * A chapter website type
+ */
+const WEBSITE_TYPE_CHAPTER = '3';
+
+/**
+ * Return some html that is three buttons
+ * which are 'Off' 'Main' and 'Side'
+ * These buttons control where links shall be
+ * displayable
+ *
+ * We hide the side buttons on chapter websites
+ * due to a recent redesign
+ *
+ * @param $pageSetting
+ * @param $templateName
+ * @param $that
+ * @param $website \Multiple\Core\Models\Website
+ * @return string
+ */
+function buildDisplayOptionsRow($pageSetting, $templateName, &$that, $website)
+{
+    $offText = $that->translator->_('cms.v3.admin.pages.off');
+    $topText = $that->translator->_('cms.v3.admin.pages.top');
+    $sideText = $that->translator->_('cms.v3.admin.pages.side');
+
+    $html = '<div class="btn-group">';
+    if ((int)$pageSetting->setting_id === DISPLAY_OPTION_SETTING_ID) {
+
+        // If the template name matches that in the read only template constant array, then we want to disable the buttons from being clicked
+        $buttonDisabled = (in_array($templateName, READ_ONLY_TEMPLATES) ? 'disabled' : '');
+
+        $offActiveClass = ((int)$pageSetting->value === DISPLAY_OPTION_OFF_VALUE ? 'active' : '');
+        $offTopClass = ((int)$pageSetting->value === DISPLAY_OPTION_TOP_VALUE ? 'active' : '');
+        $offSideClass = ((int)$pageSetting->value === DISPLAY_OPTION_SIDE_VALUE ? 'active' : '');
+
+        $html .= '<button type="button" data-setting-settingid="' . $pageSetting->id . '" data-display-select="' . DISPLAY_OPTION_OFF_VALUE . '" class="display-select-btn btn btn-default ' . $offActiveClass . '" ' . $buttonDisabled . '>' . $offText . '</button>';
+        $html .= '<button type="button" data-setting-settingid="' . $pageSetting->id . '" data-display-select="' . DISPLAY_OPTION_TOP_VALUE . '" class="display-select-btn btn btn-default ' . $offTopClass . '" ' . $buttonDisabled . '>' . $topText . '</button>';
+
+        // Don't show the side buttons if we're viewing a chapter website
+        if ($website->getTypeId() !== WEBSITE_TYPE_CHAPTER) {
+            $html .= '<button type="button" data-setting-settingid="' . $pageSetting->id . '" data-display-select="' . DISPLAY_OPTION_SIDE_VALUE . '" class="display-select-btn btn btn-default ' . $offSideClass . '" ' . $buttonDisabled . '>' . $sideText . '</button>';
+        }
+
+    }
+    $html .= '</div>';
+
+    return $html;
+}
+
+?>
+
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->getContent(); ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="selectedLanguage"><?= $this->translator->_('cms.v3.admin.pages.language'); ?></label>
+            <?php echo Phalcon\Tag::select(
+                [
+                    "selectedLanguage",
+                    $languages,
+                    "class" => "form-control",
+                    "value" => $this->dispatcher->getParam("1", "int")
+                ]
+            );
+            ?>
+
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+    <?php if (!$website->is_default && $website->getTypeId() !== WEBSITE_TYPE_CHAPTER) { ?>
+        <div class="col-md-4">
+            <div class="box-header">
+                <div class="box-tools">
+                    <?php
+                    echo $this->tag->linkTo(array('#', '<i class="fa fa-plus fa-lg"></i>', "class" => "newPageModal btn btn-default", "data-toggle" => "modal", "data-tooltip" => "true", "title" => $this->translator->_('cms.v3.admin.pages.addpage'), "data-target" => "#newPageModal", "id" => "", "data-href" => $this->url->get('backend/page/add/' . $website->id), "data-backdrop" => "static", "data-keyboard" => "false")); ?>
+                </div>
+            </div>
+        </div>
+        <?php
+    } ?>
+</div>
+
+<div class="box">
+    <div class="box-body no-padding">
+
+        <?php
+        if (count($pageArray) > 0) {
+            $optionsDir = $isRightToLeft ? 'pull-right' : 'pull-left';
+        ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+
+
+                        <table id="websiteViewPagesDatatable" class="table table-hover text-center">
+                            <thead>
+                            <tr>
+                                <th class="text-center" style="display: none;">Nav Order</th>
+                                <!-- This is the real nav order (taking into account child pages), and is hidden on page load -->
+                                <th class="text-left-override"><?= $this->translator->_('cms.v3.admin.pages.pageorder'); ?></th>
+                                <th class="text-left-override"><?= $this->translator->_('cms.v3.admin.pages.title'); ?></th>
+                                <th class="text-center"><?= $this->translator->_('cms.v3.admin.pages.lastmodified'); ?></th>
+                                <th class="text-center"><?= $this->translator->_('cms.v3.admin.pages.display'); ?></th>
+                                <th class="text-center <?= $optionsDir; ?>"><?= $this->translator->_('cms.v3.admin.pages.options'); ?></th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <?php
+                            foreach ($pageArray as $pageDataObject) {
+                                $pageContent = $pageDataObject->pageContent;
+                                $pageSettings = $pageDataObject->pageSettings;
+                                $pageTemplateName = $pageDataObject->templateName;
+
+                                // Only show a nav order if it's a top level page, else show a blank (as per V2 CMS)
+                                $navOrder = "<td class=\"text-left-override\">" . $pageContent->Page->nav_order . "</td>";
+                                if ($pageDataObject->pageLevel !== "top") {
+                                    $navOrder = "<td></td>";
+                                }
+
+                                echo "<tr class=\"" . $pageDataObject->pageLevel . "Level\">";
+                                echo("<td style=\"display: none;\">" . $pageDataObject->backgroundNavLevel . "</td>");
+                                echo($navOrder);
+                                echo("<td class=\"text-left-override\">" . $pageContent->title . "</td>");
+                                echo("<td>" . $this->translationUtils->formatDate($pageContent->Page->lastModified, $userTimezone) . "</td>");
+                                echo("<td>");
+
+                                if ($pageDataObject->pageLevel === "top") {
+                                    echo(buildDisplayOptionsRow($pageSettings, $pageTemplateName, $this, $website));
+                                }
+
+                                echo "<td class='text-center' >";
+                                echo "<div class=\"btn-group " . $optionsDir . "\" role=\"group\" aria-label=\"...\">";
+                                // BNIDEV-4798
+                                // Fix issue with previewing a chapter site - possible Phalcon param mapping issue
+                                // echo $this->tag->linkTo(array('backend/render/preview/' . $website->clean_domain . '/' . $selectedLanguage->locale_code . '/' . $pageContent->nav_name, '<i class="fa fa-eye fa-lg"></i>', "data-toggle"=>"tooltip" ,"title"=>$this->translator->_('cms.v3.admin.pages.previewwidget'),"class" => "editPageModal btn btn-default", "target" => "self"));
+                                if($website->type_id == 3) {
+                                    echo $this->tag->linkTo(array('preview/' . $this->websiteHelper->strip_accents($website->clean_domain) . '/' . $this->translationUtils->normalizeLocaleCode($selectedLanguage->locale_code, false) . '/' . $pageContent->nav_name, '<i class="fa fa-eye fa-lg"></i>', "data-toggle" => "tooltip", "title" => $this->translator->_('cms.v3.admin.pages.previewwidget'), "class" => "editPageModal btn btn-default", "target" => "self"));
+                                }else{
+                                    echo $this->tag->linkTo(array('preview/' . $website->clean_domain . '/' . $this->translationUtils->normalizeLocaleCode($selectedLanguage->locale_code, false) . '/' . $pageContent->nav_name, '<i class="fa fa-eye fa-lg"></i>', "data-toggle" => "tooltip", "title" => $this->translator->_('cms.v3.admin.pages.previewwidget'), "class" => "editPageModal btn btn-default", "target" => "self"));
+                                }
+                                echo $this->tag->linkTo(array('backend/page/editPage/' . $pageContent->id, '<i class="fa fa-edit fa-lg"></i>', "data-toggle"=>"tooltip" ,"title"=>$this->translator->_('cms.v3.admin.pages.editpage'), "class" => "editPageModal btn btn-default"));
+                                if ($pageTemplateName === 'custom-page') {
+                                    // Only show the delete button for custom pages
+                                    echo "<span data-pageid=\"{$pageContent->getPageId()}\" class='deletePageModal btn btn-default' title=\"{$this->translator->_('cms.v3.admin.pages.deletepage')}\"><i class=\"fa fa-trash-o fa-lg\"></i></span>";
+                                }
+                               echo "</div>";
+                                echo "</td>";
+
+
+
+                                echo "</tr>";
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <?php $this->partial('partials/admin/modal', [
+                    'title' => $this->translator->_('cms.v3.admin.pages.addnewpagetitle'),
+                    'iframeId' => 'newPageModalIFrame',
+                    'wrapperId' => 'newPageModal',
+                    'successButtonId' => 'newPageModalButton',
+                    'modalBodyHeight' => '260px'
+                ]); ?>
+
+                <?php $this->partial('partials/admin/modal', [
+                    'title' => $this->translator->_('cms.v3.admin.pages.editpagecontenttitle'),
+                    'iframeId' => 'editPageModalIFrame',
+                    'wrapperId' => 'editPageModal',
+                    'successButtonId' => 'editPageModalButton'
+                ]); ?>
+
+                <?php $this->partial('partials/admin/modal', [
+                    'title' => $this->translator->_('cms.v3.admin.pages.editpagesettingstitle'),
+                    'iframeId' => 'editPageSettingsIFrame',
+                    'wrapperId' => 'editPageSettingsModal',
+                    'successButtonId' => 'editPageSettingsButton'
+                ]); ?>
+
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-warning" role="alert">
+                        <strong><?= $this->translator->_('cms.v3.admin.pages.nopagesmessage'); ?></strong>
+                    </div>
+                </div>
+            </div>
+
+            <?php
+        }
+        ?>
+    </div>
+</div>
+
+<script>
+    // If no language id is specified then switch the drop down box to be the current language
+    $(document).ready(function () {
+        $('#selectedLanguage option[value="<?php echo $selectedLanguage->getId() ?>"]').attr('selected', 'selected');
+    });
+
+    $(".newPageModal").on("click", function () {
+        var frameSrc = $(this).data("href");
+        $('#newPageModal iframe').attr("src", frameSrc);
+    });
+
+    $(".editPageModal").on("click", function () {
+        var frameSrc = $(this).data("href");
+        $('#editPageModal iframe').attr("src", frameSrc);
+    });
+
+    $(".editPageSettingsModal").on("click", function () {
+        var frameSrc = $(this).data("href");
+        $('#editPageSettingsModal iframe').attr("src", frameSrc);
+
+    });
+
+    $('.display-select-btn').on('click', function () {
+        var self = $(this);
+        var setting = $(this).data('display-select');
+        var settingId = $(this).data('setting-settingid');
+        var url = "<?php echo $this->url->get('backend/page-content-setting/edit/'); ?>" + settingId;
+
+        $.post(url, {settingValue: setting}, function (data) {
+            if (data.complete !== null && data.complete === true) {
+                self.siblings().each(function () {
+                    $(this).removeClass('active');
+                });
+                $(self).addClass('active');
+            }
+        });
+
+    });
+
+    $('#selectedLanguage').on("change", function () {
+        // Store the selected language ID so we can take the user back here from the inline edits page, as per BNIDEV-4467
+        window.localStorage.setItem('selectedLanguageId', $(this).val());
+
+        // Redirect the user back to this page, but include the 2nd MVC parameter (for language id)
+        window.location = "<?php echo $this->url->get("backend/website/view/" . $website->id);?>" + "/" + $(this).val();
+    });
+
+    $('#newPageModalButton').on('click', function (e) {
+        submitModal('newPageModalIFrame');
+    });
+
+    $('#editPageModalButton').on('click', function (e) {
+        submitModal('editPageModalIFrame');
+    });
+
+    $('#editPageSettingsButton').on('click', function (e) {
+        submitModal('editPageSettingsIFrame');
+    });
+
+    $('.deletePageModal').on('click', function (e) {
+
+        e.preventDefault();
+
+        var confirmationmsg = "<?php echo $this->translator->_('cms.v3.admin.pages.deletepageconfirmationmessage') ?>";
+
+        var dialogueResult = confirm(confirmationmsg);
+
+        if (dialogueResult === true) {
+            var deleteUrl = "<?php echo $this->url->get('backend/website/deletePage'); ?>";
+            var pageId = $(this).data('pageid');
+            $.post(deleteUrl, {'pageid': pageId}, function () {
+                alert("<?php echo $this->translator->_('cms.v3.admin.pages.deletepagesuccessmessage'); ?>");
+                location.reload();
+            });
+        }
+    });
+
+    $(function () {
+        $('#websiteViewPagesDatatable').DataTable({
+            'paging': false,
+            'responsive': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false,
+            "order": [
+                [0, "asc"]
+            ],
+            'columnDefs': [
+                {
+                    'targets': [0],
+                    'visible': false,
+                    'orderable': false
+                },
+                {
+                    'targets': [1],
+                    'width': "10%",
+                    'orderable': false,
+                    'responsivePriority' : 5
+                },
+                {
+                    'targets': [2],
+                    'width': "30%",
+                    'orderable': false,
+                    'responsivePriority' : 4
+                },
+                {
+                    'targets': [3],
+                    'width': "15%",
+                    'orderable': false,
+                    'responsivePriority' : 6
+                },
+                {
+                    'targets': [4],
+                    'width': "25%",
+                    'orderable': false,
+                    'responsivePriority' : 6
+                },
+                {
+                    'targets': [5],
+                    'width': "15%",
+                    'orderable': false,
+                    'responsivePriority' : 3
+                }
+
+            ],
+            'language'    :{
+                "lengthMenu": "<?php echo  $this->translator->_('datatablesparameters.sLengthMenu')?>",
+                "zeroRecords": "<?php echo  $this->translator->_('datatablesparameters.sZeroRecords')?>",
+                "info": "<?php echo  $this->translator->_('datatablesparameters.sInfo')?>",
+                "search":" <?php echo  $this->translator->_('datatablesparameters.sSearch')?>",
+                "paginate": {
+                    "first":     "<?php echo  $this->translator->_('datatablesparameters.sFirst')?>",
+                    "last":       "<?php echo  $this->translator->_('datatablesparameters.sLast')?>",
+                    "next":      "<?php echo  $this->translator->_('datatablesparameters.sNext')?>",
+                    "previous":   "<?php echo  $this->translator->_('datatablesparameters.sPrevious')?>"
+                },
+            }
+        });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $('#websiteViewPagesDatatable').DataTable().responsive.recalc();
+        });
+
+
+    });
+
+
+</script>

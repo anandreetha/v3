@@ -1,0 +1,307 @@
+<section class="widgetForm">
+    <div class="holder">
+
+        <script src="https://www.google.com/recaptcha/api.js"></script>
+
+
+        <script type="text/javascript">
+            $(function () {
+
+                $("#optionalHeading").unbind("click");
+                $("#optionalHeading").bind("click", function () {
+                    if ($("#optionalHeading .fa").hasClass("fa-plus-square-o")) {
+                        $("#optionalHeading .fa").removeClass("fa-plus-square-o");
+                        $("#optionalHeading .fa").addClass("fa-minus-square-o");
+                    } else {
+                        $("#optionalHeading .fa").removeClass("fa-minus-square-o");
+                        $("#optionalHeading .fa").addClass("fa-plus-square-o");
+                    }
+                    $("#expandCollapse").toggle();
+                    return false;
+                });
+
+                $("#refresh-captcha").unbind("click");
+                $("#refresh-captcha").bind("click", function () {
+                    $("#captchaimg").attr("src", bniCmsDomain + "/bnicms/lib/captchaSecurityImage.php?timestamp=" + new Date().getTime());
+                    return false;
+                });
+
+                jQuery.validator.addMethod("customemail",
+                    function (value, element) {
+                        return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
+                    }
+                );
+
+                jQuery.validator.addMethod("requiredRadioValue", function (value, element, params) {
+                    var selectedValue = $('input:checkbox[name=' + element.name + ']:checked').val();
+                    return (typeof(params) == 'array') ? (params.indexOf(selectedValue) != -1) : selectedValue == params;
+                }, "You must select the required option.");
+
+                jQuery.validator.methods.matches = function (value, element, params) {
+                    var re = new RegExp(params);
+                    return this.optional(element) || re.test(value);
+                };
+
+
+                $("#formNewsletter").validate({
+
+                    rules: {
+                        formFirstName: {
+                            required: true
+                        },
+                        formLastName: {
+                            required: true
+                        },
+                        formEmail: {
+                            required: true,
+                            customemail: true
+                        },
+                        formIAgree: {
+                            required: true
+                        },
+                        captcha: {
+                            required: true
+                        },
+                        formPhoneNumber: {
+                            matches: "^(\\d|\\s|\\+|\\(|\\)|\\+|\\-|\\/)+$"
+                        }
+                    },
+                    messages: {
+                        formFirstName: {
+                            required: ""
+                        },
+                        formLastName: {
+                            required: ""
+                        },
+                        formEmail: {
+                            required: "",
+                            customemail: "<?= $mappedWidgetSettings->getValueByName("Please enter a valid email address") ?>"
+                        },
+                        formIAgree: {
+                            required: "<?= $mappedWidgetSettings->getValueByName("This field is required.") ?>"
+                        },
+                        captcha: "Captcha if require",
+                        formPhoneNumber:  "<?= $mappedWidgetSettings->getValueByName("Please enter a valid phone number") ?>"
+                    },
+                    errorPlacement: function (error, element) {
+                        if (element.attr("name") == "formIAgree") {
+                            error.insertAfter("#formIAgree");
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    },
+                    errorClass: "error",
+                    errorElement: "div",
+                    submitHandler: function (form) {
+                        $("#submit").attr("disabled", true);
+                        $("#formAjaxLoader").show();
+                        $(form).ajaxSubmit({
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.messageSendSatus == "true") {
+                                    $("#submit").hide();
+                                    $("#formAjaxLoader").hide();
+                                    $("#responcemessagesuccess").show();
+                                    $("#responcemessageerror").hide();
+                                } else if (data.messageSendSatus == "false") {
+                                    grecaptcha.reset();
+                                    $("#submit").attr("disabled", false);
+                                    $("#formAjaxLoader").hide();
+                                    $("#responcemessagesuccess").hide();
+                                    $("#responcemessageerror").show();
+                                    $("input[type=text], textarea").val("");
+                                    $("input[type=checkbox]").removeAttr('checked');
+                                    $("select option").removeAttr('selected');
+                                } else if (!data.messageSendSatus) {
+                                    $("#submit").attr("disabled", false);
+                                    $("#formAjaxLoader").hide();
+                                    $(".error", $("#captcha").parent()).remove();
+                                    $("#captcha").parent().append('<div class="error" style="display: block;">' + $("#captcha").attr("title") + '</div>');
+                                }
+                            },
+                            failure: function (data) {
+                                $("#formAjaxLoader").hide();
+                                $("#submit").attr("disabled", false);
+                                grecaptcha.reset();
+                            }
+                        });
+                    }
+                });
+                $("#submit").removeAttr("disabled");
+
+                if (getParameterByName("email") != null) {
+                    $("#formEmail").val(getParameterByName("email"));
+                    setTimeout(function () {
+                        $("#formEmail").blur();
+                    }, 10);
+
+                }
+
+            });
+        </script>
+
+        <form name="formNewsletter" action="<?php echo $formUrl; ?>" method="post" class="form"
+              id="formNewsletter" novalidate="novalidate">
+
+            <input type="hidden" name="countryIds" value="<?php echo implode(",", $orgIds); ?>">
+            <input type="hidden" name="website" value="<?php echo $cleandomain ?>">
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+
+                <div class="formRow">
+                    <select name="formTitle" id="formTitle" class="selectField">
+                        <option value=""><?= $mappedWidgetSettings->getValueByName("Title") ?></option>
+                        <option value="Dr"><?= $mappedWidgetSettings->getValueByName("Dr") ?></option>
+                        <option value="Miss"><?= $mappedWidgetSettings->getValueByName("Miss") ?></option>
+                        <option value="Mr"><?= $mappedWidgetSettings->getValueByName("Mr") ?></option>
+                        <option value="Mrs"><?= $mappedWidgetSettings->getValueByName("Mrs") ?></option>
+                        <option value="Ms"><?= $mappedWidgetSettings->getValueByName("Ms") ?></option>
+                        <option value="Prof."><?= $mappedWidgetSettings->getValueByName("Prof.") ?></option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+
+                <div class="formRow">
+                    <input type="text" name="formCompanyName" id="formCompanyName" value="" class="textField"
+                           placeholder="<?= $mappedWidgetSettings->getValueByName("Company Name") ?>">
+                    <div class="error"></div>
+                </div>
+
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+
+                <div class="formRow">
+                    <input type="text" name="formFirstName" id="formFirstName" value="" class="textField required"
+                           placeholder="<?= $mappedWidgetSettings->getValueByName("First Name") ?>" aria-required="true">
+                    <div class="error"></div>
+                </div>
+
+                <div class="formRow">
+                    <input type="text" name="formLastName" id="formLastName" value="" class="textField required"
+                           placeholder="<?= $mappedWidgetSettings->getValueByName("Last Name") ?>" aria-required="true">
+                    <div class="error"></div>
+                </div>
+
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+
+                <div class="formRow">
+                    <input type="text" name="formPhoneNumber" id="formPhoneNumber" value="" class="textField"
+                           placeholder="<?= $mappedWidgetSettings->getValueByName("Phone Number") ?>">
+                    <div class="error"></div>
+                </div>
+
+                <div class="formRow">
+                    <input type="text" name="formEmail" id="formEmail"
+                           value="<?= $eventId = $this->request->get("email"); ?>" class="textField required"
+                           placeholder="<?= $mappedWidgetSettings->getValueByName("Email") ?>" aria-required="true">
+                    <div class="error"></div>
+                </div>
+
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <a href="#" id="optionalHeading"><i class="fa fa-plus-square-o"
+                                                    aria-hidden="true"></i><?= $mappedWidgetSettings->getValueByName("Optional Address Details") ?>
+                </a>
+            </div>
+
+            <div id="expandCollapse" style="display:none;">
+
+                <div class="col-xs-12 col-sm-4 col-md-4">
+
+                    <div class="formRow">
+                        <input type="text" name="formAddressOne" id="formAddressOne" value="" class="textField"
+                               placeholder="<?= $mappedWidgetSettings->getValueByName("Address Line 1") ?>">
+                        <div class="error"></div>
+                    </div>
+                    <div class="formRow">
+                        <input type="text" name="formAddressTwo" id="formAddressTwo" value="" class="textField"
+                               placeholder="<?= $mappedWidgetSettings->getValueByName("Address Line 2") ?>">
+                        <div class="error"></div>
+                    </div>
+
+                </div>
+
+                <div class="col-xs-12 col-sm-4 col-md-4">
+
+                    <div class="formRow">
+                        <input type="text" name="formCity" id="formCity" value="" class="textField"
+                               placeholder="<?= $mappedWidgetSettings->getValueByName("City") ?>">
+                        <div class="error"></div>
+                    </div>
+                    <div class="formRow">
+                        <input type="text" name="formStateProvinceRegion" id="formStateProvinceRegion" value=""
+                               class="textField"
+                               placeholder="<?= $mappedWidgetSettings->getValueByName("State/Province/Region") ?>">
+                        <div class="error"></div>
+                    </div>
+
+                </div>
+
+                <div class="col-xs-12 col-sm-4 col-md-4">
+
+                    <div class="formRow">
+                        <input type="text" name="formPostalZipCode" id="formPostalZipCode" value="" class="textField"
+                               placeholder="<?= $mappedWidgetSettings->getValueByName("Postal/Zip Code") ?>">
+                        <div class="error"></div>
+                    </div>
+                    <div class="formRow">
+                        <select name="formAddressCountry" id="formAddressCountry" class="selectField">
+                            <option value="@"
+                                    selected="selected"><?= $mappedWidgetSettings->getValueByName("Country") ?></option>
+                            <?php
+                            foreach ($jsonResponse as $row) {
+
+                                echo "<option value='" . $row->key . "'>" . $row->value . "</option>";
+
+                            }
+                            ?>
+                        </select>
+                        <div class="error"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xs-12 col-sm-6 col-md-4">
+
+                <div class="formRow">
+                    <label for="IAgree1" id="formIAgree" class="agree">
+                        <input type="checkbox" id="IAgree1" name="formIAgree" value="Y">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                        <i class="fa fa-square-o" aria-hidden="true"></i>
+                        <?= $mappedWidgetSettings->getValueByName("I agree to receive the BNI Newsletter by email.") ?>
+                    </label>
+                    <div class="error"></div>
+                </div>
+
+
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="formRow">
+                    <div class="g-recaptcha" data-sitekey="6LfvSREUAAAAAOxTPtj79Hj7sECtQthOpb7NQ2gb" data-callback="correctCaptcha"></div>
+                    <input type="hidden" name="captcha" id="captcha" value=""
+                           title="<?= $mappedWidgetSettings->getValueByName("Please enter captcha") ?>">
+                    <div class="error"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="formButtonsRow">
+                    <button type="submit" id="submit" name="submit"
+                            class="button"><?= $mappedWidgetSettings->getValueByName("Submit") ?></button>
+                    <span id="formAjaxLoader" style="display:none;"><i
+                                class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                </div>
+            </div>
+            <p id="responcemessagesuccess" align="center"
+               style="display: none;"><?= $mappedWidgetSettings->getValueByName("Your message has been sent successfully") ?></p>
+            <p id="responcemessageerror" align="center"
+               style="display: none;"><?= $mappedWidgetSettings->getValueByName("There was an error while processing your request") ?></p>
+        </form>
+    </div>
+</section>

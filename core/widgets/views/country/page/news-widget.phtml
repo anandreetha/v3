@@ -1,0 +1,17 @@
+<div id="news">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script>
+    //This will make a ajax post request to the news controller which return html and we render that in ajax response.
+    $(function () {
+
+        var languages = <?php echo json_encode($languages) ?>;
+        var orgIds = <?php echo json_encode($orgIds) ?>;
+        $.post("<?php echo $ajaxUrl; ?>", {orgIds: orgIds, languages: languages} ,function (data) {
+            $("#rssLoaderAjax").hide();
+            $("#news").html(data);
+        });
+    });
+
+</script>

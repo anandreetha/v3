@@ -1,0 +1,268 @@
+<section class="widgetEventCalendar">
+<br>
+    <script type="text/javascript">
+        var monthNames = ['<?=addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("January"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("February"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("March"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("April"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("May"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("June"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("July"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("August"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("September"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("October"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("November"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("December"),ENT_QUOTES, 'UTF-8'));?>'];
+        var dayNamesShort = ['<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("Sun"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("Mon"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("Tue"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("Wed"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("Thu"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("Fri"),ENT_QUOTES, 'UTF-8'));?>',
+            '<?= addslashes(html_entity_decode($mappedWidgetSettings->getValueByName("Sat"),ENT_QUOTES, 'UTF-8'));?>'];
+        var eventsDataJsonUrl;
+        var hideExtension=true;
+        var gotoMonth;
+        var gotoYear;
+
+
+        $(function() {
+            var fullURL = window.document.URL;
+            var queryString = fullURL.substring(fullURL.indexOf("?"), fullURL.length);
+            var regionIds = '<?php echo implode(",",$orgIds); ?>';
+            var $eventTypeOptTextJs = "Select Event Type";
+
+            $(window).bind('resizeEnd', function () {
+                setCalendar();
+            });
+
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+
+            gotoMonth = m;
+            gotoYear = y;
+
+            $("#calendar").fullCalendar({
+                theme: true,
+                header: {
+                    left: "title",
+                    center: "",
+                    right: "prev,today,next",
+                },
+                buttonText: {
+                    today: "",
+                },
+                eventRender: function (event, element) {
+                    var el = element.text();
+                    element.attr("title", event.description);
+                    element.tooltip({
+                        track: true,
+                        delay: 0,
+                        showURL: false,
+                        showBody: " - ",
+                        extraClass: "pretty",
+                        fixPNG: true,
+                        left: -120
+                    });
+                },
+                viewRender: function (view, element) {
+
+                    var caldate = $("#calendar").fullCalendar("getDate");
+                    var caly = caldate.format('YYYY');
+                    $("#eventCalendarYearDropDown").val(caly);
+
+                    var calm = parseInt(caldate.format('M'));
+                    calm = (calm ? calm - 1 : 0);
+                    $("#eventCalendarMonthDropDown").val(calm);
+
+                    gotoMonth = calm;
+                    gotoYear = caly;
+                    delete caldate, calm, caly;
+
+                    if (typeof eventsDataJsonUrl == "undefined") return;
+
+                    setMobileCalendar(eventsDataJsonUrl);
+
+                },
+                monthNames: monthNames,
+                dayNamesShort: dayNamesShort
+            });
+
+
+            $.each(monthNames, function (i, item) {
+                $("<option/>", {value: i}).text(item).appendTo("#eventCalendarMonthDropDown");
+            });
+            $("#eventCalendarMonthDropDown").val(m);
+
+            var beginYear = parseInt(y) - 10;
+            var i;
+
+            for (i = 0; i < 13; i++) {
+                var optVal = beginYear + i;
+                $("#eventCalendarYearDropDown").append('<option value="' + optVal + '">' + optVal + '</option>');
+                delete optVal;
+            }
+            $("#eventCalendarYearDropDown").val(y);
+
+            delete date, d, m, y, beginYear, i;
+
+            $("#eventCalendarMonthDropDown").on("change", function () {
+                gotoMonth = $(this).val();
+                eventsDataJsonUrl = "/web/open/cmsViewEventsCalendarJson?regionIds="+regionIds+ "&eventTypeId=" + $("#eventCalendarEventTypeDropDown").val()+"&cmsv3="+hideExtension;
+                setCalendar();
+                localStorage.setItem("month", gotoMonth);
+            });
+
+            $("#eventCalendarYearDropDown").on("change", function () {
+                gotoYear = $(this).val();
+                eventsDataJsonUrl = "/web/open/cmsViewEventsCalendarJson?regionIds="+regionIds+ "&eventTypeId=" + $("#eventCalendarEventTypeDropDown").val()+"&cmsv3="+hideExtension;
+                setCalendar();
+                localStorage.setItem("year", gotoYear);
+            });
+
+            $("#eventCalendarEventTypeDropDown").on("change", function () {
+                eventsDataJsonUrl = "/web/open/cmsViewEventsCalendarJson?regionIds="+regionIds+ "&eventTypeId=" + $("#eventCalendarEventTypeDropDown").val()+"&cmsv3="+hideExtension;
+                setCalendar();
+                localStorage.setItem("eventType", $("#eventCalendarEventTypeDropDown").val());
+            });
+
+            $.getJSON("/web/open/cmsViewEventTypesJson?regionIds="+ regionIds+"<?=$languages?>", function(data) {
+
+                $("#eventCalendarEventTypeDropDown").empty().append('<option value="0"><?= $mappedWidgetSettings->getValueByName("Select Event Type")?></option>');
+                $.each($(data).sort(sortByName), function(i,item){
+                    $("<option/>", { value : item.typeID }).text(item.typeName).appendTo("#eventCalendarEventTypeDropDown");
+                });
+                eventsDataJsonUrl = "/web/open/cmsViewEventsCalendarJson?regionIds="+regionIds+"&eventTypeId="+$("#eventCalendarEventTypeDropDown").val()+"&cmsv3="+hideExtension;
+                setCalendar();
+                setMobileCalendar(eventsDataJsonUrl);
+            });
+
+
+            function setMobileCalendar(mobileEventsCalendarJsonUrl) {
+                var calendarMobileHTML = '<h1><span class="month">' + monthNames[gotoMonth] + '</span> <span class="year">' + gotoYear + '</span></h1>\n';
+                var selectedDate = gotoYear + "-" + (parseInt(gotoMonth) + 1);
+                var startOfFirstDay = new Date(gotoYear, gotoMonth, 1);
+                var start = startOfFirstDay / 1000;
+                var startOfLastDay = new Date(gotoYear, gotoMonth + 1, 1);
+                var end = startOfLastDay / 1000;
+                if (mobileEventsCalendarJsonUrl.indexOf("start=") == -1) {
+                    mobileEventsCalendarJsonUrl = mobileEventsCalendarJsonUrl + "&start=" + start;
+                }
+                if (mobileEventsCalendarJsonUrl.indexOf("end=") == -1) {
+                    mobileEventsCalendarJsonUrl = mobileEventsCalendarJsonUrl + "&end=" + end;
+                }
+
+                $.getJSON(mobileEventsCalendarJsonUrl, function (calEvents) {
+                    var eventsList = new Object;
+                    $.each(calEvents, function (i, calEvent) {
+
+                        var startDateObj = calEvent.start.split("T");
+                        startDateObj.pop();
+                        var eventStartDate = startDateObj;
+                        startDateObj = new Date(startDateObj);
+
+                        var startDate = startDateObj.getUTCFullYear() + "-" + (startDateObj.getUTCMonth() + 1);
+
+                        if (selectedDate == startDate) {
+                            var eventHTML = '<a href="' + calEvent.url + '">' + calEvent.title + '</a>';
+                            if (eventsList[eventStartDate]) {
+                                eventsList[eventStartDate] = eventsList[eventStartDate] + "\n" + eventHTML;
+                            } else {
+                                eventsList[eventStartDate] = eventHTML;
+                            }
+                        }
+                        delete startDateObj, eventStartDate, startDate, eventHTML;
+                    });
+
+                    var len = $.map(eventsList, function (n, i) {
+                        return i;
+                    }).length;
+
+                    if (len) {
+                        var dates = Object.keys(eventsList).sort();
+                        $.each(dates, function (key, date) {
+                            var eventDate = new Date(date);
+                            calendarMobileHTML = calendarMobileHTML + '<div class="rows">\n';
+                            calendarMobileHTML = calendarMobileHTML + '\t<div class="date">' + eventDate.getUTCDate() + ' ' + dayNamesShort[eventDate.getUTCDay()] + '</div>\n';
+                            calendarMobileHTML = calendarMobileHTML + '\t<div class="eventsList">\n';
+                            calendarMobileHTML = calendarMobileHTML + eventsList[date];
+                            calendarMobileHTML = calendarMobileHTML + '\t</div>\n';
+                            calendarMobileHTML = calendarMobileHTML + '\t<div class="clearBoth"></div>\n';
+                            calendarMobileHTML = calendarMobileHTML + '</div>';
+
+                            delete eventDate;
+                        });
+                    } else {
+                        calendarMobileHTML = calendarMobileHTML + '<div class="rows">\n';
+                        calendarMobileHTML = calendarMobileHTML + '<div class="noRecords"><?= $mappedWidgetSettings->getValueByName("No Events Found")?></div>';
+                        calendarMobileHTML = calendarMobileHTML + '</div>';
+                    }
+
+                    $("#calendarMobile").html(calendarMobileHTML);
+
+                    delete calendarHTML, calendarMobileHTML, selectedDate;
+                });
+            }
+
+            //Json Sort Function
+            $.fn.sort = function () {
+                return this.pushStack([].sort.apply(this, arguments), []);
+            }
+
+            function sortByName(a, b) {
+                if (a.name && !a.typeName) {
+                    if (a.name == b.name) {
+                        return 0;
+                    }
+                    return a.name > b.name ? 1 : -1;
+                }
+
+                if (a.typeName == b.typeName) {
+                    return 0;
+                }
+                return a.typeName > b.typeName ? 1 : -1;
+            }
+
+            function setCalendar() {
+                $("#calendar").fullCalendar('removeEventSources');
+                $("#calendar").fullCalendar('addEventSource', eventsDataJsonUrl);
+                var gotoMoment = moment().year(gotoYear).month(gotoMonth);
+                $("#calendar").fullCalendar("gotoDate", gotoMoment);
+            }
+            getValuesFromLocaleStorage();
+        });
+
+
+        function getValuesFromLocaleStorage(){
+            if(localStorage.getItem("year") != null){
+                $("#eventCalendarYearDropDown").val(localStorage.getItem("year")).trigger("change");
+            }
+            if(localStorage.getItem("month") != null){
+                $("#eventCalendarMonthDropDown").val(localStorage.getItem("month")).trigger("change");
+            }
+            if(localStorage.getItem("eventType") != null){
+                $("#eventCalendarEventTypeDropDown").val(localStorage.getItem("eventType")).trigger("change");
+            }
+        }
+    </script>
+
+
+
+    <div class="widgetEventCalendarToolBar">
+		<div class="holder">
+			<div class="selectBoxarea">
+				<select name="year" class="selectField" id="eventCalendarYearDropDown"></select>
+				<select name="month" class="selectField" id="eventCalendarMonthDropDown"></select>
+				<select name="eventType" class="selectField" id="eventCalendarEventTypeDropDown"></select>
+			</div>
+		</div>	
+    </div>
+
+    <div class="holder">
+        <div id="calendar"></div>
+        <div id="calendarMobile"></div>
+    </div>
+
+</section>

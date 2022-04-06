@@ -1,0 +1,19 @@
+<?php
+
+$this->partial('partials/v3/page/page-header');
+
+// Main content from controller will be displayed here
+echo $this->getContent();
+
+$widgetProperties = array();
+$widgetProperties["orgIds"] = $orgIds;
+$widgetProperties["page"] = $page;
+$widgetProperties["languages"] =$languages;
+
+if(isset($renderStaticContent)){
+    $widgetProperties['renderStaticContent'] = $renderStaticContent;
+}
+
+$this->widgetRenderService->renderWidgets($pageWidgets,$widgetProperties);
+$this->partial('partials/v3/footer/footer');
+?>

@@ -1,0 +1,48 @@
+<div id="chapterDetail">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script type="text/javascript" data-cookieconsent="ignore">
+    $(document).ready(function(){
+		var basepath=document.location.href;
+		$('link[rel="canonical"]').attr('href', basepath);
+		$('meta[property="og:url"]').attr('content', basepath);
+		$('meta[name="twitter:url"]').attr('content', basepath);
+		
+        //This will make a ajax post request to the chapter detail controller which return html and we render that in ajax response.
+        var mappedWidgetSettings = '<?php echo json_encode($mappedWidgetSettingsObj) ?>';
+        var pageMode = <?php echo json_encode($pageMode) ?>;
+        var languageLocaleCode = <?php echo json_encode($code)?>;
+        var website_type = $('#website_type').val();
+		var website_id = $('#website_id').val();
+
+        var url = "<?php echo $ajaxUrl; ?>";
+		
+		$.urlParam = function(name){
+			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+			return results[1] || 0;
+		}			
+		var chapterId=decodeURIComponent($.urlParam('chapterId'));
+
+		
+		
+		$.ajax({
+			type: "POST",
+			url: url,
+			data:{
+            pageMode: pageMode,
+            chapterId: chapterId,
+            languageLocaleCode: languageLocaleCode,
+			website_type:website_type,
+			website_id:website_id,
+            mappedWidgetSettings:mappedWidgetSettings},
+			success: function(data) {
+				 $("#rssLoaderAjax").hide();
+				$("#chapterDetail").html(data);
+			}
+		}).fail(function () {
+            window.location.href = "nopage";
+        });
+		
+    });
+</script>

@@ -1,0 +1,69 @@
+<script src="/bnicms/v3/js/modalClose/closeModal.js"></script>
+<div class="container">
+    <?= $this->getContent(); ?>
+    
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post" action = "<?=$this->config->general->baseUri?>backend/website/addcountrylevel/<?=$countryid?>">
+                    <div class="form-group">
+                        <label for="inputWebsiteDomain"><?= $this->translator->_('cms.v3.admin.websitecreation.createcountryleveltemplate') ?></label>
+                       
+						<input type="hidden" name="countryname" id="countryname">
+						<input type="hidden" name="countryid" id="countryid">
+						<div class="processicons">
+							<button type="button" class="btn btn-default active" id="newWebsiteProcess"><?php echo $this->translator->_('cms.v3.admin.websitecreation.countrylevelyes');?></button>
+							<button type="button" class="btn btn-default" data-dismiss="modal" id="ClosePopup"><?php echo $this->translator->_('cms.v3.admin.websitecreation.countrylevelno');?></button>
+							<div style="clear:both"></div>							
+						</div>
+						
+                    </div>
+                   
+                </form>
+            </div>
+        </div>
+    
+</div>
+
+<style type="text/css">
+.processicons .btn-default.active {
+    color: #fff;
+    background-color: #CF2030;
+}
+</style>
+
+<script>
+
+    // When the document is ready, check on intervals if the success alert is on display.
+    // If the success alert is on display then this means we've successfully completed our action and we can close the form
+    // Close modal function is highly specific to the bootstrap modal and expects some sort of successful alert in this file to process
+    
+	$(document).ready(function () {
+		var countriesAvailable=window.parent.$('#countriesAvailable option:selected');
+		$('#countryname').val(countriesAvailable.text());
+		$('#countryid').val(countriesAvailable.val());
+		
+		$('#newWebsiteProcess').click(function (e) { 
+			window.parent.$('#newWebsiteSubmit').trigger('click');
+		});
+		$('#ClosePopup').click(function (e) { console.log("Hello"); 
+			window.parent.$('#newWebsiteModal').modal('hide');;
+		});
+	
+        // If there are errors shown then enable the save button again
+        if ($(".alert-danger").length > 0) {
+            $(parent.document).find("#newWebsiteSubmit").attr("disabled", false);
+        }
+        if ($(".alert-danger").length > 0 || $(".alert-success").length > 0){
+            $(parent.document).find("#modalLoadingBackground").fadeOut(function () {
+
+                $(parent.document).find('#modalLoadingSpinner').fadeOut();
+                $(parent.document).find('#modal-spinner').fadeOut();
+            });
+        }
+        closeModal('#newWebsiteModal');
+    });
+
+
+    
+
+</script>

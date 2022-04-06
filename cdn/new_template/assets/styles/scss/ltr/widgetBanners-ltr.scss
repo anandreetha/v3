@@ -1,0 +1,440 @@
+/* Banners Start */
+.widgetBanners {
+    clear: both;
+    display: block;
+    margin: 0px;
+    padding: 60px 0px 40px 0;
+    overflow: hidden;
+    background: $greyLight;
+    .navTwo {
+        display: block;
+        height: 765px;
+        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: $white;
+        padding: 34px 0px;
+        margin: 0px 0px;
+        list-style: none;
+        box-shadow: 0px 3px 6px #00000029; 
+        h2{
+            color: $bniBlack;
+            font-weight: 700;
+            position: relative;
+            padding: 0 0 10px 0;
+            margin: 0 30px 30px 30px;
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 80px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }  
+        ul{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            li {
+                display: block;
+                margin: -1px 0px 0px 0px;
+                padding: 0;
+                a {
+                    position: relative;
+                    display: block;
+                    margin: 0px;
+                    padding: 35px 30px;
+                    font-size: 34px;
+                    line-height: 39px;
+                    font-weight: 700;
+                    color: $bniRed;
+                    text-decoration: none;
+                    span {
+                        position: absolute;
+                        top: 14px;
+                        right: 30px;
+                        font-size: 10px;
+                        line-height: 10px;
+                        padding: 26px 0px;
+                        margin-right: 0px;
+                        transition: all 0.5s ease;
+                        -webkit-transition:  all 0.5s ease;
+                        svg{
+                            width: 22px;
+                            &.icon-redarrow{
+                                .cls-1, .cls-2 {
+                                    stroke: $bniRed;
+                                }
+                            }
+                        }
+                    }                    
+                    &:hover {
+                        color: $white;
+                        background-color: $bniRed;
+                        span {
+                            transition: all 0.5s ease;
+                            -webkit-transition:  all 0.5s ease;
+                            svg{
+                                &.icon-redarrow{
+                                    .cls-1, .cls-2 {
+                                        stroke: $white;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            li:first-child {
+                margin: 0px 0px 0px 0px;
+            }
+        }
+    }
+    
+    .banner {
+        display: block;
+        height: 425px;
+        overflow: hidden;
+        background-color: $third;
+        padding: 0px;
+        margin: 15px 0px;
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+    
+    .wysiwyg.banner {
+        display: block;
+        height: 425px;
+        overflow: hidden;
+        background-color: $third;
+        padding: 15px;
+        margin: 15px 0px;
+        
+        .wysiwygContent {
+            display: block;
+            margin: 0px;
+            padding: 0px 15px 0px 0px;
+            height: 100%;
+            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: $white;
+        }
+        
+        &:hover {
+            opacity: 1;
+        }
+    }
+    
+    .visit {
+        background: $third url(../../images/banner-visitchapter.jpg) no-repeat center center;
+        background-size: cover;
+        text-align: center;
+        color: $white;
+        text-transform: uppercase;
+        font-size: 24px;
+        text-decoration: none;
+        span {
+            display: block;
+            padding-top: 300px;
+            text-decoration: none;
+        }
+    }
+    
+    .podcast {
+        background: $third url(../../images/banner-podcast.jpg) no-repeat center center;
+        background-size: cover;
+    }
+    
+    .foundation {
+        background: $third url(../../images/banner-foundation.jpg) no-repeat center center;
+        background-size: cover;
+    }
+
+    .bannerBox{
+        box-shadow: 0px 3px 6px #00000029;
+        position: relative;
+        margin: 0 0 80px 0;
+        height: 320px;
+        img{
+            max-width: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        a{
+            display: inline-block;
+            font-size: 38px;
+            line-height: 43px;
+            font-weight: 700;
+            color: $bniRed;
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            width: 80%;
+            text-decoration: none;
+            padding: 27px 15px;
+            background: $white;
+            border: 1px solid $white;
+            text-align: center;
+            transform: translate(-50%, 0%);
+            -webkit-transform: translate(-50%, 0%);
+            -moz-transform: translate(-50%, 0%);
+            -ms-transform: translate(-50%, 0%);
+            -o-transform: translate(-50%, 0%);
+            box-shadow: 0px 3px 6px #00000029;
+            &:hover{
+                background: $bniRed;
+                color: $white;
+                border: 1px solid $white;
+            }
+        }
+    }
+}
+
+@media (max-width: 1439px) {
+    .widgetBanners {
+        padding: 50px 0 30px 0;
+        .navTwo {
+            height: 590px;
+            h2{
+                font-size: 28px;
+                line-height: 32px;
+                margin: 0 20px 30px 20px;
+                &:after{
+                    width: 70px;
+                    height: 5px;
+                }
+            }
+            ul{
+                li {
+                    a {
+                        padding: 28px 20px;
+                        font-size: 28px;
+                        line-height: 34px;
+                        span {
+                            top: 18px;
+                            right: 20px;
+                            padding: 12px 0px;
+                            svg{
+                                width: 20px;
+                            }
+                        }
+
+                        &:hover {
+                           
+                            span {
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .banner {
+            height: 350px;
+        }
+        
+        .visit {
+            font-size: 20px;
+            span {
+                padding-top: 247px;
+            }
+        }
+        .bannerBox{
+            margin: 0 0 50px 0;
+            height: 260px;
+            a{
+                font-size: 28px;
+                line-height: 30px;
+                bottom: -20px;  
+                padding: 12px 15px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetBanners {
+        .navTwo {
+            ul{
+                li{
+                    a{
+                        padding: 20px 20px;
+                        font-size: 22px;
+                        line-height: 28px;
+                        span{
+                            top: 9px;
+                        }
+                    }
+                }
+            }
+        }
+        .bannerBox{
+            a{
+                font-size: 22px;
+                line-height: 26px;
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetBanners {
+        .navTwo{
+            height: 930px;
+            h2{
+                margin: 0 20px 20px 20px;
+            }
+            ul{
+                li{
+                    a{
+                        padding: 16px 20px;
+                        font-size: 18px;
+                        line-height: 24px;
+                        span{
+                            top: 2px;
+                        }
+                    }
+                }
+            }
+        }
+        .bannerBox{
+            height: 190px;
+            a{
+                font-size: 20px;
+                line-height: 24px;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetBanners {
+        padding: 30px 0px 0 0;
+        
+        .holder {
+            padding: 0px;
+        }
+        
+        
+        .navTwo {
+            height: auto;
+            padding: 20px 0px;
+            margin-top: 1px;
+            margin-bottom: 30px;
+            margin-right: 1px;
+            h2{
+                font-size: 25px;
+                line-height: 30px;
+                margin: 0 20px 20px 20px;
+                &:after{
+                    width: 50px;
+                }
+            }
+            ul{
+                li {
+                    a {
+                        padding: 10px 20px;
+                        font-size: 16px;
+                        line-height: 20px;
+                        span {
+                            padding: 6px 0px;
+                            top: 0;
+                            svg{
+                                width: 16px;
+                            }
+                        }
+
+                        &:hover {
+                            
+                            span {
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .banner {
+            height: 320px;
+            margin-top: 1px;
+            margin-bottom: 0px;
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+        
+        .visit {
+            span {
+                padding-top: 227px;
+            }
+        }
+        
+        .boxes:nth-child(odd) {
+            .banner {
+                margin-right: 1px;
+            }
+        }
+
+        .bannerBox {
+            height: 210px;
+            a{
+                font-size: 18px;
+                line-height: 24px;
+                padding: 8px 15px 6px 15px;
+            }
+        }
+
+    }
+}
+
+@media (max-width: 413px) {
+    .widgetBanners {
+        .boxes {
+            float: none;
+            display: block;
+            width: 100%;
+        }
+        .navTwo {
+            height: auto !important;
+            margin-bottom: 30px;
+            li {
+                a {
+                    padding: 15px 0px;
+                    font-size: 16px;
+                    line-height: 20px;
+                    span {
+                        padding: 20px 0px;
+                    }
+
+                    &:hover {
+                        
+                        span {
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+        .banner {
+            height: 320px;
+            margin-top: 1px;
+            margin-bottom: 0px;
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+        
+        
+
+    }
+}
+/* Banners End */

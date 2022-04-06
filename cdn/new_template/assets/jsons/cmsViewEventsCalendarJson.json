@@ -1,0 +1,8 @@
+[
+    {"description":"Test 1 for date 23rd June","end":"2017-06-23T11:00","id":163337,"start":"2017-06-23T10:00","title":"Test 1 for date 23rd June","url":"eventdetails.html?eventId=163337"},
+    {"description":"Test 2 for 23rd June","end":"2017-06-23T12:00","id":163338,"start":"2017-06-23T11:00","title":"Test 2 for 23rd June","url":"eventdetails.html?eventId=163338"},
+    {"description":"Member Success Program - Part 2 of 2","end":"2017-06-23T12:30","id":166618,"start":"2017-06-23T11:00","title":"Member Success Program - Part 2 of 2","url":"eventdetails.html?eventId=166618"},
+    {"description":"Member Success Program - Part 1 of 2","end":"2017-06-16T12:30","id":166619,"start":"2017-06-16T11:00","title":"Member Success Program - Part 1 of 2","url":"eventdetails.html?eventId=166619"},
+    {"description":"BNI Connect: Chapter Web Pages","end":"2017-05-31T15:30","id":164064,"start":"2017-05-31T15:00","title":"BNI Connect: Chapter Web Pages","url":"eventdetails.html?eventId=164064"},
+    {"description":"BNI Connect  Webinar - Online Renewals in BNI Connect","end":"2017-05-30T15:30","id":164066,"start":"2017-05-30T15:00","title":"BNI Connect  Webinar - Online Renewals in BNI Conn","url":"eventdetails.html?eventId=164066"}
+]

@@ -1,0 +1,464 @@
+<section class="widgetChapterDetail">
+    <div class="holder">
+        <?php
+			//print"<pre>";print_r($jsonResponse);
+			$phone = $mappedWidgetSettings->getValueByName("Phone");
+            $directions= $mappedWidgetSettings->getValueByName("Directions");
+            $doesRegionAllowOnlineApplicationsCheck = !isset($jsonForOnlineApplicationsCheck) ?  "" : $jsonForOnlineApplicationsCheck->{'cancreate'};
+        ?>
+        <p id="responcemessageerror" align="center"
+           style="display: none; margin-top:10px;"><?php echo isset($errorMessage) ? $errorMessage : "" ?></p>
+        <?php if (!isset($errorMessage)) { ?>
+        <div class="rowDetail">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"><h1 class="ico-068"></h1>
+					<h2><?php echo $ChapterDetails['name']; ?></h2></div>
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><h3><?=$mappedWidgetSettings->getValueByName("Meeting Details")?></h3>
+					<p class="meetingDate"><?php echo $OrgType !="PLANNED_CHAPTER" && isset($ChapterDetails['meetingDay']) && isset($ChapterDetails['meetingTime']) ? $ChapterDetails['meetingDay'] . ' ' . $ChapterDetails['meetingTime'] : '' ?></p>
+					<?php if(($OrgType != "PLANNED_CHAPTER")&&isset($ChapterDetails['meetingTypeText'])):?>
+					<p><?php echo $ChapterDetails['meetingTypeText'];?></p>
+					<?php endif;?>
+					<p><strong><?php echo $ChapterDetails['locationName']; ?></strong></p>
+					<p class="address"><?php echo $ChapterDetails['addressLine1']; ?>
+						<?php if(isset($ChapterDetails['addressLine2']) && !empty($ChapterDetails['addressLine2'])) {
+							echo "<br>".$ChapterDetails['addressLine2'];
+						} ?>
+						<br><?php echo $ChapterDetails['city']; ?>
+						<br><?php echo isset($ChapterDetails['state'])? $ChapterDetails['state'] :'' ; ?><br><?php echo $ChapterDetails['postalCode']; ?></p>
+					<p class="-phone"><bdi><?php echo isset( $ChapterDetails['phoneNumber']) && !empty($ChapterDetails['phoneNumber'])? "<strong>".$phone.": </strong>".$ChapterDetails['phoneNumber'] : "" ?></bdi></p>
+
+
+					<?php if (!$hideUrls && !empty($ChapterDetails['directions'])) {?>
+						<p><?php echo isset( $ChapterDetails['directions']) && !empty($ChapterDetails['directions'])? "<strong>".$directions.": </strong>".$ChapterDetails['directions'] : "" ?></p>
+					<?php } ?>
+					<?php if (!$hideUrls && !empty($ChapterDetails['mapUrl'])) {
+						$fixedUrl = substr($ChapterDetails['mapUrl'], 0, 4) === "http" ? $ChapterDetails['mapUrl'] : 'http://' . $ChapterDetails['mapUrl'];
+						?>
+						<p><a href="<?php echo $fixedUrl;?>" target="_blank"><?=$mappedWidgetSettings->getValueByName("View Map")?></a></p>
+					<?php } ?>
+				</div>
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><h3><?=$mappedWidgetSettings->getValueByName("Member Count")?></h3>
+				<?php 
+					if($MemberListVal=="on"):?>
+						<a href="javascript:;" class="numberLink">
+				<?php 
+					else: 
+						echo '<span class="numberLink">';
+					endif;
+				?>	
+							<?=$MemberCount?>
+							<?php if($MemberListVal=="on"):?>
+								<span><?=$mappedWidgetSettings->getValueByName("Show Members")?></span>
+							</a>
+							<?php 
+							else:
+								echo '</span>';
+							endif;?>	
+				</div>
+            </div>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">	
+				<?php if (!$hideUrls) {
+					if (count($chapterWebsiteAndGalleryArray) > 0) {
+						$website = $chapterWebsiteAndGalleryArray[0];
+						?>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><a
+									href="<?php echo "http://".$this->websiteHelper->strip_accents($website->clean_domain) ?>"
+									target="_blank"
+									class="button"><?= $mappedWidgetSettings->getValueByName("Chapter Website") ?>
+								<span class="ico-048"></span></a></div>
+						<?php
+						if(count($chapterWebsiteAndGalleryArray)> 1){
+							?>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><a
+										href="<?php echo "http://".$this->websiteHelper->strip_accents($website->clean_domain)."/".$this->translationUtils->normalizeLocaleCode($chapterWebsiteAndGalleryArray[2],false)."/".$chapterWebsiteAndGalleryArray[1] ?>"
+										target="_self"
+										class="button"><?= $mappedWidgetSettings->getValueByName("View Chapter Gallery") ?>
+									<span class="ico-048"></span></a></div>
+
+						<?php }
+
+					} ?>
+
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<?php
+						$visitorRegUrl = ($useLatestCode == true ? "visitorregistration?chapterId=" . $chapterId :  $ChapterDetails['visitChapterUrl']);
+						?>
+						<a href="<?php echo $visitorRegUrl; ?>"
+								target="_blank"
+								class="button"><?= $mappedWidgetSettings->getValueByName("Visit This Chapter") ?>
+							<span class="ico-048"></span></a></div>
+				<?php }?>
+
+				<!-- Apply Now button -->
+				<?php
+				$applicantRegUrl = ($useLatestCode == true ? "applicationregistration?chapterId=" . $chapterId :  $ChapterDetails['visitChapterUrl']);
+				?>
+				<?php if ($OrgType != "PLANNED_CHAPTER" && $doesRegionAllowOnlineApplicationsCheck == true) { 
+					if($OnlineApplications=="on"):
+				?>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><a
+							href="<?php echo $applicantRegUrl; ?>"
+							target="_blank"
+							class="button"><?= $mappedWidgetSettings->getValueByName("Apply Now") ?>
+						<span class="ico-048"></span></a>
+				</div>
+
+			   <?php 
+					endif;
+			   } ?>
+			</div>
+        </div>
+		
+	</div>
+</section>	
+<?php
+if (((count($LeadershipTeam) >0 && !empty($LeadershipTeam))&&($ChapterLeadershipVal=="on")) || (($MemberListVal=="on")&&(count($OrgMembers) >0 && !empty($OrgMembers))))
+{ 
+?>
+<section class="widget_chapterdetails_people">
+            <div class="holder">
+                <div class="leadership-taholder">
+                    <ul class="nav nav-tabs leadership_tab" id="myTab" role="tablist">
+                        <?php 
+						$member_active='';$member_in='';
+						if ((count($LeadershipTeam) >0 && !empty($LeadershipTeam))&&($ChapterLeadershipVal=="on")){ ?>
+						<li class="nav-item active">
+                            <a class="nav-link active" id="chapter_leaders_tab" data-toggle="tab" href="#Chapter_leaders" role="tab" aria-controls="<?= $mappedWidgetSettings->getValueByName("Chapter Leadership") ?>" aria-selected="true">
+							<? echo $this->translator->_('cms.v3.admin.chapterdetails.chapterleadership'); ?></a>
+                        </li>
+						<?php }else{$member_active='active'; $member_in='in';} 
+						if(($MemberListVal=="on")&&(count($OrgMembers) >0 && !empty($OrgMembers))){ ?>
+                        <li class="nav-item <?php echo $member_active;?>">
+                            <a class="nav-link <?php echo $member_active;?>" id="members_tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false"><? echo $this->translator->_('cms.v3.admin.chapterdetails.memberstabtitle'); ?></a>
+                        </li>
+						<?php } ?>
+
+                    </ul>
+                    <div class="tab-content chapter_leaders_tab_content" id="myTabContent">
+                        <?php if ((count($LeadershipTeam) >0 && !empty($LeadershipTeam))&&($ChapterLeadershipVal=="on")){
+								//print"<pre>";print_r($leadershipRole);print"</pre>";
+						?>
+						<div class="tab-pane fade active in" id="Chapter_leaders" role="tabpanel" aria-labelledby="chapter_leaders_tab">
+                            
+							<?php if(isset($leadershipRole['president'])&&(count($leadershipRole['president']) >0 && !empty($leadershipRole['president']))):?>		
+							<div class="chptr_leadr_card_row">
+								<?php foreach($leadershipRole['president'] as $ps):
+										$name = $ps['firstName'] . ' ' . $ps['lastName']; 
+								 		if($ps['companyName']!=""):
+											$companyName=$ps['companyName'];
+										else:
+											$companyName=$ps['companyWebsitelink'];
+										endif;
+										
+										if($ps['profileImageUrl']!=""):
+											$profile_img=$ps['profileImageUrl'];
+										else:
+											$profile_img=$this->config->general->cdn.'/new_template/assets/images/default.svg';
+										endif;
+										
+										$website_link='javascript:;';
+										if($ps['companyWebsitelink']!=""):
+											$website_link=$ps['companyWebsitelink'];
+											$website_link=parse_url($website_link, PHP_URL_SCHEME)==''?'http://'.$website_link:$website_link;
+										endif;
+								?>
+                                <div class="leader_headwrap">
+                                    <p><?php echo $ps['role']; ?></p>
+                                    <div class="leaders_card_holder">
+                                        <div class="profile_picture">
+                                            <img src="<?php echo $profile_img;?>" alt="default">
+                                        </div>
+                                        <div class="leadership_card_content_holder">
+                                            <h4 title="<?php echo $name;?>"><?php echo $name; ?></h4>
+                                            <h5 title="<?php echo $ps['role'];?>"><?php echo $ps['role']; ?></h5>
+											<p class="company_name"><a <?php if($website_link!="javascript:;"){?> href="<?php echo $website_link; ?>"  target="_blank" <?php }else{echo 'class="leadership_withoutwebsite"';} ?> title="<?php echo $companyName; ?>"><?php if($companyName!=""): echo $companyName; else: echo '&nbsp;'; endif; ?></a></p>
+                                            <div class="mail_call_profile_viewholder">
+                                                <div class="leftside">
+                                                    <?php if(!is_null($ps['phone'])&&($ps['phone']!="")):?>
+													<a href="tel:<?php echo $ps['phone']; ?>"><i class="fa fa-phone" aria-hidden="true"></i></a>
+													<?php endif; 
+													if(!is_null($ps['email'])&&($ps['email']!="")):?>
+                                                    <a href="<?php echo 'sendmessage?userId=' . $this->securityUtils->encryptUrlEncoded($ps['userId']) . '&userName=' . urlencode($name) ?>"
+													   target="_self" class="iconEmail"><i class="fa fa-envelope-o"  data-toggle='tooltip' title='<?php echo $this->translator->_('cms.v3.admin.editpage.sendmessage')?>' aria-hidden="true"></i></a>
+													<?php endif;?>
+                                                </div>
+												<?php if(!is_null($ps['cmsProfileUrl'])&&($ps['cmsProfileUrl']!="N/A")):
+														$cmsProfileUrl=$ps['cmsProfileUrl'];
+														if (strpos($cmsProfileUrl, 'memberdetails') !== false):
+															$member_url=explode('memberdetails',$cmsProfileUrl);
+															$cmsProfileUrl='memberdetails'.$member_url[1];
+														endif;
+												?>
+													<div class="right_side">
+														<a href="<?php echo $cmsProfileUrl;?>"><? echo $this->translator->_('cms.v3.admin.chapterdetails.viewprofile'); ?>  <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+													</div>
+												<?php endif;?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<?php endforeach; ?>
+                            </div>
+							<?php endif; ?>
+							
+							<?php 
+							foreach($leadershipRoleOrder as $rorder){
+							if(isset($leadershipRole[$rorder])&&(count($leadershipRole[$rorder]) >0 && !empty($leadershipRole[$rorder]))){?>		
+							<div class="chptr_leadr_card_row">
+								<div class="chptr_leadr_heading">
+									<p><?php
+									if($rorder=="membershipcommittee"):
+										echo $this->translator->_('cms.v3.admin.chapterdetails.membershipcommittee'); 
+									elseif($rorder=="visitorhost"):
+										echo $this->translator->_('cms.v3.admin.chapterdetails.visitorhost'); 	
+									elseif($rorder=="support_leaders"):
+										echo $this->translator->_('cms.v3.admin.chapterdetails.supportingleaders'); 
+									elseif($rorder=="rest_team"):
+										echo $this->translator->_('cms.v3.admin.chapterdetails.restoftheteam'); 		
+									elseif($rorder=="boardofadvisors"):
+										echo $this->translator->_('cms.v3.admin.chapterdetails.iba'); 	
+									else:
+										echo $rorder;
+									endif;
+									?></p>
+								</div>
+								
+								<?php
+									
+								foreach ($leadershipRole[$rorder] as $item) { //print"<pre>";print_r($item);
+									$name = $item['firstName'] . ' ' . $item['lastName']; 
+									if($item['companyName']!=""):
+										$companyName=$item['companyName'];
+									else:
+										$companyName=$item['companyWebsitelink'];
+									endif;
+									
+									//print"<pre>";print_r($item);print"</pre>";
+									
+									if($item['profileImageUrl']!=""):
+										$profile_img=$item['profileImageUrl'];
+									else:
+										$profile_img=$this->config->general->cdn.'/new_template/assets/images/default.svg';
+									endif;
+									
+									$website_link='javascript:;';
+									if($item['companyWebsitelink']!=""):
+										$website_link=$item['companyWebsitelink'];
+										$website_link=parse_url($website_link, PHP_URL_SCHEME)==''?'http://'.$website_link:$website_link;
+									endif;
+									
+									?>
+									
+									<div class="leaders_card_holder">
+										<div class="profile_picture">
+											<img src="<?php echo $profile_img; ?>" alt="default">
+										</div>
+										<div class="leadership_card_content_holder">
+											<h4 title="<?php echo $name;?>"><?php echo $name; ?></h4>
+											<h5 title="<?php echo $item['role'];?>"><?php echo $item['role']; ?></h5>
+											<p class="company_name"><a <?php if($website_link!="javascript:;"){?> href="<?php echo $website_link; ?>"  target="_blank" <?php }else{echo 'class="leadership_withoutwebsite"';} ?> title="<?php echo $companyName; ?>"><?php if($companyName!=""): echo $companyName; else: echo '&nbsp;'; endif; ?></a></p>
+											<div class="mail_call_profile_viewholder">
+												<div class="leftside">
+													<?php if(!is_null($item['phone'])&&($item['phone']!="")):?>
+													<a href="tel:<?php echo $item['phone']; ?>"><i class="fa fa-phone" aria-hidden="true"></i></a>
+													<?php endif;
+													if(!is_null($item['email'])&&($item['email']!="")): ?>
+														<a href="<?php echo 'sendmessage?userId=' . $this->securityUtils->encryptUrlEncoded($item['userId']) . '&userName=' . urlencode($name) ?>"
+														   target="_self" class="iconEmail"><i class="fa fa-envelope-o"  data-toggle='tooltip' title='<?php echo $this->translator->_('cms.v3.admin.editpage.sendmessage')?>' aria-hidden="true"></i></a>
+													<?php endif;?>
+												</div>
+												<?php if(!is_null($item['cmsProfileUrl'])&&($item['cmsProfileUrl']!="N/A")):
+														$cmsProfileUrl=$item['cmsProfileUrl'];
+														if (strpos($cmsProfileUrl, 'memberdetails') !== false):
+															$member_url=explode('memberdetails',$cmsProfileUrl);
+															$cmsProfileUrl='memberdetails'.$member_url[1];
+														endif;
+												?>
+													<div class="right_side">
+														<a href="<?php echo $cmsProfileUrl;?>"><? echo $this->translator->_('cms.v3.admin.chapterdetails.viewprofile'); ?> <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+													</div>
+												<?php endif;?>
+											</div>
+										</div>
+									</div>
+									
+								<?php } ?>
+							</div>
+							<?php } 
+							}
+							?>
+							
+                        </div>
+						<?php }?>
+
+						<?php 
+						if(($MemberListVal=="on")&&(count($OrgMembers) >0 && !empty($OrgMembers))){ ?>	
+                        <div class="tab-pane fade <?php echo $member_active." ".$member_in;?>" id="members" role="tabpanel" aria-labelledby="members_tab">
+                            <section class="widgetDataTable">
+
+                                <div class="table-responsive">
+                                    
+							
+									<table id="chapterListTable" class="table table-hover listtables dataTable no-footer dtr-inline"
+										   width="100%"
+										   id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"
+										   style="width: 100%;">
+										<thead>
+											<tr role="row">
+
+											</tr>
+										</thead>
+										<tbody>
+											<?php
+											$counter = 0;
+											foreach ($OrgMembers AS $row) {
+												$classValue = $counter % 2 == 0 ? 'even' : 'odd';
+												$counter++; ?>
+
+												<tr role="row" class="<?php echo $classValue; ?>">
+													<?php
+													if (!$hideUrls) { ?>
+														<td tabindex="0"><a
+																	href=<?php echo "memberdetails?encryptedMemberId=" . $this->securityUtils->encryptUrlEncoded($row["memberId"]) . "&cmsv3=true" . "&name=" . urlencode($row['firstName'] . ' ' . $row['lastName']) ?>
+																	class="linkone"><?php echo $row['firstName'] . ' ' . $row['lastName'] ?></a></td>
+													<?php
+													} else { ?>
+														<td tabindex="0"><a href="memberdetails" class="linkone"><?php echo $row['firstName'] . ' ' . $row['lastName'] ?></a></td>
+													<?php
+													} ?>
+													<td><?php echo $row['companyName'] ?></td>
+													<td><?php echo $row['profession'] . ' > ' . $row['speciality'] ?></td>
+													<td><bdi><?php echo $row['phone'] ?></bdi></td>
+													<td>
+														<?php if (!$hideUrls && !empty($row['emailAddress'] && substr($row['emailAddress'], 0, strlen('does-not-have-email')) != 'does-not-have-email')) { 
+															if($WebsiteSetting=="on"){
+														?>
+														<a href="<?php echo 'sendmessage?userId=' . $this->securityUtils->encryptUrlEncoded($row['userId']) . '&userName=' . urlencode($row['firstName'] . ' ' . $row['lastName']) ?>"
+														   class="sendMessageIcon"></a>
+														<?php 
+															}
+														} ?>
+													</td>
+												</tr>
+											<?php }; ?>
+										</tbody>
+									</table>
+									<div id="DataTables_Table_0_processing" class="dataTables_processing panel panel-default" style="display: none;">Processing...</div>
+								<div class="row">
+									<div class="col-sm-5"></div>
+								</div>
+							
+								<script type="text/javascript">
+									var oTable;
+									var oDefault;
+									var oSettings;
+
+									$(function () {
+										$(".numberLink").click(function () {
+											$("#members_tab").trigger('click');
+											$('html, body').animate({
+												scrollTop: $("#members_tab").offset().top
+											}, 2000);
+										});
+
+										$.fn.dataTableExt.oSort["string-asc"] = function (x, y) {
+											return x.toString().localeCompare(y.toString());
+										};
+
+										$.fn.dataTableExt.oSort["string-desc"] = function (x, y) {
+											return y.toString().localeCompare(x.toString());
+										};
+
+										oDefault = {
+											"bProcessing": true,
+											"responsive": true,
+											"bServerSide": false,
+											"bDestroy": true,
+											"bLengthChange": false,
+											"iDisplayLength": 50,
+											"bSort": true,
+											"bInfo": true,
+											"bPaginate": true,
+											"sPaginationType": "full_numbers",
+											"aaSorting": [],
+											"fnDrawCallback": function (oSettings) {
+												if (oSettings.aiDisplay.length == 0) {
+
+												}
+											}
+										};
+
+										oSettings = $.extend(true, {}, oDefault);
+
+										oSettings.oLanguage = {
+											sLengthMenu: "Show _MENU_ entries",
+											sSearch: "<i class='fa fa-filter' aria-hidden='true'></i>",
+											sZeroRecords: "<?=$mappedWidgetSettings->getValueByName("Zero Records")?>",
+											sEmptyTable: "<?=$mappedWidgetSettings->getValueByName("Zero Records")?>",
+											sInfo: "<?=$mappedWidgetSettings->getValueByName("Showing")?> _START_ <?= $mappedWidgetSettings->getValueByName("to")?> _END_ <?=$mappedWidgetSettings->getValueByName("of")?> _TOTAL_ <?=$mappedWidgetSettings->getValueByName("entries")?>",
+											sInfoEmpty: "<?=$mappedWidgetSettings->getValueByName("Showing")?> 0 <?=$mappedWidgetSettings->getValueByName("to")?> 0 <?=$mappedWidgetSettings->getValueByName("of")?> 0 <?=$mappedWidgetSettings->getValueByName("entries")?>",
+											sInfoFiltered: "",
+											oPaginate: {
+												sFirst: "<i class='fa fa-step-backward' aria-hidden='true'></i>",
+												sPrevious: "<i class='fa fa-chevron-left' aria-hidden='true'></i>",
+												sNext: "<i class='fa fa-chevron-right' aria-hidden='true'></i>",
+												sLast: "<i class='fa fa-step-forward' aria-hidden='true'></i>"
+											}
+										};
+
+										oSettings.aoColumns = [
+											{sWidth: "30%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Member Names")?>"},
+											{sWidth: "20%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Company")?>"},
+											{sWidth: "10%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Profession/Speciality")?>"},
+											{sWidth: "10%", sTitle: "<?=$phone?>"},
+											{sWidth: "15%", sTitle: "<?=$mappedWidgetSettings->getValueByName("Send Mail")?>", bSortable: false}
+										];
+
+										$("#members_tab").click(function () {
+											setTimeout(function(){
+												if($('.member_list_class').length==0){
+													$('.listtables').addClass('member_list_class');
+													oTable = $('.listtables').dataTable(oSettings);
+													$("#chapterListTable").show();	
+												}												
+											}, 200);
+										});
+										
+										
+										if((($('#Chapter_leaders').length)==0)&&(($('#members').length)>0)){
+											$("#members_tab").trigger('click');									
+										}
+										
+									});
+									$("#responcemessageerror").hide();
+									$(".widgetChapterDetail").last().removeClass("widgetForm");
+									<?php if (isset($errorMessage)){ ?>
+									$("#responcemessageerror").show();
+									$(".widgetChapterDetail").last().addClass("widgetForm");
+									<?php } ?>
+								</script>
+								<style type="text/css">
+								.widgetChapterDetail .holder .rowDetail div:last-child{
+									border:none !important;
+								}
+								</style>
+                                </div>
+                            </section>
+                        </div>
+						<?php }
+								
+						}
+						?>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+<?php } ?>
+        
+		
+		
+        
+    
+
+

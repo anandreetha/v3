@@ -1,0 +1,209 @@
+<section class="widgetTextColumns">
+	<div class="holder">
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<p>All Fields are mandatory.</p>
+		</div>
+	</div>
+</section>
+
+<section class="widgetForm">
+    <div class="holder">
+        <script type="text/javascript">
+            $(function () {
+				let canonical=$("link[rel='canonical']").attr("href");
+				let website_type=$('#website_type').val();
+				let domain_url=canonical.substring(0, canonical.lastIndexOf("/") + 1);
+				domain=domain_url.replace(/\/$/, ''); 
+				let domainName=domain.substring(0, domain.lastIndexOf("/") + 1);
+				$('#domainName').val(domainName);
+				
+                //custom validation rule
+                $.validator.addMethod("customemail",
+                    function(value, element) {
+                        return /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(value);
+                    }
+                );
+
+                if($("#IAgree1").change(function () {
+                        if($("#IAgree1").is(":checked")) {
+                            $("#submit").attr("disabled", false);
+                        }else{
+                            $("#submit").attr("disabled", true);
+                        }
+                    }));
+
+                var url = '<?php echo $this->url->get("backend/captcha/checkRecaptha")?>';
+                $("#formSendMessage").validate({
+                    rules: {
+                        fromEmail: {
+                            required: true,
+                            customemail: true
+                        },
+                        messageSubject: {
+                            required: true
+                        },
+                        messageBody: {
+                            required: true
+                        },
+                        captcha: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        fromEmail: {
+                            required: "<?=$mappedWidgetSettings->getValueByName("Enter a correct email validation message")?>",
+                            customemail: "<?=$mappedWidgetSettings->getValueByName("Enter a correct email validation message")?>"
+                        },
+                        messageSubject: {
+                            required: "<?=$mappedWidgetSettings->getValueByName("Enter subject validation message")?>"
+                        },
+                        messageBody: {
+                            required: "<?=$mappedWidgetSettings->getValueByName("Enter message validation message")?>"
+                        },
+                        captcha: {
+                            required: "<?=$mappedWidgetSettings->getValueByName("Please enter captcha")?>"
+                        }
+                    },
+                    errorClass: "error",
+                    errorElement: "div",
+                    submitHandler: function (form) {
+                        $("#submit").attr("disabled", true);
+                        $("#formAjaxLoader").show();
+                        $(form).ajaxSubmit({
+                            dataType: "json",
+                            url:url,
+                            success: function (data) {
+                                if (data.reCaptchaFailed) {
+                                    grecaptcha.reset();
+                                    $("#submit").attr("disabled", false);
+                                    $("#formAjaxLoader").hide();
+                                    $(".error", $("#captcha").parent()).remove();
+                                    $("#captcha").parent().append('<div class="error" style="display: block;">' + $("#captcha").attr("title") + '</div>');
+                                }
+                                else if (data.messageSendSatus == "true" || data.messageSendSatus == true) {
+                                    $("#submit").hide();
+                                    $("#formAjaxLoader").hide();
+                                    $("#responcemessagesuccess").show();
+                                    $("#responcemessageerror").hide();
+                                } else if (data.messageSendSatus == "false" || data.messageSendSatus == false) {
+                                    grecaptcha.reset();
+                                    $("#submit").attr("disabled", false);
+                                    $("#formAjaxLoader").hide();
+                                    $("#responcemessagesuccess").hide();
+                                    $("#responcemessageerror").show();
+                                }
+                            },
+                            failure: function (data) {
+                                grecaptcha.reset();
+                                $("#submit").attr("disabled", false);
+                                $("#formAjaxLoader").hide();
+                            }
+                        });
+                    }
+                });
+
+                if(getParameterByName("userName") != null){
+                    $("#mailTo").text(getParameterByName("userName"));
+                } else if(getParameterByName("countryId")!= null){
+                    $("#mailTo").text(getParameterByName("countryName"));
+                } else {
+                    $("#mailTo").text(getParameterByName("regionName"));
+                }
+                $("#isDirector").val(getParameterByName("isDirector"));
+                $("#userId").val(getParameterByName("userId"));
+                $("#toEmail").val(getParameterByName("toEmail"));
+                $("#regionId").val(getParameterByName("regionId"));
+                $("#countryId").val(getParameterByName("countryId"));
+                $("#companyId").val(getParameterByName("companyId"));
+
+            });
+        </script>
+
+        <style>
+            #buttonSendMessage .button[disabled="disabled"] {
+                background-color: #8d8888;
+                border: 1px solid #979495;
+                color: #ffffff;
+            }
+            
+        </style>
+
+        <script src="https://www.google.com/recaptcha/api.js"></script>
+        <form name="formSendMessage" method="post" class="form"
+              id="formSendMessage" novalidate="novalidate">
+
+            <input name="isDirector" id="isDirector" value="" type="hidden">
+            <input name="userId" id="userId" class="fields" value="" type="hidden">
+            <input name="toEmail" id="toEmail" class="fields" value="" type="hidden">
+            <input name="regionId" id="regionId" class="fields" value="" type="hidden">
+            <input name="countryId" id="countryId" class="fields" value=">" type="hidden">
+            <input name="companyId" id="companyId" class="fields" value="" type="hidden">
+			<input name="domainName" id="domainName" class="fields" value="" type="hidden">
+			
+			<?php
+				$originated_from=$mappedWidgetSettings->getValueByName("This message originated from");
+				$sent_by=$mappedWidgetSettings->getValueByName("This message was sent by");
+				if($originated_from==""):
+					$originated_from="This message originated from";
+				endif;
+				if($sent_by==""):
+					$sent_by="This message was sent by";
+				endif;
+			?>
+			<input name="originated_from" id="originated_from" value="<?php echo $originated_from;?>" type="hidden">
+			<input name="sent_by" id="sent_by" value="<?php echo $sent_by; ?>" type="hidden">
+			
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="formRow">
+                    <label for="formSendMessageTo"><?=$mappedWidgetSettings->getValueByName("Send Message To")?></label>
+                    <div id="mailTo" class="textField">&nbsp;</div>
+                </div>
+                <div class="formRow">
+                    <input type="text" name="fromEmail" id="fromEmail" value="" class="textField required"
+                           placeholder="<?=$mappedWidgetSettings->getValueByName("Your Email Address")?>" aria-required="true">
+                </div>
+                <div class="formRow">
+                    <input type="text" name="messageSubject" id="messageSubject" value="" class="textField required"
+                           placeholder="<?=$mappedWidgetSettings->getValueByName("Subject")?>" aria-required="true">
+                </div>
+
+                <div class="formRow">
+                    <div class="g-recaptcha" data-sitekey="6LfvSREUAAAAAOxTPtj79Hj7sECtQthOpb7NQ2gb" data-callback="correctCaptcha"></div>
+                    <input type="hidden" name="captcha" id="captcha" value="" title="<?=$mappedWidgetSettings->getValueByName("Please enter captcha")?>">
+                </div>
+
+                <div class="formRow" style="display: inline">
+                    <label for="IAgree1" id="formIAgree" class="agree">
+                        <input type="checkbox" id="IAgree1" title="<?= $mappedWidgetSettings->getValueByName("I have read the privacy policy and I consent to sharing my data") ?>" name="formIAgree" value="Y">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                        <i class="fa fa-square-o" aria-hidden="true"></i> &nbsp; <?= $mappedWidgetSettings->getValueByName("I have read the privacy policy and I consent to sharing my data") ?>
+                    </label>
+                </div>
+
+            </div>
+
+
+            <div class="col-xs-12 col-sm-8 col-md-8">
+                <div class="formRow">
+                    <textarea name="messageBody" id="messageBody" class="textField required" rows="6"
+                              placeholder="<?=$mappedWidgetSettings->getValueByName("Message")?>" aria-required="true"></textarea>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="formButtonsRow" id="buttonSendMessage">
+                    <button type="submit" id="submit" name="submit" class="button" disabled="disabled"><?=$mappedWidgetSettings->getValueByName("Send Message")?></button>
+                    <span id="formAjaxLoader" style="display:none;"><i
+                                class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                </div>
+            </div>
+
+            <p id="responcemessagesuccess" align="center" style="margin-top: 15px; display: none;"><?=$mappedWidgetSettings->getValueByName("Your message has been sent successfully")?></p>
+            <p id="responcemessageerror" align="center" style="margin-top: 15px; display: none;"><?=$mappedWidgetSettings->getValueByName("There was an error while processing your request")?></p>
+
+        </form>
+
+
+    </div>
+</section>

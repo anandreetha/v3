@@ -1,0 +1,154 @@
+<section class="widgetForm">
+    <div class="holder">
+
+        <script type="text/javascript">
+            var jsonUrl;
+            $(function() {
+                regionIds = '<?php echo implode(",",$orgIds); ?>';
+                jsonUrl = "/web/open/appsCmsChapterFilterJson?regionIds="+regionIds ;
+
+                $.getJSON(jsonUrl, function(data) {
+                    $("#chapterCity").empty().append("<option></option>");
+                    $.each($(data.city), function(i,item){
+                        $("<option/>", { value : item.name }).text(item.name).appendTo("#chapterCity");
+                    });
+
+                    $("#chapterArea").empty().append("<option></option>");
+                    $.each($(data.area), function(i,item){
+                        $("<option/>", { value : item.id }).text(item.name).appendTo("#chapterArea");
+                    });
+
+                });
+
+                $.getJSON("/web/open/apps/cms/chapter/appsCmsMeetingTimes?regionIds=" +regionIds+"<?php echo $languages ?>", function(data) {
+                    $("#chapterMeetingDay option").each(function () {
+                        if ($(this).val() != "") {
+                            if (data.meetingDay[$(this).val()]) {
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        }
+                    });
+					
+					let meetingType=data.meetingType;
+					$('#chapterMeetingType').empty();
+					let optionval='<option value=""></option>';
+					$.each( meetingType, function(i, obj) {
+						optionval+='<option value='+i+'>'+obj.meetingTypeText+'</option>';
+					});
+					$('#chapterMeetingType').append(optionval);
+					
+
+                    $("#chapterMeetingTime option").each(function () {
+                        if ($(this).val() != "") {
+                            if (data.meetingTime[$(this).val()]) {
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        }
+                    });
+                });
+
+                $("#submit").bind("click", function(){
+                    window.location.assign($("#formFindChapter").attr("action")+"?"+$("#formFindChapter").serialize()+"&regionIds="+regionIds);
+                    return false;
+                });
+                $("#submit").removeAttr("disabled");
+            });
+
+            //Json Sort Function
+            $.fn.sort = function() {
+                return this.pushStack( [].sort.apply( this, arguments ), []);
+            };
+
+            function sortByName(a,b){
+                if (a.name == b.name){
+                    return 0;
+                }
+                return a.name> b.name ? 1 : -1;
+            }
+
+            function sortById(a,b) {
+                if (a.id == b.id) {
+                    return 0;
+                }
+                return a.id > b.id ? 1 : -1;
+            }
+
+
+        </script>
+        <!-- link to controller action-->
+        <form name="formFindChapter" action="chapterlist" method="post" class="form" id="formFindChapter">
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="formRow">
+                    <label for="chapterName"><?php echo $mappedWidgetSettings->getValueByName("Chapter Name")?></label>
+                    <input type="text" name="chapterName" id="chapterName" value="" class="textField">
+                </div>
+                <div class="formRow">
+                    <label for="chapterCity"><?php echo $mappedWidgetSettings->getValueByName("City")?></label>
+                    <select name="chapterCity" id="chapterCity" class="selectField">
+                        <option></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="formRow">
+                    <label for="chapterArea"><?php echo $mappedWidgetSettings->getValueByName("Area")?></label>
+                    <select name="chapterArea" id="chapterArea" class="selectField">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="formRow">
+                    <label for="chapterMeetingDay"><?php echo $mappedWidgetSettings->getValueByName("Meeting Day")?></label>
+                    <select name="chapterMeetingDay" id="chapterMeetingDay" class="selectField">
+                        <option value=""></option>
+                        <option value="0" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Sunday")?></option>
+                        <option value="1" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Monday")?></option>
+                        <option value="2" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Tuesday")?></option>
+                        <option value="3" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Wednesday")?></option>
+                        <option value="4" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Thursday")?></option>
+                        <option value="5" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Friday")?></option>
+                        <option value="6" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Saturday")?></option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="formRow">
+                    <label for="chapterMeetingTime"><?php echo $mappedWidgetSettings->getValueByName("Approximate Meeting Time")?></label>
+                    <select name="chapterMeetingTime" id="chapterMeetingTime" class="selectField">
+                        <option value=""></option>
+                        <option value="am" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Morning")?></option>
+                        <option value="mid" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Lunch")?></option>
+                        <option value="pm" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Afternoon")?></option>
+                        <option value="eve" style="display: none;"><?php echo $mappedWidgetSettings->getValueByName("Evening")?></option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+            </div>
+			
+			<div class="col-xs-12 col-sm-4 col-md-4">
+				<div class="formRow">
+                    <label for="chapterMeetingType"><?=$mappedWidgetSettings->getValueByName("Meeting Type")?></label>
+                    <select name="chapterMeetingType" id="chapterMeetingType" class="selectField">
+                        <option value=""></option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+			</div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="formButtonsRow">
+                    <button type="submit" id="submit" name="submit" class="button"><?php echo $mappedWidgetSettings->getValueByName("Search")?></button>
+                    <span id="formAjaxLoader" style="display:none;"><i
+                                class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

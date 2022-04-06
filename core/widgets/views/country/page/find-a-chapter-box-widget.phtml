@@ -1,0 +1,22 @@
+<section class="widgetFindChapterBox">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <h1><?= $headingText ?></h1>
+        </div>
+    </div>
+    <div class="contentArea">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+                <h2><?= $subheadingText ?></h2>
+                <p><?= $contentText?></p>
+
+                <form class="input-group" name="findChapterBox" method="get" action="<?= $link ?>">
+                    <input type="text" class="form-control" name="search" value="" placeholder="<?= $searchText?>">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><span class="ico-048"></span></button>
+                        </span>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

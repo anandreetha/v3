@@ -1,0 +1,729 @@
+/* Chapter Home Start */
+.widgetChapterHomeDetail {
+    display: block;
+    background-color: $greyLight;
+    margin: 0px;
+    padding: 40px 0px 40px 0px;
+    overflow: hidden;
+    
+    .rowDetail {
+        display: block;
+        margin: 0px;
+        padding: 0px 0px 0px 0px;
+        margin: 0px 15px;
+        overflow: hidden;
+        
+        .firstCol {
+            padding-left: 0px;
+        }
+        
+        h2 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 10px 0px 10px 0px;
+            font-size: 36px;
+            line-height: 42px;
+            font-weight: 700;
+            color: $bniBlack;
+            position: relative;            
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+        
+        h3 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 10px 0px 10px 0px;
+            font-size: 30px;
+            line-height: 34px;
+            font-weight: 700;
+            color: $bniBlack;
+            position: relative;           
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+
+        h4 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 10px 0px 10px 0px;
+            font-size: 24px;
+            line-height: 28px;
+            font-weight: 700;
+            color: $bniBlack;
+            position: relative;           
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+        
+        p {
+            display: block;
+            margin: 0px;
+            padding: 8px 0px;
+            font-size: 17px;
+            line-height: 22px;
+            font-weight: 500;
+            color: $bniBlack;
+            strong {
+                font-size: 17px;
+                line-height: 22px;
+                font-weight: 700;
+            }
+
+            a {
+                font-size: 17px;
+                line-height: 22px;
+                font-weight: 500;
+                color: $bniRed;
+                text-decoration: underline;
+                &:hover {
+                    text-decoration: none;       
+                }
+            }
+        }
+        
+        .numberLink {
+            display: inline-block;
+            font-size: 100px;
+            line-height: 100px;
+            font-weight: 500;
+            color: $bniRed;
+            text-decoration: none;
+            span {
+                display: block;
+                font-size: 15px;
+                line-height: 15px;
+                margin-top: -5px;
+                font-weight: 500;
+                padding-left: 5px;
+                color: $bniRed;
+                text-decoration: underline;
+            }
+            &:hover {
+                color: $bniRed;
+                span {
+                    text-decoration: none;
+                }
+            }
+        }
+        
+        .thirdCol {
+            .button {
+                display: inline-block;
+                margin: 0px 5px 20px 0px;
+                padding: 10px 25px;
+                border-radius: 25px;
+                background-color: $bniRed;
+                font-size: 17px;
+                line-height: 22px;
+                color: $white;
+                text-decoration: none;
+                border: 1px solid $bniRed;
+                span {
+                    float: right;
+                    font-size: 12px;
+                    line-height: 18px;
+                }
+                &:hover {
+                    border: 1px solid $bniRed;
+                    background: $white;
+                    color: $bniRed;
+                }
+            }
+        }
+    }
+    
+    .chapterLeadershipRow {
+        display: block;
+        margin: 0px -15px 0px 0px;
+        overflow: hidden;
+        padding: 25px 0px 0px 0px;
+
+        h2 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 10px 0px 10px 0px;
+            font-size: 36px;
+            line-height: 42px;
+            font-weight: 700;
+            color: $bniBlack;
+            position: relative;            
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+
+        .card {
+            position: relative;
+            float: left;
+            width: 33%;
+            padding: 0px;
+            margin: 0px;
+            overflow: hidden;
+
+            .inside {
+                position: relative;
+                display: block;
+                padding: 30px;
+                background-color: $white;
+                margin: 15px 15px;
+
+                p {
+                    display: block;
+                    margin: 0px;
+                    padding: 0px;
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-weight: 400;
+                    color: $grey;
+
+                    span.name {
+                        display: block;
+                        margin: 0px;
+                        padding: 0px 0px 5px 0px;
+                        font-size: 24px;
+                        line-height: 28px;
+                        font-weight: 500;
+                        color: $bniBlack;
+                        text-decoration: none;
+                        width: 86% !important;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+
+                        span {
+                            display: block;
+                            font-size: 16px;
+                            line-height: 20px;
+                            font-weight: 400;
+                            color: $greyDark;
+                            text-decoration: none;
+                        }
+
+                    }
+
+                    .fa-phone {
+                        font-size: 14px;
+                    }
+                }
+
+                .iconEmail {
+                    position: absolute;
+                    right: 0px;
+                    top: 0px;
+                    padding: 48px 30px 48px 30px;
+                    font-size: 36px;
+                    line-height: 36px;
+                    color: $bniRed;
+                    &:hover {
+                        .fa {
+                            animation: nudge .4s linear;
+                        }
+                    }
+                }
+
+                &:hover {
+                    -webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.1);
+                    -moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.1);
+                    box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.1);
+                }
+            }
+
+
+        }
+
+    }
+    
+    .chapterSpeakerRow {
+        display: block;
+        margin: 0px -15px 0px 0px;
+        overflow: hidden;
+        padding: 25px 0px 0px 0px;
+
+        h2 {
+            display: block;
+            margin: 0px 0 20px 0;
+            padding: 10px 0px 10px 0px;
+            font-size: 36px;
+            line-height: 42px;
+            font-weight: 700;
+            color: $bniBlack;
+            position: relative;            
+            &:after{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100px;
+                height: 6px;
+                background: $bniRed;
+            }
+        }
+        
+        p {
+            display: block;
+            margin: 0px 15px 2px 15px;
+            padding: 12px 25px;
+            font-size: 17px;
+            line-height: 22px;
+            color: $greyDark;
+            font-weight: 400;
+            background-color: $white;
+            
+            .date {
+                color: $greyDark;
+                padding-right: 15px;
+            }
+            .name {
+                color: $bniBlack;
+                padding-right: 15px;
+                font-weight: 600;
+            }
+        }
+    }
+    
+}
+
+@media (max-width: 1439px) {
+    .widgetChapterHomeDetail {
+        padding: 40px 0px 40px 0px;
+        .holder {
+            .rowDetail {
+                padding: 0px 0px 0px 0px;
+
+                h1{
+                    font-size: 50px;
+                    line-height: 56px;
+                }
+                h2{
+                    font-size: 30px;
+                    line-height: 36px;
+                }
+                h3{
+                    font-size: 26px;
+                    line-height: 32px;
+                }
+                h4{
+                    font-size: 20px;
+                    line-height: 26px;
+                }
+
+                .thirdCol {
+                    .button {
+                        font-size: 17px;
+                        line-height: 22px;
+                        span {
+                            float: right;
+                            font-size: 12px;
+                            line-height: 18px;
+                        }
+                    }
+                }
+
+            }
+
+            .chapterLeadershipRow {
+                padding: 15px 3px 0px 0px;
+
+                h2{
+                    font-size: 30px;
+                    line-height: 36px;
+                }
+
+                .card {
+                    .inside {
+                        padding: 20px;
+
+                        p {
+                            font-size: 14px;
+                            line-height: 18px;
+
+                            span.name {
+                                font-size: 20px;
+                                line-height: 24px;
+                                span {
+                                    font-size: 14px;
+                                    line-height: 18px;
+                                }
+                            }
+
+                            .fa-phone {
+                                font-size: 12px;
+                            }
+                        }
+
+                        .iconEmail {
+                            padding: 36px 30px 36px 30px;
+                            font-size: 32px;
+                            line-height: 32px;
+                        }
+
+                    }
+
+
+                }
+
+            }
+            
+            .chapterSpeakerRow {
+
+                h2{
+                    font-size: 30px;
+                    line-height: 36px;
+                }
+
+               
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetChapterHomeDetail {
+        padding: 40px 0px 40px 0px;
+        .holder {
+            .rowDetail {
+                padding: 0px 0px 0px 0px;
+
+                h1{
+                    font-size: 40px;
+                    line-height: 46px;
+                }
+                h2{
+                    font-size: 25px;
+                    line-height: 34px;
+                }
+                h3{
+                    font-size: 22px;
+                    line-height: 26px;
+                }
+                h4{
+                    font-size: 18px;
+                    line-height: 24px;
+                }
+
+                p {
+                    font-size: 16px;
+                    line-height: 22px;
+                    strong, b {
+                        font-size: 16px;
+                    }
+
+                    a {
+                        font-size: 16px;
+                    }
+                }
+                
+                .thirdCol {
+                    padding-top: 25px;
+                    .button {
+                        font-size: 16px;
+                        line-height: 22px;
+                        span {
+                            float: right;
+                            font-size: 10px;
+                            line-height: 16px;
+                        }
+                    }
+                }
+
+            }
+
+            .chapterLeadershipRow {
+                padding: 10px 5px 0px 0px;
+
+                h2{
+                    font-size: 25px;
+                    line-height: 34px;
+                }
+
+                .card {
+                    .inside {
+                        padding: 18px;
+
+                        .iconEmail {
+                            padding: 36px 15px 36px 15px;
+                            font-size: 28px;
+                            line-height: 28px;
+                        }
+
+                    }
+
+
+                }
+
+            }
+            
+            .chapterSpeakerRow {
+
+                h2{
+                    font-size: 25px;
+                    line-height: 34px;
+                }
+
+                p {
+                    font-size: 16px;
+                    line-height: 22px;
+                }
+            }
+
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetChapterHomeDetail {
+        padding: 40px 0px 40px 0px;
+        .holder {
+            .rowDetail {
+                padding: 0px 0px 0px 0px;
+
+                h1{
+                    font-size: 30px;
+                    line-height: 36px;
+                    padding: 20px 0 10px 0;
+                    &:after{
+                        width: 70px;
+                        height: 5px;
+                    }
+                }
+                h2{
+                    font-size: 22px;
+                    line-height: 26px;
+                    padding: 20px 0 10px 0;
+                    &:after{
+                        width: 70px;
+                        height: 5px;
+                    }
+                }
+                h3{
+                    font-size: 20px;
+                    line-height: 24px;
+                    padding: 20px 0 10px 0;
+                    &:after{
+                        width: 70px;
+                        height: 5px;
+                    }
+                }
+                h4{
+                    font-size: 18px;
+                    line-height: 24px;
+                    padding: 20px 0 10px 0;
+                    &:after{
+                        width: 70px;
+                        height: 5px;
+                    }
+                }
+
+                p {
+                    padding: 0px 0px 10px 0px;
+                    font-size: 16px;
+                    line-height: 22px;
+                    color: $bniBlack;
+
+                    strong, b {
+                        font-size: 16px;
+                    }
+
+                    a {
+                        font-size: 16px;
+                    }
+                }
+                
+                .secondCol {
+                    padding-left: 0px;
+                }
+                
+                .thirdCol {
+                    padding-top: 25px;
+                    .button {
+                        
+                        span {
+                            float: right;
+                            font-size: 10px;
+                            line-height: 16px;
+                        }
+                    }
+                }
+
+            }
+            
+            .chapterLeadershipRow {
+                padding: 5px 15px 0px 0px;
+                h2{
+                    font-size: 22px;
+                    line-height: 26px;
+                    padding: 20px 0 10px 0;
+                    &:after{
+                        width: 70px;
+                        height: 5px;
+                    }
+                }
+                .card {
+                    width: 50%;
+                }
+
+            }
+            
+            .chapterSpeakerRow {
+                h2{
+                    font-size: 22px;
+                    line-height: 26px;
+                    padding: 20px 0 10px 0;
+                    &:after{
+                        width: 70px;
+                        height: 5px;
+                    }
+                }
+                p {
+                    margin: 0px 0px 10px 0px;
+                    font-size: 16px;
+                    line-height: 22px;
+                    .name {
+                        display: block;
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetChapterHomeDetail {
+        padding: 30px 0px 30px 0px;
+        .holder {
+            padding: 0px;
+            .rowDetail {
+                padding: 0px 30px;
+                margin: 0px;
+                
+                .secondCol {
+                    padding-left: 0px;
+                }
+
+                .thirdCol {
+                    padding-left: 0px;
+                    padding-right: 0px;
+                }
+
+                h1{
+                    font-size: 26px;
+                    line-height: 34px;
+                }
+                h2{
+                    font-size: 22px;
+                    line-height: 26px;
+                }
+                h3{
+                    font-size: 20px;
+                    line-height: 24px;
+                }
+                h4{
+                    font-size: 18px;
+                    line-height: 24px;
+                    padding: 20px 0 10px 0;
+                }
+
+                p {
+                    padding: 0px 0px 10px 0px;
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: $black;
+
+                    strong, b {
+                        font-size: 14px;
+                    }
+
+                    a {
+                        font-size: 14px;
+                    }
+                }
+
+                .button {
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    border: 1px solid $greyLight;
+                    border-bottom: 0px solid $greyLight;
+                    &:last-child {
+                        border-bottom: 1px solid $greyLight;
+                    }
+                }
+            }
+            .chapterLeadershipRow {
+                padding: 20px 15px;
+                margin: 0px;
+                h2{
+                    font-size: 22px;
+                    line-height: 26px;
+                }
+                .card {
+                    width: 100%;
+                    .inside {
+                        margin-top: 5px;
+                        margin-bottom: 5px;
+                        p {
+                            font-size: 14px;
+                            line-height: 18px;
+
+                            span.name {
+                                font-size: 16px;
+                                line-height: 20px;
+                            }
+                        }
+                        
+                        .iconEmail {
+                            font-size: 22px;
+                            line-height: 22px;
+                        }
+                    }
+                }
+
+            }
+            .chapterSpeakerRow {
+                padding-left: 15px;
+                padding-right: 30px;
+                h2{
+                    font-size: 22px;
+                    line-height: 26px;
+                }
+                p {
+                    margin: 0px 0px 10px 0px;
+                    font-size: 14px;
+                    line-height: 20px;
+                    .name {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+/* Chapter Home End */

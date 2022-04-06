@@ -1,0 +1,34 @@
+<section class="widgetNewsLetterBox">
+            <div class="holder">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="newsLetterOuter">
+                        <div class="newsLetterLeft">
+                            <img loading="lazy" src="<?php echo $this->config->general->cdn; ?>/new_template/assets/images/newspaperImg.png" alt="<?php echo isset($contentSettings["pagecontent_newsletter_alt"]) ?  $contentSettings["pagecontent_newsletter_alt"] : "Newsletter" ?>">
+                        </div>
+                        <div class="newsLetterRight">
+                            <h2><?php echo isset($contentSettings["pagecontent_newsletter_title"]) ?  $contentSettings["pagecontent_newsletter_title"] : "Newsletter" ?></h2>
+                            <p><?php echo isset($contentSettings["pagecontent_newsletter_text"]) ?  $contentSettings["pagecontent_newsletter_text"] : "Subscribe to our newsletter for exclusive tips on networking, public speaking and business." ?></p>
+                            <form class="input-group" name="newsLetterSubscribeBox" method="get" action="newsletter">
+                                <div class="inputOuter">
+                                    <input type="email" name="email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$"  value="<?= $eventId= $this->request->get("email");?>" class="textField required form-control" title="abc@abc.abc"
+                       placeholder="<?php echo isset($contentSettings["pagecontent_newsletter_input_text"]) ?  $contentSettings["pagecontent_newsletter_input_text"] : "Your email address" ?>" required>
+                                    <div class="btnOuter">
+                                        <button class="btn btn-default" type="submit">
+                                            <span>
+                                                <svg class="icon-redarrow" xmlns="http://www.w3.org/2000/svg" width="25.967" height="26.7" viewBox="0 0 25.967 26.7">
+                                                  <g data-name="Group 261" transform="translate(-1732.5 -1677.672)">
+                                                    <path data-name="Path 40" class="cls-1" d="M1757.443,1680.379l10.521,10.521-10.521,10.521" transform="translate(-11.498 0.121)"/>
+                                                    <line data-name="Line 19" class="cls-2" x1="21.857" transform="translate(1734.5 1690.87)"/>
+                                                  </g>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="error">Please enter your email address</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>

@@ -1,0 +1,462 @@
+.widgetVisitChapterOverlay {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 900;
+    padding: 15px;
+    
+    .contentBox {
+        display: block;
+        max-width: 1527px;
+        min-height: 591px;
+        overflow: hidden;
+        background-color: $white;
+        margin: 0px auto;
+        margin-top: 100px;
+        .contentBoxInner{
+            position: relative;
+            overflow: hidden;
+            .modal-close{
+                position: absolute;
+                top: 30px;
+                right: 30px;
+                display: inline-block;
+                z-index: 90;
+                svg{
+                    width: 25px;
+                    height: 25px;
+                    .cls-1 {
+                        fill: none;
+                        stroke: $white;
+                        stroke-width: 2px;
+                    }
+                }
+            }
+            .chapterLeft{
+                min-height: 591px;
+                float: left;
+                width: 50%;
+                img{
+                    height: 591px;
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+            .chapterRight{
+                min-height: 591px;
+                float: right;
+                width: 50%;
+                background: $bniRed;
+                position: relative;
+                .chapterRightInner{
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    transform: translate(0%, -50%);
+                    -webkit-transform: translate(0%, -50%);
+                    -moz-transform: translate(0%, -50%);
+                    -ms-transform: translate(0%, -50%);
+                    width: 100%;
+                    padding: 70px;
+                }
+                h2 {
+                    display: block;
+                    margin: 0px 0 50px 0;
+                    padding: 0px 0px 10px 0px;
+                    font-weight: 700;
+                    color: $white;
+                    -webkit-column-break-inside: avoid;
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                    position: relative;
+                    &:after{
+                        content: '';
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 100px;
+                        height: 6px;
+                        background: $white;
+                    }
+                }
+                ul{
+                    list-style: none;
+                    padding: 0 0 40px 0;
+                    margin: 0;
+                    li{
+                        display: inline-block;
+                        padding: 0 80px 0 80px;
+                        position: relative;
+                        vertical-align: top;
+                        text-align: center;
+                        span{
+                            display: inline-block;
+                            position: relative;
+                            &:after{
+                                content: '';
+                                position: absolute;
+                                top: 50%;
+                                left: 80px;
+                                border-top: 2px dashed $white;
+                                width: 180px;
+                                transform: translate(0, -50%);
+                                -webkit-transform: translate(0, -50%);
+                                -moz-transform: translate(0, -50%);
+                                -ms-transform: translate(0, -50%);
+                            }      
+                        }                  
+                        &:first-child{
+                            padding-left: 0;
+                        }
+                        &:last-child{
+                            padding-right: 0;
+                            span{
+                                &:after{
+                                    display: none;
+                                }
+                            }
+                        }
+                        p{
+                            color: $white;
+                            text-align: center;
+                            span{
+                                display: block;
+                                &:after{
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+                h3{
+                    color: $white;
+                    font-weight: 700;
+                    margin: 0px 0 20px 0;
+                }
+                .input-group{
+                    display: block;
+                }
+                .inputOuter{
+                    position: relative;
+                    .form-control {
+                        -webkit-border-radius: 0px;
+                        -moz-border-radius: 0px;
+                        border-radius: 0px;
+                        border: 0px solid $white;
+                        font-size: 16px;
+                        line-height: 22px;
+                        font-weight: 400;
+                        color: $grey;
+                        padding: 15px 75px 15px 15px;
+                        height: 45px;
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        width: 100%;
+                        border-radius: 50px;
+                    }
+                    .form-control:focus {
+                        outline: none;
+                        outline-style:none;
+                        box-shadow:none;
+                    }
+                }
+                .btnOuter{
+                    position: absolute;
+                    top: 0;
+                    right: -1px;
+                    z-index: 5;
+                    button{
+                        background: transparent;
+                        border: none;
+                        box-shadow: none;
+                        padding: 0;
+                        span{
+                            width: 65px;
+                            height: 45px;
+                            background: $greyDark;
+                            border: 1px solid $greyDark;
+                            border-radius: 50%;
+                            display: inline-block;
+                            padding: 8px 10px 10px 10px;
+                            border-radius: 50px;
+                            svg{
+                                width: 16px;
+                                .cls-1, .cls-2 {
+                                    stroke: $white;
+                                }
+                            }
+                        }
+                        &:hover{
+                            span{
+                                background: $bniRed;
+                                border: 1px solid $white;
+                                svg{
+                                    -moz-animation: movearrow 1s linear;
+                                    -ms-animation: movearrow 1s linear;
+                                    -o-animation: movearrow 1s linear;
+                                    -webkit-animation: movearrow 1s linear; 
+                                    animation: movearrow 1s linear;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media (max-width: 1600px) {
+    .widgetVisitChapterOverlay {
+        .contentBox {
+            .contentBoxInner {
+                .chapterRight {
+                    ul{
+                        li{
+                            padding: 0 70px 0 70px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1439px) {
+    .widgetVisitChapterOverlay {
+        .contentBox {
+            min-height: 490px;
+            .contentBoxInner {
+                .chapterLeft{
+                    min-height: 490px;
+                    img{
+                        height: 490px;
+                    }
+                }
+                .chapterRight {
+                    min-height: 490px;
+                    .chapterRightInner{
+                        padding: 40px;
+                    }
+                    ul{
+                        li{
+                            padding: 0 50px 0 50px;
+                        }
+                    }                    
+                    h2{
+                        font-size: 30px;
+                        line-height: 36px;
+                    }
+                    h3{
+                        font-size: 26px;
+                        line-height: 32px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetVisitChapterOverlay {
+        .contentBox {
+            min-height: 490px;
+            .contentBoxInner {
+                .chapterLeft{
+                    min-height: 490px;
+                    img{
+                        height: 490px;
+                    }
+                }
+                .chapterRight {
+                    min-height: 490px;
+                    .chapterRightInner{
+                        padding: 30px;
+                    }
+                    ul{
+                        li{
+                            padding: 0 35px 0 35px;
+                            span{
+                                &:after{
+                                    width: 90px;
+                                }
+                            }
+                        }
+                    }
+                    h2{
+                        font-size: 25px;
+                        line-height: 34px;
+                    }
+                    h3{
+                        font-size: 22px;
+                        line-height: 26px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetVisitChapterOverlay{
+        .contentBox {
+            min-height: inherit;
+            width: 70%;
+            .contentBoxInner {
+                .chapterLeft{
+                    display: none;
+                }
+                .chapterRight {
+                    min-height: inherit;  
+                    width: 100%;
+                    float: none;
+                    .chapterRightInner{
+                        position: relative;
+                        top: auto;
+                        left: auto;
+                        transform: translate(0, 0);
+                        -webkit-transform: translate(0, 0);
+                        -moz-transform: translate(0, 0);
+                        -ms-transform: translate(0, 0);
+                    }
+                    ul{
+                        li{
+                            span{
+                                svg{
+                                   
+                                }
+                            }
+                            p{
+                                font-size: 16px;
+                            }
+                        }
+                    }                  
+                    h2{
+                        font-size: 22px;
+                        line-height: 26px;
+                        padding: 0px 0 10px 0;
+                        &:after{
+                            width: 70px;
+                            height: 5px;
+                        }
+                    }
+                    h3{
+                        font-size: 20px;
+                        line-height: 24px;
+                        padding: 0px 0 10px 0;
+                    }
+                    .inputOuter {
+                        .form-control{
+                            float: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetVisitChapterOverlay{
+        .contentBox {
+            width: 100%;
+            .contentBoxInner {
+                .modal-close{
+                    top: 15px;
+                    right: 15px;
+                    svg{
+                        width: 16px;
+                        height: 16px;
+                    }
+                }
+                .chapterRight {
+                    h2{
+                        font-size: 22px;
+                        line-height: 26px;
+                        margin: 0 0 30px 0;
+                    }
+                    h3{
+                        font-size: 20px;
+                        line-height: 24px;
+                        padding: 0;
+                    }
+                    ul{
+                        padding: 0 0 20px 0;
+                        li{
+                            padding: 0 25px 0 25px;
+                            span{
+                                svg{
+                                    width: 60px;
+                                    height: 60px;
+                                }
+                                &:after{
+                                    left: 60px;
+                                }
+                            }
+                            p{
+                                font-size: 14px;
+                                line-height: 20px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .widgetVisitChapterOverlay{
+        .contentBox {
+            .contentBoxInner {
+                .chapterRight {
+                    ul{
+                        li{
+                            padding: 0 25px 0 25px;
+                            width: 32%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 374px) {
+    .widgetVisitChapterOverlay{
+        .contentBox {
+            .contentBoxInner {
+                .chapterRight {
+                    .chapterRightInner{
+                        padding: 30px 20px;
+                    }
+                    ul{
+                        li{
+                            padding: 0 16px 0 16px;
+                            width: 32%;
+                            span{
+                                svg{
+                                    width: 50px;
+                                    height: 60px;
+                                }
+                                &:after{
+                                    left: 50px;
+                                    width: 70px;
+                                }
+                            }
+                            p{
+                                span{
+                                    display: inline-block;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

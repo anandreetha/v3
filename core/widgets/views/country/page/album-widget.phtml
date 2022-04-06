@@ -1,0 +1,62 @@
+<section class="widgetAccordion">
+    <div class="holder">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="panel-group" id="accordion">
+                <?php
+                if ($widgetSettings != null) { ?>
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#<?= $identifier ?>"
+                               class="collapsed"
+                               aria-expanded="false"> <?= property_exists($widgetSettings[0], 'value') ? $widgetSettings[0]->value : $widgetSettings[0]->default_value; ?></a>
+                        </div>
+
+                        <div id="<?= $identifier ?>" class="panel-collapse collapse" aria-expanded="false"
+                             style="height: 0px;">
+                            <div class="panel-body">
+                                <p><?= property_exists($widgetSettings[1], 'value') ? $widgetSettings[1]->value : $widgetSettings[1]->default_value; ?></p>
+
+                                <div class="imageThumbs">
+
+                                    <?php
+                                    if (count($images) <= 0) {
+                                        ?>
+                                        <p><?php echo $this->translator->_('cms.v3.admin.gallery.zeroimages'); ?></p>
+                                        <?php
+                                    }
+                                    foreach ($images as $image) {
+                                        if (array_key_exists("staticFileUrl",$image) && array_key_exists("staticThumbnailUrl",$image)) {
+                                            ?>
+                                            <a href="<?= 'http://'.$image["staticFileUrl"] ?>"
+                                               data-fancybox="<?= $identifier ?>"
+                                               data-caption="<?= $image["fileName"] ?>">
+                                                <img loading="lazy" src="<?= 'http://'.$image["staticFileUrl"] ?>"
+                                                     class="fit" alt="Album thumbanil image"/>
+                                                <i class="fa fa-search-plus" aria-hidden="true"></i>
+                                            </a>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <a href="<?= $this->url->get('backend/render/renderImage/' . $image["object"]) ?>"
+                                               data-fancybox="<?= $identifier ?>"
+                                               data-caption="<?= $image["fileName"] ?>">
+                                                <img loading="lazy" src="<?= $this->url->get('backend/render/renderImage/' . $image["thumbnail_object_id"]) ?>"
+                                                     class="fit" alt="Album thumbanil image"/>
+                                                <i class="fa fa-search-plus" aria-hidden="true"></i>
+                                            </a>
+                                            <?php
+                                        }
+                                    } ?>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                <?php } ?>
+
+            </div>
+        </div>
+    </div>
+</section>

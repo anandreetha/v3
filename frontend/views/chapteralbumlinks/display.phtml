@@ -1,0 +1,44 @@
+<?php
+use Multiple\Core\Models\UrlAccents;
+$renderStaticContent;
+$iterator = new MultipleIterator;
+$iterator->attachIterator(new ArrayIterator($visibleWebsiteGallery));
+$iterator->attachIterator(new ArrayIterator($visibleWebsiteLanguage));
+$iterator->attachIterator(new ArrayIterator($visibleWebsiteNavName));
+if (count($visibleWebsiteLanguage) != 0) { ?>
+
+    <section class="widgetAccordion">
+        <div class="holder">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="panel-group" id="accordion">
+                    <?php echo "<h2>" . $this->translator->_('cms.v3.admin.gallery.chaptergalleries') . "</h2>"; ?>
+
+
+                    <?php foreach ($iterator as $chapter) { ?>
+                        <div class="panel panel-default">
+                            <?php
+                            $lng_url = $renderStaticContent ?
+                                "http://" . $chapter[0]->getCleanDomain() . "/" . $this->translationUtils->normalizeLocaleCode($chapter[1], false) . "/" . $chapter[2]
+                                : $this->url->get("backend/render/preview/" . $chapter[0]->getCleanDomain() . "/" . $this->translationUtils->normalizeLocaleCode($chapter[1], false)
+                                    . "/" . $chapter[2]); 
+									
+							$actual_url='';
+							if($renderStaticContent):
+								$asscents=new UrlAccents();
+								if(filter_var($lng_url, FILTER_VALIDATE_URL)):
+									$actual_url=$lng_url;
+								else:
+									$actual_url=$asscents->removeAccentsUrl($lng_url); 
+								endif;	
+							else:
+								$actual_url=$lng_url;
+							endif;		
+									?>
+                            <a target="_blank" href="<?php echo $actual_url;?>"><?php echo $chapter[0]->getName(); ?></a>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </section>
+<?php } ?>

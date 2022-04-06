@@ -1,0 +1,28 @@
+<div id="cookieDetail">
+</div>
+<img loading="lazy" id="cookieLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script>
+    //This will make a ajax post request to the event detail controller which return html and we render that in ajax response.
+    $(function () {
+
+        var languages = <?php echo json_encode($languages) ?>;
+        var pageMode = <?php echo json_encode($pageMode) ?>;
+		var cookie_group_id = $('#cookie_group_id').val();
+        var mappedWidgetSettings = '<?php echo json_encode($mappedWidgetSettingsObj) ?>';
+        
+
+        $.post("<?php echo $ajaxUrl; ?>", {
+            mappedWidgetSettings:mappedWidgetSettings,
+            pageMode:pageMode,
+            languages:languages,
+			cookie_group_id:cookie_group_id} ,function (data) {
+            $("#cookieLoaderAjax").hide();
+            $("#cookieDetail").html(data);
+        });
+    });
+
+</script>
+<style type="text/css">
+.widgetBanners, .widgetBniFeed,.widgetNewsLetterBox{display:none;}
+</style>

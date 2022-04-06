@@ -1,0 +1,36 @@
+<div class="navRow">
+    <div class="holder">
+
+        <?php
+			$licnt=0;
+            $navLinkChunks = array_chunk($navLinks["footer"], round(count($navLinks["footer"]) / 2));
+            foreach ($navLinkChunks as $arrayOfNavLinks) { ?>
+                <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 navCol">
+                    <ul class="navLinks">
+                    <?php foreach ($arrayOfNavLinks as $navLink) { ?>
+                        <li><?= $navLink ?></li>
+                    <?php } $licnt++; ?>
+					<?php
+						if(($licnt=="1")&&($cookie_group_id!="")):
+							$this->partial('partials/v3/footer/footer-cookiedeclaration');
+						endif;						
+					?>
+                    </ul>
+                </div>
+            <?php } ?>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 socialCol">
+            <!-- User custom script set in admin -->
+            <?php
+            // Users social media javascript to be executed here, with accompanying html (if any)
+            foreach($websettings['allSettings'] as $websetting) {
+                if ($websetting->getSettingsId() == '123') {
+                    echo $this->renderService->convertHexToAscii($websetting->getValue());
+                } else if ($websetting->getSettingsId() === '230') {
+                    echo html_entity_decode($websetting->getValue(), ENT_QUOTES | ENT_XML1, 'UTF-8');
+                }
+            }
+            ?>
+        </div>
+    </div>
+</div>

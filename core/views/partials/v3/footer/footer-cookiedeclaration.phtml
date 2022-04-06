@@ -1,0 +1,10 @@
+<?php
+	if($cookie_group_id!=""):
+		$website_id=$website->getId();
+		$active_language=$languages->activeLanguage;
+		$widget = $this->coreWidgetFactory->getCountryWidget("CookiebotmenuWidget");
+		echo $widget->getContent($website_id,$active_language);
+	endif;
+?>
+    
+	

@@ -1,0 +1,23 @@
+var warningMessage = $("#TextIdleTimeout").val();
+	warningMessage = warningMessage.replace('_WARNINGTIME_', '%s');
+	$.idleTimeout('#idletimeout', '#idletimeout a', {
+		idleAfter: 2100,
+		pollingInterval: 150,
+		warningLength: 300,
+		titleMessage: warningMessage,
+		keepAliveURL: '/web/secure/keepalive.jsp',
+		serverResponseEquals: '<meta http-equiv="refresh" content="0;url=/web/">',
+		onTimeout: function(){
+			$(this).slideUp();			
+			window.location = "/web/logout?forced_timeout=1";
+		},
+		onIdle: function(){
+			$(this).slideDown(); // show the warning bar
+		},
+		onCountdown: function(counter){
+			$(this).find("span").html(counter); // update the counter
+		},
+		onResume: function(){
+			$(this).slideUp(); // hide the warning bar
+		}
+	});

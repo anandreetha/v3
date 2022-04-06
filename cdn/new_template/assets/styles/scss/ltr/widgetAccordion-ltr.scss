@@ -1,0 +1,958 @@
+/* Accordion Start */
+.widgetAccordion {
+    display: block;
+    background-color: $white;
+    padding: 15px 0px 50px 0px;
+    margin: 0px;
+    overflow: hidden;
+    
+    .panel-group {
+        display: block;
+        overflow: hidden;
+        margin: 0px;
+        padding: 0px;
+        background-color: $white;
+        
+        .panel-default {
+            display: block;
+            overflow: hidden;
+            margin: 1px 0px 1px 0px;
+            padding: 0px;
+            border: 0px solid $white;
+            -webkit-border-radius: 0px;
+            -moz-border-radius: 0px;
+            border-radius: 0px;
+            background-color: $white;
+            -webkit-box-shadow: 0 0px 0px rgba(0,0,0,.05);
+            -moz-box-shadow: 0 0px 0px rgba(0,0,0,.05);
+            box-shadow: 0 0px 0px rgba(0,0,0,.05);
+            
+            .panel-heading {
+                display: block;
+                overflow: hidden;
+                margin: 0px;
+                padding: 0px;
+                border: 0px solid $white;
+                -webkit-border-radius: 0px;
+                -moz-border-radius: 0px;
+                border-radius: 0px;
+                background-color: $white;
+
+                a {
+                    display: block;
+                    margin: 0px;
+                    padding: 15px 15px;
+                    border: 0px solid $white;
+                    text-decoration: none;
+                    background-color: $greyLight;
+                    color: $bniRed;
+                    font-size: 18px;
+                    line-height: 22px;
+                    font-weight: 500;
+                    &:hover {
+                        background-color: $greyLight;
+                        color: $third;
+                    }
+                }
+                
+                a:before {
+                    content: "\f068";
+                    display: inline-block;
+                    font: normal normal normal 14px/1 FontAwesome;
+                    font-size: inherit;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    padding-right: 10px;
+                }
+
+                .collapsed {
+                    background-color: $bniRed;
+                    color: $white;
+                    &:hover {
+                        background-color: $bniRed;
+                        color: $white;
+                    }
+                }
+                
+                .collapsed:before {
+                    content: "\f067";
+                }
+            
+            }
+            
+            .panel-collapse {
+                background-color: $white;
+                .panel-body {
+                    background-color: $greyLight;
+                    padding: 25px 25px 25px 40px;
+                    
+                    h1 {
+                        display: block;
+                        margin: 0px 0 20px 0;
+                        padding: 0px 0px 8px 0;
+                        font-size: 60px;
+                        line-height: 66px;
+                        color: $bniBlack;
+                        font-weight: 700;
+                        position: relative;                        
+                        &:after{
+                            content: '';
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            width: 100px;
+                            height: 6px;
+                            background: $bniRed;
+                        }
+                    }
+                    
+                    h2 {
+                        display: block;
+                        margin: 0px 0 20px 0;
+                        padding: 0px 0px 8px 0;
+                        font-size: 36px;
+                        line-height: 42px;
+                        color: $bniBlack;
+                        font-weight: 700;
+                        position: relative;
+                        &:after{
+                            content: '';
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            width: 100px;
+                            height: 6px;
+                            background: $bniRed;
+                        }
+                    }
+                    
+                    h3 {
+                        display: block;
+                        margin: 0px 0 20px 0;
+                        padding: 0px 0px 8px 0;
+                        font-size: 30px;
+                        line-height: 34px;
+                        color: $bniBlack;
+                        font-weight: 700;
+                        position: relative;
+                        &:after{
+                            content: '';
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            width: 100px;
+                            height: 6px;
+                            background: $bniRed;
+                        }
+                    }
+                    
+                    h4 {
+                        display: block;
+                        margin: 0px 0 20px 0;
+                        padding: 0px 0px 8px 0;
+                        font-size: 24px;
+                        line-height: 28px;
+                        color: $bniBlack;
+                        font-weight: 500;
+                        position: relative;
+                        &:after{
+                            content: '';
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            width: 100px;
+                            height: 6px;
+                            background: $bniRed;
+                        }
+                    }
+                    
+                    p {
+                        display: block;
+                        margin: 0px;
+                        padding: 10px 0px;
+                        font-size: 17px;
+                        line-height: 22px;
+                        color: $bniBlack;
+                        font-weight: 400;
+                        
+                        strong, b {
+                            font-size: 17px;
+                            line-height: 22px;
+                            font-weight: 500;
+                        }
+                        
+                        em, i {
+                            font-size: 17px;
+                            line-height: 22px;
+                        }
+                        
+                        a {
+                            font-size: 17px;
+                            line-height: 22px;
+                            font-weight: 500;
+                            color: $bniRed;
+                            text-decoration: underline;
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                    
+                    ul {
+                        position: relative;
+                        list-style: none;
+                        padding: 0;
+                        li {
+                            font-size: 17px;
+                            line-height: 22px;
+                            font-weight: 500;
+                            color: $bniBlack;
+                            padding: 8px 0px 8px 30px;
+                            position: relative;
+                            strong, b {
+                                font-size: 17px;
+                                line-height: 22px;
+                                font-weight: 600;
+                            }
+
+                            em, i {
+                                font-size: 17px;
+                                line-height: 22px;
+                            }
+
+                            a {
+                                font-size: 17px;
+                                line-height: 22px;
+                                font-weight: 500;
+                                color: $bniRed;
+                                text-decoration: underline;
+                                &:hover {
+                                    text-decoration: none;
+                                }
+                            } 
+                            &:before {
+                                content: "";
+                                position: absolute;
+                                left: 2px;
+                                top: 13px;
+                                display: inline-block;
+                                text-rendering: auto;
+                                -webkit-font-smoothing: antialiased;
+                                -moz-osx-font-smoothing: grayscale;
+                                border-top: 15px solid $bniRed;
+                                border-left: 0px solid $bniRed;
+                                border-right: 15px solid transparent;
+                            }
+                        }
+                    }
+
+                    .contactDetailsRow {
+                        display: block;
+                        margin: 0px 15px 0px 0px;
+                        overflow: hidden;
+                        padding: 0px 0px 25px 0px;
+                        border-bottom: 1px solid #b8b8b8;
+                        
+                        .col-sm-12.col-md-4.col-lg-4 {
+                            
+                            p {
+                                display: block;
+                                margin: 0px;
+                                padding: 8px 0px;
+                                font-size: 17px;
+                                line-height: 22px;
+                                font-weight: 400;
+                                color: $bniBlack;
+
+                                .fa-phone,
+                                .fa-fax {
+                                    width: 22px;
+                                    font-size: 16px;
+                                    color: $grey;
+                                }
+
+                                .iconEmail {
+                                    display: inline-block;
+                                    padding: 0px 0px 0px 0px;
+                                    color: $bniRed;
+                                    .fa {
+                                        font-size: 50px;
+                                        line-height: 50px;
+                                    }
+                                    &:hover {
+                                        color: $third;
+                                        .fa {
+                                            animation: nudge .4s linear;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        .col-sm-12.col-md-4.col-lg-4:first-child {
+                            padding-left: 0px;
+                        }
+                        
+                    }
+                    
+                    .contactLeadershipRow {
+                        display: block;
+                        margin: 0px -15px;
+                        overflow: hidden;
+                        padding: 25px 0px 0px 0px;
+                        
+                        .card {
+                            position: relative;
+                            float: left;
+                            width: 33%;
+                            padding: 0px;
+                            margin: 0px;
+                            overflow: hidden;
+                            
+                            .inside {
+                                position: relative;
+                                display: block;
+                                padding: 30px;
+                                background-color: $white;
+                                margin: 15px 15px;
+                                
+                                p {
+                                    display: block;
+                                    margin: 0px;
+                                    padding: 0px;
+                                    font-size: 16px;
+                                    line-height: 20px;
+                                    font-weight: 400;
+                                    color: $greyDark;
+
+                                    a {
+                                        display: block;
+                                        margin: 0px;
+                                        padding: 0px 0px 5px 0px;
+                                        font-size: 24px;
+                                        line-height: 28px;
+                                        font-weight: 500;
+                                        color: $bniRed;
+                                        text-decoration: none;
+                                        width: 80% !important;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+
+                                        span {
+                                            display: block;
+                                            font-size: 16px;
+                                            line-height: 20px;
+                                            font-weight: 400;
+                                            color: $greyDark;
+                                            text-decoration: none;
+                                        }
+
+                                        &:hover {
+                                            color: $bniBlack;
+                                            text-decoration: none;
+                                            span {
+                                                color: $grey;
+                                                text-decoration: none;
+                                            }
+                                        }
+                                    }
+
+                                    .fa-phone {
+                                        font-size: 14px;
+                                    }
+                                }
+
+                                .iconEmail {
+                                    position: absolute;
+                                    right: 0px;
+                                    top: 0px;
+                                    padding: 51px 30px 51px 30px;
+                                    font-size: 36px;
+                                    line-height: 36px;
+                                    color: $bniRed;
+                                    &:hover {
+                                        color: $third;
+                                        .fa {
+                                            animation: nudge .4s linear;
+                                        }
+                                    }
+                                }
+                                
+                                &:hover {
+                                    -webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.1);
+                                    -moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.1);
+                                    box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.1);
+                                }
+                            }
+                            
+                            
+                        }
+
+                    }
+                    
+                    .imageThumbs {
+                        display: block;
+                        margin: 0px;
+                        padding: 40px 15px 20px 0px;
+                        overflow: hidden;
+                        
+                        a {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            float: left;
+                            width: 25%;
+                            height: 230px;
+                            overflow: hidden;
+                            background-color: $greyDarker;
+                            color: $white;
+                            
+                            .fa {
+                                position: absolute;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                top: 0px;
+                                left: 0px;
+                                right: 0px;
+                                bottom: 0px;
+                                background-color: $bniRed;
+                                width: 100%;
+                                height: 100%;
+                                font-size: 56px;
+                                line-height: 56px;
+                                text-align: center;
+                                color: $white;
+                                opacity: 0;
+                                vertical-align: middle;
+                                transition: all 0.5s ease;
+                                -webkit-transition:  all 0.5s ease;
+                            }
+                            
+                            img {
+                              max-width: 100%;
+                            }
+                            
+                            img.fit {
+                              width: 100%;
+                              height: 100%;
+                              -o-object-fit: cover;
+                              object-fit: cover;
+                            }
+                            
+                            &:hover {
+                                .fa {
+                                    opacity: 0.5;
+                                    transition: all 0.5s ease;
+                                    -webkit-transition:  all 0.5s ease;
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1439px) {
+    .widgetAccordion {
+        .panel-group {
+            .panel-default {
+                .panel-collapse {
+                    .panel-body {
+                        h1{
+                            font-size: 45px;
+                            line-height: 50px;
+                        }
+                        h2{
+                            font-size: 30px;
+                            line-height: 36px;
+                        }
+                        h3{
+                            font-size: 25px;
+                            line-height: 34px;
+                        }
+                        h4{
+                            font-size: 22px;
+                            line-height: 28px;
+                        }
+                        .contactLeadershipRow {
+
+                            .card {
+                                .inside {
+                                    padding: 25px;
+
+                                    p {
+                                        a {
+                                            font-size: 22px;
+                                            line-height: 26px;
+                                        }
+                                    }
+
+                                    .iconEmail {
+                                        padding: 45px 25px 45px 25px;
+
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+                        
+                        .imageThumbs {
+                            a {
+                                width: 25%;
+                                height: 180px;
+                            }
+                        }
+                        
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .widgetAccordion {
+        .panel-group {
+            .panel-default {
+                .panel-collapse {
+                    .panel-body {
+                        h1{
+                            font-size: 45px;
+                            line-height: 50px;
+                        }
+                        h2{
+                            font-size: 30px;
+                            line-height: 36px;
+                        }
+                        h3{
+                            font-size: 25px;
+                            line-height: 34px;
+                        }
+                        h4{
+                            font-size: 22px;
+                            line-height: 28px;
+                        }
+                        .contactLeadershipRow {
+
+                            .card {
+                                .inside {
+                                    padding: 20px;
+
+                                    p {
+                                        a {
+                                            font-size: 20px;
+                                            line-height: 24px;
+                                        }
+                                    }
+
+                                    .iconEmail {
+                                        padding: 42px 20px 42px 20px;
+                                        font-size: 30px;
+                                        line-height: 30px;
+
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+                        
+                        .imageThumbs {
+                            a {
+                                width: 25%;
+                                height: 150px;
+                            }
+                        }
+                        
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .widgetAccordion {
+        .panel-group {
+            .panel-default {
+                .panel-collapse {
+                    .panel-body {
+                        h1{
+                            font-size: 35px;
+                            line-height: 42px;
+                            &:after{
+                                width: 80px;
+                                height: 4px;
+                            }
+                        }
+                        h2{
+                            font-size: 26px;
+                            line-height: 32px;
+                            &:after{
+                                width: 80px;
+                                height: 4px;
+                            }
+                        }
+                        h3{
+                            font-size: 22px;
+                            line-height: 28px;
+                            &:after{
+                                width: 80px;
+                                height: 4px;
+                            }
+                        }
+                        h4{
+                            font-size: 20px;
+                            line-height: 26px;
+                            &:after{
+                                width: 80px;
+                                height: 4px;
+                            }
+                        }
+                        p{
+                            font-size: 16px;
+                            line-height: 22px;
+                            strong, b {
+                                font-size: 16px;
+                                line-height: 22px;
+                            }
+
+                            em, i {
+                                font-size: 16px;
+                                line-height: 22px;
+                            }
+
+                            a {
+                                font-size: 16px;
+                                line-height: 22px;
+                            }
+                        }
+                        ul{
+                            li{
+                                font-size: 16px;
+                                line-height: 22px;
+                                strong, b {
+                                    font-size: 16px;
+                                    line-height: 22px;
+                                }
+
+                                em, i {
+                                    font-size: 16px;
+                                    line-height: 22px;
+                                }
+
+                                a {
+                                    font-size: 16px;
+                                    line-height: 22px;
+                                }
+                            }
+                        }
+                        .contactDetailsRow {
+                            margin: 0px 5px 0px 0px;
+
+                            .col-sm-12.col-md-4.col-lg-4 {
+                                padding-left: 0px;
+                                p {
+                                    padding: 8px 0px;
+                                    font-size: 16px;
+                                    line-height: 22px;
+
+                                    .fa-phone,
+                                    .fa-fax {
+                                        width: 20px;
+                                        font-size: 14px;
+                                    }
+
+                                    .iconEmail {
+                                        .fa {
+                                            font-size: 40px;
+                                            line-height: 40px;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                        
+                        .contactLeadershipRow {
+                            margin: 0px -5px 0px -10px; 
+                            .card {
+                                width: 50%;
+                                .inside {
+                                    padding: 15px;
+                                    margin: 10px;
+
+                                    p {
+                                        font-size: 14px;
+                                        line-height: 18px;
+                                        a {
+                                            font-size: 18px;
+                                            line-height: 22px;
+                                            
+                                            span {
+                                                font-size: 14px;
+                                                line-height: 18px;
+                                            }
+                                        }
+                                    }
+
+                                    .iconEmail {
+                                        padding: 36px 15px 36px 15px;
+                                        font-size: 28px;
+                                        line-height: 28px;
+                                    }
+
+                                }
+
+
+                            }
+
+                        }
+                        
+                        .imageThumbs {
+                            a {
+                                width: 33.3%;
+                                height: 130px;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .widgetAccordion {
+        padding: 15px 0px 50px 0px;
+
+        .panel-group {
+            .panel-default {
+                .panel-heading {
+                    a {
+                        font-size: 16px;
+                        line-height: 20px;
+                    }
+                }
+
+                .panel-collapse {
+                    .panel-body {
+                        padding: 20px 20px 20px 37px;
+
+                        h1 {
+                            font-size: 26px;
+                            line-height: 30px;
+                        }
+
+                        h2 {
+                            font-size: 22px;
+                            line-height: 26px;
+                        }
+
+                        h3 {
+                            font-size: 18px;
+                            line-height: 22px;
+                        }
+
+                        h4 {
+                            font-size: 16px;
+                            line-height: 18px;
+                        }
+
+                        p {
+                            font-size: 14px;
+                            line-height: 20px;
+
+                            strong, b {
+                                font-size: 14px;
+                                line-height: 20px;
+                            }
+
+                            em, i {
+                                font-size: 14px;
+                                line-height: 20px;
+                            }
+
+                            a {
+                                font-size: 14px;
+                                line-height: 20px;
+                            }
+                        }
+
+                        ul {
+                            li {
+                                font-size: 14px;
+                                line-height: 20px;
+
+                                strong, b {
+                                    font-size: 14px;
+                                    line-height: 20px;
+                                }
+
+                                em, i {
+                                    font-size: 14px;
+                                    line-height: 20px;
+                                }
+
+                                a {
+                                    font-size: 14px;
+                                    line-height: 20px;
+                                }
+                            }
+                        }
+                        
+                        .contactLeadershipRow {
+                            margin: 0px 0px 0px -10px; 
+                            .card {
+                                width: 100%;
+                                .inside {
+                                    .iconEmail {
+                                        padding: 34px 15px 34px 15px;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        .imageThumbs {
+                            a {
+                                width: 33.3%;
+                                height: 100px;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 413px) {
+    .widgetAccordion {
+        padding: 5px 0px 0px 0px;
+        
+        .holder {
+            padding: 0px;
+            .col-xs-12.col-sm-12.col-md-12 {
+                padding: 0px;
+            }
+        }
+
+        .panel-group {
+            .panel-default {
+                .panel-heading {
+                    a {
+                        font-size: 16px;
+                        line-height: 20px;
+                        padding-left: 30px;
+                    }
+                }
+
+                .panel-collapse {
+                    .panel-body {
+                        background-color: $greyLight;
+                        padding: 15px 15px 15px 30px;
+
+                        h1 {
+                            padding: 12px 0px;
+                            font-size: 24px;
+                            line-height: 28px;
+                        }
+
+                        h2 {
+                            padding: 10px 0px;
+                            font-size: 20px;
+                            line-height: 24px;
+                        }
+
+                        h3 {
+                            padding: 8px 0px;
+                            font-size: 16px;
+                            line-height: 20px;
+                        }
+
+                        h4 {
+                            padding: 6px 0px;
+                            font-size: 13px;
+                            line-height: 17px;
+                        }
+
+                        p {
+                            padding: 7px 0px;
+                            font-size: 14px;
+                            line-height: 20px;
+
+                            strong, b {
+                                font-size: 14px;
+                                line-height: 20px;
+                            }
+
+                            em, i {
+                                font-size: 14px;
+                                line-height: 20px;
+                            }
+
+                            a {
+                                font-size: 14px;
+                                line-height: 20px;
+                            }
+                        }
+
+                        ul {
+                            li {
+                                font-size: 14px;
+                                line-height: 20px;
+                                padding: 4px 0px 4px 30px;
+
+                                strong, b {
+                                    font-size: 14px;
+                                    line-height: 20px;
+                                }
+
+                                em, i {
+                                    font-size: 14px;
+                                    line-height: 20px;
+                                }
+
+                                a {
+                                    font-size: 14px;
+                                    line-height: 20px;
+                                }
+                            }
+                            li:before {
+                                font: normal normal normal 10px/20px FontAwesome;
+                            }
+                        }
+                        
+                        .imageThumbs {
+                            a {
+                                width: 50%;
+                                height: 100px;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            .panel-default:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
+/* Accordion Start */

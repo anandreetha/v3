@@ -1,0 +1,88 @@
+<section class="widgetBanners">
+
+    <div class="holder">
+        <?php
+        $sideNavWidget = $this->coreWidgetFactory->getCountryWidget("SideNavWidget");
+        if ($sideNavWidget != false) {
+            echo $sideNavWidget->getContent($navLinks["side"]);
+        }
+
+		echo '<div class="col-xs-12 col-sm-7 col-md-8 col-lg-8"><div class="row">';
+        $visitNowWidget = $this->coreWidgetFactory->getCountryWidget("VisitNowWidget");
+		//print"<pre>";print_r($contentSettings);print"</pre>";
+        if ($visitNowWidget != false) {
+            echo $visitNowWidget->getContent();
+        }
+
+        $podcastWidget = $this->coreWidgetFactory->getCountryWidget("PodcastWidget");
+        if ($podcastWidget != false) {
+            if(isset($contentSettings) && array_key_exists('pod_cast_content_url',$contentSettings)){
+                $podcastWidget->setPodcastUrl($contentSettings['pod_cast_content_url']);
+            }
+            if(isset($contentSettings) && array_key_exists('podcast_custom_img_path',$contentSettings)){
+                $podcastWidget->setPodcastCustomImageUrl($contentSettings['podcast_custom_img_path']);
+            }
+			if(isset($contentSettings) && array_key_exists('pod_cast_content_title',$contentSettings)){
+				$podcastWidget->setPodcastTitle($contentSettings['pod_cast_content_title']);
+            }
+			if(isset($contentSettings) && array_key_exists('pod_cast_content_alt',$contentSettings)){
+				$podcastWidget->setPodcastAlt($contentSettings['pod_cast_content_alt']);
+            }
+			
+			
+            $podcastWidget->setWebsite($website);
+
+            $podcastWidget->setRenderStaticContent($renderStaticContent);
+
+            echo $podcastWidget->getContent();
+        }
+
+        $successNetWidget = $this->coreWidgetFactory->getCountryWidget("SuccessNetWidget");
+        if ($successNetWidget != false) {
+            if(isset($contentSettings) && array_key_exists('foundation_content_url',$contentSettings)){
+                $successNetWidget->setFoundationUrl($contentSettings['foundation_content_url']);
+            }
+            if(isset($contentSettings) && array_key_exists('foundation_custom_img_path',$contentSettings)){
+                $successNetWidget->setFoundationCustomImageUrl($contentSettings['foundation_custom_img_path']);
+            }
+			if(isset($contentSettings) && array_key_exists('foundation_content_title',$contentSettings)){
+				$successNetWidget->setFoundationTitle($contentSettings['foundation_content_title']);
+            }
+			if(isset($contentSettings) && array_key_exists('foundation_content_alt',$contentSettings)){
+				$successNetWidget->setFoundationAlt($contentSettings['foundation_content_alt']);
+            }
+			
+            $successNetWidget->setWebsite($website);
+
+            $successNetWidget->setRenderStaticContent($renderStaticContent);
+
+            echo $successNetWidget->getContent();
+        }
+		
+		$bniUWidget = $this->coreWidgetFactory->getCountryWidget("BniUWidget");
+		if ($bniUWidget != false) {
+           if(isset($contentSettings) && array_key_exists('bniu_content_url',$contentSettings)){
+                $bniUWidget->setBniUUrl($contentSettings['bniu_content_url']);
+            }
+            if(isset($contentSettings) && array_key_exists('bniu_custom_img_path',$contentSettings)){
+                $bniUWidget->setBniUCustomImageUrl($contentSettings['bniu_custom_img_path']);
+            }
+			if(isset($contentSettings) && array_key_exists('bniu_content_title',$contentSettings)){
+				$bniUWidget->setBniUTitle($contentSettings['bniu_content_title']);
+            }
+			if(isset($contentSettings) && array_key_exists('bniu_content_alt',$contentSettings)){
+				$bniUWidget->setBniUAlt($contentSettings['bniu_content_alt']);
+            }
+
+            $bniUWidget->setWebsite($website);
+
+            $bniUWidget->setRenderStaticContent($renderStaticContent);
+
+            echo $bniUWidget->getContent();
+        }
+		
+		echo '</div></div>';
+        ?>
+    </div>
+
+</section>

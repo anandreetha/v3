@@ -1,0 +1,19 @@
+<div id="contactUs">
+</div>
+<img loading="lazy" id="rssLoaderAjax" style="display: block; margin: 0 auto;"
+     src="<?= $this->config->general->cdn; ?>/images/ajax-loader.gif"/>
+<script>
+    //This will make a ajax post request to the contact us controller which return html and we render that in ajax response.
+    $(function () {
+
+        var languages = <?php echo json_encode($languages) ?>;
+        var orgIds = <?php echo json_encode($orgIds) ?>;
+        var website = <?php echo json_encode($website) ?>;
+
+        $.post("<?php echo $ajaxUrl; ?>", {orgIds: orgIds, languages: languages, website: JSON.stringify(website)} ,function (data) {
+            $("#rssLoaderAjax").hide();
+            $("#contactUs").html(data);
+        });
+    });
+
+</script>
